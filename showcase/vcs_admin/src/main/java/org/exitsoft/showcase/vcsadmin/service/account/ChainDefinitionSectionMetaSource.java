@@ -28,8 +28,7 @@ public class ChainDefinitionSectionMetaSource implements FactoryBean<Ini.Section
 	
 	//shiro默认的链接定义
 	private String filterChainDefinitions;
-
-	@Transactional
+	
 	public Section getObject() throws BeansException {
         
         List<Resource> resources = accountManager.getAllResources();
