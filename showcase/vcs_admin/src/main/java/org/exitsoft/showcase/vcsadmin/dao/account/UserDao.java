@@ -1,6 +1,6 @@
 package org.exitsoft.showcase.vcsadmin.dao.account;
 
-import org.exitsoft.orm.core.hibernate.HibernateSuperDao;
+import org.exitsoft.orm.core.hibernate.HibernateSupportDao;
 import org.exitsoft.showcase.vcsadmin.entity.account.User;
 import org.springframework.stereotype.Repository;
 
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
  *
  */
 @Repository
-public class UserDao extends HibernateSuperDao<User, String>{
+public class UserDao extends HibernateSupportDao<User, String>{
 
 	/**
 	 * 通过用户id更新用户密码

@@ -1,6 +1,6 @@
 package org.exitsoft.showcase.vcsadmin.dao.account;
 
-import org.exitsoft.orm.core.hibernate.HibernateSuperDao;
+import org.exitsoft.orm.core.hibernate.HibernateSupportDao;
 import org.exitsoft.showcase.vcsadmin.entity.account.Resource;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
  *
  */
 @Repository
-public class ResourceDao extends HibernateSuperDao<Resource, String>{
+public class ResourceDao extends HibernateSupportDao<Resource, String>{
 
 	
 }

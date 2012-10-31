@@ -11,7 +11,7 @@ import org.exitsoft.common.unit.Fixtures;
 import org.exitsoft.orm.core.Page;
 import org.exitsoft.orm.core.PageRequest;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.hibernate.HibernateSuperDao;
+import org.exitsoft.orm.core.hibernate.HibernateSupportDao;
 import org.exitsoft.orm.core.hibernate.property.PropertyFilterRestrictionHolder;
 import org.exitsoft.orm.core.hibernate.property.impl.restriction.LikeRestriction;
 import org.exitsoft.orm.core.hibernate.property.impl.restriction.NeRestriction;
@@ -37,7 +37,7 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 @ContextConfiguration(locations = { "/applicationContext-core-test.xml" })
 public class TestHibernateSuperDao extends AbstractTransactionalJUnit4SpringContextTests{
 
-	private HibernateSuperDao<User, String> dao;
+	private HibernateSupportDao<User, String> dao;
 	
 	private DataSource dataSource;
 	
@@ -51,7 +51,7 @@ public class TestHibernateSuperDao extends AbstractTransactionalJUnit4SpringCont
 	
 	@Autowired
 	public void setSessionFactory(SessionFactory sessionFactory) {
-		dao = new HibernateSuperDao<User, String>(User.class);
+		dao = new HibernateSupportDao<User, String>(User.class);
 		dao.setSessionFactory(sessionFactory);
 	}
 	

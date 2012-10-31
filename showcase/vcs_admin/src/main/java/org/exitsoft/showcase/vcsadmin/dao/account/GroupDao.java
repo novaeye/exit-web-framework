@@ -1,6 +1,6 @@
 package org.exitsoft.showcase.vcsadmin.dao.account;
 
-import org.exitsoft.orm.core.hibernate.HibernateSuperDao;
+import org.exitsoft.orm.core.hibernate.HibernateSupportDao;
 import org.exitsoft.showcase.vcsadmin.entity.account.Group;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
  *
  */
 @Repository
-public class GroupDao extends HibernateSuperDao<Group, String>{
+public class GroupDao extends HibernateSupportDao<Group, String>{
 
 }

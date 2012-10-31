@@ -1,6 +1,6 @@
 package org.exitsoft.showcase.vcsadmin.dao.foundation;
 
-import org.exitsoft.orm.core.hibernate.HibernateSuperDao;
+import org.exitsoft.orm.core.hibernate.HibernateSupportDao;
 import org.exitsoft.showcase.vcsadmin.entity.foundation.DictionaryCategory;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
  *
  */
 @Repository
-public class DictionaryCategoryDao extends HibernateSuperDao<DictionaryCategory, String>{
+public class DictionaryCategoryDao extends HibernateSupportDao<DictionaryCategory, String>{
 
 }

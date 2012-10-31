@@ -34,13 +34,13 @@ import org.springframework.util.Assert;
  * @param <T> ORM对象
  * @param <PK> 主键Id类型
  */
-public class HibernateSuperDao<T,PK extends Serializable> extends BasicHibernateDao<T, PK>{
+public class HibernateSupportDao<T,PK extends Serializable> extends BasicHibernateDao<T, PK>{
 
-	public HibernateSuperDao(){
+	public HibernateSupportDao(){
 		
 	}
 	
-	public HibernateSuperDao(Class entityClass){
+	public HibernateSupportDao(Class entityClass){
 		super(entityClass);
 	}
 	
