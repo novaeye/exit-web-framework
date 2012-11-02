@@ -22,7 +22,7 @@
 		<h2.version>1.3.154</h2.version>
 		<hibernate.version>4.1.6.Final</hibernate.version>
 		<cxf.version>2.6.1</cxf.version>
-		<jackson.version>1.9.8</jackson.version>
+		<jackson.version>2.1.0</jackson.version>
 		<jetty.version>7.6.4.v20120524</jetty.version>
 		<freemarker.version>2.3.19</freemarker.version>
 		<shiro.version>1.2.1</shiro.version>
@@ -291,28 +291,33 @@
 			<!-- ws end -->
 
 			<!-- web start -->
+			
 			<!-- json -->
 			<dependency>
-				<groupId>org.codehaus.jackson</groupId>
-				<artifactId>jackson-core-asl</artifactId>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
 				<version>${jackson.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.codehaus.jackson</groupId>
-				<artifactId>jackson-mapper-asl</artifactId>
+				<groupId>com.fasterxml.jackson.module</groupId>
+				<artifactId>jackson-module-jaxb-annotations</artifactId>
 				<version>${jackson.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.codehaus.jackson</groupId>
-				<artifactId>jackson-jaxrs</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
+	            <groupId>com.fasterxml.jackson.datatype</groupId>
+	            <artifactId>jackson-datatype-joda</artifactId>
+	            <version>${jackson.version}</version>
+	        </dependency>
 			<dependency>
-				<groupId>org.codehaus.jackson</groupId>
-				<artifactId>jackson-xc</artifactId>
-				<version>${jackson.version}</version>
+	            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+	            <artifactId>jackson-jaxrs-json-provider</artifactId>
+	            <version>${jackson.version}</version>
+	        </dependency>
+	        <dependency>
+			    <groupId>com.fasterxml.jackson.datatype</groupId>
+			    <artifactId>jackson-datatype-hibernate4</artifactId>
+			    <version>${jackson.version}</version>
 			</dependency>
-
 			<!-- j2ee web spec -->
 			<dependency>
 				<groupId>javax.servlet</groupId>
