@@ -52,16 +52,6 @@ public class SystemCommonController {
 	}
 	
 	/**
-	 * 当shior发现当前用户状态为is remember-me状态，并且该操作需要授权才能访问时，调用该C返回登录页面
-	 * 
-	 * @return String
-	 */
-	@RequestMapping("/unauthorized")
-	public String unauthorized(){
-		return "login";
-	}
-	
-	/**
 	 * 当前用户修改密码C.修改成功返回"true"否则返回"false"
 	 * 
 	 * @param oldPassword 旧密码

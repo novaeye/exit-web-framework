@@ -43,22 +43,6 @@
 	<context:component-scan base-package="org.exitsoft.showcase.vcsadmin">
 		<context:include-filter type="annotation" expression="org.aspectj.lang.annotation.Aspect" />
 	</context:component-scan>
-	
-	<!-- 使用aop annotation配置 -->
-	<aop:aspectj-autoproxy  proxy-target-class="true" />
-	
-	<!-- 使用缓存annotation 配置 -->
-	<cache:annotation-driven cache-manager="ehCacheManager" />
-
-	<!-- spring对ehcache的缓存工厂支持 -->
-	<bean id="ehCacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-		<property name="configLocation" value="classpath:ehcache.xml" />
-		<property name="shared" value="false" />
-	</bean>
-	<!-- spring对ehcache的缓存管理 -->
-	<bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
-		<property name="cacheManager" ref="ehCacheManagerFactory"></property>
-	</bean>
 
 	<!-- 数据源配置,使用应用内的DBCP数据库连接池 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
@@ -102,5 +86,18 @@
 	<!-- 使用annotation定义事务 -->
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 	
+	<!-- spring对ehcache的缓存工厂支持 -->
+	<bean id="ehCacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:ehcache.xml" />
+		<property name="shared" value="false" />
+	</bean>
+	
+	<!-- spring对ehcache的缓存管理 -->
+	<bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+		<property name="cacheManager" ref="ehCacheManagerFactory"></property>
+	</bean>
+	
+	<!-- 使用缓存annotation 配置 -->
+	<cache:annotation-driven cache-manager="ehCacheManager" />
 	
 </beans>

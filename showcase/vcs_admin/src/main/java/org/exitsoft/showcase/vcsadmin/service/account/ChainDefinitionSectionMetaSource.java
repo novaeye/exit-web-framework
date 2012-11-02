@@ -12,7 +12,6 @@ import org.exitsoft.showcase.vcsadmin.entity.account.Resource;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 
 /**
