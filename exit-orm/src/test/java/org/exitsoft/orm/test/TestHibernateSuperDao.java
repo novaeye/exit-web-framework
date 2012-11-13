@@ -22,11 +22,17 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.EncodedResource;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.jdbc.JdbcTestUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 测试HibernateSuperDao的查询方法
@@ -34,34 +40,35 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
  * @author vincent
  *
  */
-@ContextConfiguration(locations = { "/applicationContext-core-test.xml" })
-public class TestHibernateSuperDao extends AbstractTransactionalJUnit4SpringContextTests{
+@Transactional
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("/applicationContext-test.xml")
+public class TestHibernateSuperDao {
 
 	private HibernateSupportDao<User, String> dao;
 	
 	private DataSource dataSource;
 	
+	private JdbcTemplate jdbcTemplate;
 	
 	@Autowired
-	public void setDataSource(DataSource dataSource) {
-		super.setDataSource(dataSource);
+	private ApplicationContext applicationContext;
+	
+	
+	@Autowired
+	public void setDataSource(DataSource dataSource) throws Exception {
 		this.dataSource = dataSource;
-		
+		jdbcTemplate =  new JdbcTemplate(this.dataSource);
+		Resource resource = this.applicationContext.getResource("classpath:/h2schma.sql");
+		JdbcTestUtils.executeSqlScript(jdbcTemplate, new EncodedResource(resource,"UTF-8"), false);
+
+		Fixtures.loadData(this.dataSource, "/sample-data.xml");
 	}
 	
 	@Autowired
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		dao = new HibernateSupportDao<User, String>(User.class);
 		dao.setSessionFactory(sessionFactory);
-	}
-	
-	@Before
-	public void reloadSampleData() throws Exception {
-		simpleJdbcTemplate.update("drop all objects");
-
-		executeSqlScript("classpath:/h2schma.sql", false);
-
-		Fixtures.loadData(this.dataSource, "/sample-data.xml");
 	}
 	
 	@Test
