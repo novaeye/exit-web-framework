@@ -1,9 +1,10 @@
-package org.exitsoft.common.utils;
+package org.exitsoft.common.mapper;
 
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,9 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 
@@ -25,9 +29,10 @@ import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
  * @author vincent
  *
  */
-public class JacksonBinder {
+@SuppressWarnings("unchecked")
+public class JacksonMapper {
 	
-	private static Logger logger = LoggerFactory.getLogger(JacksonBinder.class);
+	private static Logger logger = LoggerFactory.getLogger(JacksonMapper.class);
 	
 	private ObjectMapper mapper;
 
@@ -36,7 +41,7 @@ public class JacksonBinder {
 	 * 构造方法
 	 * 
 	 */
-	public JacksonBinder() {
+	public JacksonMapper() {
 		this(null);
 	}
 
@@ -44,7 +49,7 @@ public class JacksonBinder {
 	 * 构造方法，根据Jackson的{@link Include}类创建ObjectMapper
 	 * 
 	 */
-	public JacksonBinder(Include include) {
+	public JacksonMapper(Include include) {
 		mapper = new ObjectMapper();
 		if (include != null) {
 			mapper.setSerializationInclusion(include);
@@ -74,37 +79,37 @@ public class JacksonBinder {
      * 提示：其他类型的默认处理可以自定义{@link JsonSerializer}的{@link JsonSerializer#isEmpty(Object)}如果被重写，
      * 序列化json会调用该方法，根据返回值判断是否序列化
 	 * </p>
-	 * @return {@link JacksonBinder}
+	 * @return {@link JacksonMapper}
 	 */
-	public static JacksonBinder nonEmptyBinder() {
+	public static JacksonMapper nonEmptyBinder() {
 		
-		return new JacksonBinder(Include.NON_EMPTY);
+		return new JacksonMapper(Include.NON_EMPTY);
 	}
 	
 	/**
 	 * 创建不管任何值都序列化成json的ObjectMapper
 	 * 
-	 * @return {@link JacksonBinder}
+	 * @return {@link JacksonMapper}
 	 */
-	public static JacksonBinder alwaysBinder() {
-		return new JacksonBinder(Include.ALWAYS);
+	public static JacksonMapper alwaysBinder() {
+		return new JacksonMapper(Include.ALWAYS);
 	}
 	
 	/**
 	 * 创建序列化属性为非空(null)值的ObjectMapper
 	 * 
-	 * @return {@link JacksonBinder}
+	 * @return {@link JacksonMapper}
 	 */
-	public static JacksonBinder nonNullBinder() {
-		return new JacksonBinder(Include.NON_NULL);
+	public static JacksonMapper nonNullBinder() {
+		return new JacksonMapper(Include.NON_NULL);
 	}
 
 	/**
 	 * 创建只输出初始值被改变的属性到Json字符串的ObjectMapper, 最节约的存储方式。
 	 * @return
 	 */
-	public static JacksonBinder nonDefaultBinder() {
-		return new JacksonBinder(Include.NON_DEFAULT);
+	public static JacksonMapper nonDefaultBinder() {
+		return new JacksonMapper(Include.NON_DEFAULT);
 	}
 	
 	/** 
@@ -134,7 +139,7 @@ public class JacksonBinder {
     }
     
     /**
-	 * 反序列化复杂Collection如List<Bean>, 先使用函數createCollectionType构造类型,然后调用本函数.
+	 * 反序列化复杂Collection如List<Bean>, 先使用函数createCollectionType构造类型,然后调用本函数.
 	 * @see #createCollectionType(Class, Class...)
 	 */
 	public <T> T fromJson(String jsonString, JavaType javaType) {
@@ -151,16 +156,18 @@ public class JacksonBinder {
 	}
 
 	/**
-	 * 構造泛型的Collection Type如:
+	 * 构造泛型的Collection Type如:
+	 * <p>
 	 * ArrayList<MyBean>, 则调用constructCollectionType(ArrayList.class,MyBean.class)
 	 * HashMap<String,MyBean>, 则调用(HashMap.class,String.class, MyBean.class)
+	 * </p>
 	 */
 	public JavaType createCollectionType(Class<?> collectionClass, Class<?>... elementClasses) {
 		return mapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);
 	}
 
 	/**
-	 * 當JSON裡只含有Bean的部分屬性時，更新一個已存在Bean，只覆蓋該部分的屬性.
+	 * 当JSON里只含有Bean的部分属性时，更新一个已存在Bean，只覆盖部分属性.
 	 */
 	public <T> T update(String jsonString, T object) {
 		try {
@@ -187,7 +194,21 @@ public class JacksonBinder {
             return null;  
         }  
     }
-  
+    
+    /**
+     * 根据finterName动态过滤对象属性
+     * 
+     * @param filterName 过滤器名称
+     * @param properties 可变长度的属性名
+     * 
+     * @return {@link JacksonMapper}
+     */
+    public JacksonMapper filter(String filterName, String... properties) {
+		FilterProvider filterProvider = new SimpleFilterProvider().addFilter(filterName, SimpleBeanPropertyFilter.filterOutAllExcept(properties));
+		mapper.setFilters(filterProvider);
+		return this;
+	}
+    
     /** 
      * 设置转换日期类型的时间科室,如果不设置默认打印Timestamp毫秒数.
      * 
@@ -220,7 +241,8 @@ public class JacksonBinder {
 	}
 
 	/**
-	 * 支持使用Jaxb的Annotation，使得POJO上的annotation不用与Jackson藕合,默认会先查找jaxb的annotation，如果找不到再找jackson的。
+	 * 支持使用Jaxb的Annotation,使得POJO上的annotation不用与Jackson藕合.
+	 * 默认会先查找jaxb的annotation,如果找不到再找jackson的.
 	 */
 	public void enableJaxbAnnotation() {
 		JaxbAnnotationModule module = new JaxbAnnotationModule();
