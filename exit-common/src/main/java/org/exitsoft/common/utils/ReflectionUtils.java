@@ -34,71 +34,98 @@ public abstract class ReflectionUtils {
 	/**
 	 * 调用Getter方法.
 	 * 
-	 * @param o Object对象
+	 * @param target 目标对象Object
 	 * @param propertyName 属性字段名称
 	 * 
 	 * @return Object
 	 */
-	public static <T> T invokeGetterMethod(Object o, String propertyName) {
+	public static <T> T invokeGetterMethod(Object target, String propertyName) {
 		String getterMethodName = "get" + StringUtils.capitalize(propertyName);
-		return (T)invokeMethod(o, getterMethodName, new Class[] {}, new Object[] {});
+		return (T)invokeMethod(target, getterMethodName, new Class[] {}, new Object[] {});
 	}
 
 	/**
 	 * 调用Setter方法.使用value的Class来查找Setter方法.
 	 * 
-	 * @param obj Object对象
+	 * @param target 目标对象Object
 	 * @param propertyName 属性名称
 	 * @param value 值
 	 * 
 	 */
-	public static void invokeSetterMethod(Object obj, String propertyName, Object value) {
-		invokeSetterMethod(obj, propertyName, value, null);
+	public static void invokeSetterMethod(Object target, String propertyName, Object value) {
+		invokeSetterMethod(target, propertyName, value, null);
 	}
 
 	/**
 	 * 调用Setter方法.
 	 * 
-	 * @param obj Object 对象
+	 * @param target 目标对象Object
 	 * @param value 值
 	 * @param propertyType 用于查找Setter方法,为空时使用value的Class替代.
 	 */
-	public static void invokeSetterMethod(Object obj, String propertyName, Object value, Class<?> propertyType) {
+	public static void invokeSetterMethod(Object target, String propertyName, Object value, Class<?> propertyType) {
 		Class<?> type = propertyType != null ? propertyType : value.getClass();
 		String setterMethodName = "set" + StringUtils.capitalize(propertyName);
-		invokeMethod(obj, setterMethodName, new Class[] { type }, new Object[] { value });
+		invokeMethod(target, setterMethodName, new Class[] { type }, new Object[] { value });
 	}
 	
 	/**
+	 * 直接调用对象方法, 无视private/protected修饰符.用于一次性调用的情况.
+	 * 
+	 * @param target 目标对象Object
+	 * @param methodName 方法名称
+	 * @param parameterTypes 方法参数类型，和args参数一一对应
+	 * @param args 方法参数值，值的类型和parameterTypes参数一一对应
+	 * 
+	 * @return Object
+	 */
+	public static Object invokeMethod(final Object target, final String methodName, final Class<?>[] parameterTypes, final Object[] args) {
+		
+		Method method = getAccessibleMethod(target, methodName, parameterTypes);
+		if (method == null) {
+			throw new IllegalArgumentException("找不到 [" + methodName + "] 方法在对象 [" + target + "] 里");
+		}
+	
+		try {
+			return method.invoke(target, args);
+		} catch (Exception e) {
+			throw convertReflectionExceptionToUnchecked(e);
+		}
+	}
+
+	/**
 	 * 判断obj参数是否存在fiedlName字段
 	 * 
-	 * @param obj 要判断的对象
+	 * @param target 要判断的目标对象
 	 * @param fieldName 字段名称
 	 * 
 	 * @return boolean
 	 */
-	public static boolean hasField(Object obj, String fieldName) {
-		return getAccessibleField(obj, fieldName) != null;
+	public static boolean hasField(Object target, String fieldName) {
+		return getAccessibleField(target, fieldName) != null;
 	}
 
 	/**
 	 * 直接读取对象属性值, 无视private/protected修饰符, 不经过getter函数.
 	 * 
-	 * @param obj Object对象
+	 * @param target 目标对象Object
 	 * @param fieldName 字段名称
 	 * 
 	 * @return Object
 	 */
-	public static <T> T getFieldValue(final Object obj, final String fieldName) {
-		Field field = getAccessibleField(obj, fieldName);
+	public static <T> T getFieldValue(final Object target, final String fieldName) {
+		Assert.notNull(target, "target不能为空");
+		Assert.notNull(fieldName, "fieldName不能为空");
+		
+		Field field = getAccessibleField(target, fieldName);
 
 		if (field == null) {
-			throw new IllegalArgumentException("找不到字段 [" + fieldName + "] 在对象  [" + obj + "] 里");
+			throw new IllegalArgumentException("找不到字段 [" + fieldName + "] 在对象  [" + target + "] 里");
 		}
 
 		Object result = null;
 		try {
-			result = field.get(obj);
+			result = field.get(target);
 		} catch (IllegalAccessException e) {
 			logger.error("不可能抛出的异常{}", e.getMessage());
 		}
@@ -108,19 +135,22 @@ public abstract class ReflectionUtils {
 	/**
 	 * 直接设置对象属性值, 无视private/protected修饰符, 不经过setter函数.
 	 * 
-	 * @param obj Object对象
+	 * @param target 目标对象Object
 	 * @param fieldName 字段名称
 	 * @param value 值
 	 */
-	public static void setFieldValue(final Object obj, final String fieldName, final Object value) {
-		Field field = getAccessibleField(obj, fieldName);
+	public static void setFieldValue(final Object target, final String fieldName, final Object value) {
+		Assert.notNull(target, "target不能为空");
+		Assert.notNull(fieldName, "fieldName不能为空");
+		
+		Field field = getAccessibleField(target, fieldName);
 
 		if (field == null) {
-			throw new IllegalArgumentException("找不到字段 [" + fieldName + "] 在对象 [" + obj + "] 里");
+			throw new IllegalArgumentException("找不到字段 [" + fieldName + "] 在对象 [" + target + "] 里");
 		}
 
 		try {
-			field.set(obj, value);
+			field.set(target, value);
 		} catch (IllegalAccessException e) {
 			logger.error("不可能抛出的异常:{}", e.getMessage());
 		}
@@ -129,39 +159,14 @@ public abstract class ReflectionUtils {
 	/**
 	 * 循环向上转型, 获取对象的DeclaredField,	 并强制设置为可访问.如向上转型到Object仍无法找到, 返回null.
 	 * 
-	 * @param obj Object对象
+	 * @param target 目标对象Object
 	 * @param fieldName 字段名称
 	 * 
 	 * @return {@link Field}
 	 */
-	public static Field getAccessibleField(final Object obj, final String fieldName) {
-		
-		return getAccessibleField(obj.getClass(),fieldName);
-	}
-	
-	/**
-	 * 
-	 * 更具类型获取o中的所有字段名称
-	 * 
-	 * @param o 对象Class
-	 * @param type 要获取名称的类型
-	 * 
-	 * @return List
-	 */
-	public static List<String> getAllAccessibleFieldName(final Class o,Class type) {
-		
-		Assert.notNull(o, "o不能为空");
-		Assert.notNull(type, "fieldName不能为空");
-		
-		List<String> list = new ArrayList<String>();
-		
-		for (Field field : o.getDeclaredFields()) {
-			if (field.getType().equals(type)) {
-				list.add(field.getName());
-			}
-		}
-		
-		return list;
+	public static Field getAccessibleField(final Object target, final String fieldName) {
+		Assert.notNull(target, "target不能为空");
+		return getAccessibleField(target.getClass(),fieldName);
 	}
 	
 	/**
@@ -169,15 +174,15 @@ public abstract class ReflectionUtils {
 	 * 
 	 * 如向上转型到Object仍无法找到, 返回null.
 	 * 
-	 * @param o 类型Class
+	 * @param targetClass 目标对象Class
 	 * @param fieldName class中的字段名
 	 * 
 	 * @return {@link Field}
 	 */
-	public static Field getAccessibleField(final Class o, final String fieldName) {
-		Assert.notNull(o, "o不能为空");
+	public static Field getAccessibleField(final Class targetClass, final String fieldName) {
+		Assert.notNull(targetClass, "targetClass不能为空");
 		Assert.hasText(fieldName, "fieldName不能为空");
-		for (Class<?> superClass = o; superClass != Object.class; superClass = superClass.getSuperclass()) {
+		for (Class<?> superClass = targetClass; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			try {
 				Field field = superClass.getDeclaredField(fieldName);
 				field.setAccessible(true);
@@ -191,26 +196,42 @@ public abstract class ReflectionUtils {
 	/**
 	 * 循环向上转型, 获取对象的所有DeclaredField,	 并强制设置为可访问.
 	 * 
-	 * @param o Object对象
+	 * @param targetClass 目标对象Class
 	 * 
 	 * @return List
 	 */
-	public static List<Field> getAccessibleFields(final Object o) {
-		return getAccessibleFields(o.getClass());
+	public static List<Field> getAccessibleFields(final Object target) {
+		Assert.notNull(target, "target不能为空");
+		return getAccessibleFields(target.getClass());
 	}
 	
 	/**
 	 * 循环向上转型, 获取对象的所有DeclaredField,	 并强制设置为可访问.
 	 * 
-	 * @param o 类型Clss
+	 * @param targetClass 目标对象Class
 	 * 
 	 * @return List
 	 */
-	public static List<Field> getAccessibleFields(final Class o) {
-		Assert.notNull(o, "o不能为空");
+	public static List<Field> getAccessibleFields(final Class targetClass) {
+		return getAccessibleFields(targetClass,false);
+	}
+	
+	/**
+	 * 获取对象的所有DeclaredField,并强制设置为可访问.
+	 * 
+	 * @param targetClass 目标对象Class
+	 * @param ignoreParent 是否循环向上转型,获取所有父类的Field 
+	 * 
+	 * @return List
+	 */
+	public static List<Field> getAccessibleFields(final Class targetClass,final boolean ignoreParent) {
+		Assert.notNull(targetClass, "targetClass不能为空");
 		List<Field> fields = new ArrayList<Field>();
-		for (Class<?> superClass = o; superClass != Object.class; superClass = superClass.getSuperclass()) {
-			Field[] result = superClass.getDeclaredFields();
+		
+		Class<?> sc = targetClass;
+		
+		do{
+			Field[] result = sc.getDeclaredFields();
 			
 			if (ArrayUtils.isEmpty(result)) {
 				continue;
@@ -222,48 +243,28 @@ public abstract class ReflectionUtils {
 			
 			CollectionUtils.addAll(fields, result);
 			
-		}
+			sc = sc.getSuperclass();
+			
+		}while(sc != Object.class && ignoreParent);
+		
 		return fields;
 	}
 
 	/**
-	 * 对于被cglib AOP过的对象, 取得真实的Class类型.
+	 * 循环向上转型, 获取对象的DeclaredMethod,并强制设置为可访问.
+	 * 如向上转型到Object仍无法找到, 返回null.
 	 * 
-	 * @param 对象Class
+	 * 用于方法需要被多次调用的情况. 先使用本函数先取得Method,然后调用Method.invoke(Object obj, Object... args)
 	 * 
-	 * @return Class
-	 */
-	public static Class<?> getUserClass(Class<?> o) {
-		if (o != null && o.getName().contains(CGLIB_CLASS_SEPARATOR)) {
-			Class<?> superClass = o.getSuperclass();
-			if (superClass != null && !Object.class.equals(superClass)) {
-				return superClass;
-			}
-		}
-		return o;
-	}
-
-	/**
-	 * 直接调用对象方法, 无视private/protected修饰符.用于一次性调用的情况.
-	 * 
-	 * @param obj Object对象
+	 * @param target Object对象
 	 * @param methodName 方法名称
-	 * @param parameterTypes 方法参数类型，和args参数一一对应
-	 * @param args 方法参数值，值的类型和parameterTypes参数一一对应
+	 * @param parameterTypes 方法参数类型
 	 * 
-	 * @return Object
+	 * @return {@link Method}
 	 */
-	public static Object invokeMethod(final Object obj, final String methodName, final Class<?>[] parameterTypes, final Object[] args) {
-		Method method = getAccessibleMethod(obj, methodName, parameterTypes);
-		if (method == null) {
-			throw new IllegalArgumentException("找不到 [" + methodName + "] 方法在对象 [" + obj + "] 里");
-		}
-
-		try {
-			return method.invoke(obj, args);
-		} catch (Exception e) {
-			throw convertReflectionExceptionToUnchecked(e);
-		}
+	public static Method getAccessibleMethod(final Object target, final String methodName,Class<?>... parameterTypes) {
+		Assert.notNull(target, "target不能为空");
+		return getAccessibleMethod(target.getClass(),methodName,parameterTypes);
 	}
 	
 	/**
@@ -272,31 +273,16 @@ public abstract class ReflectionUtils {
 	 * 
 	 * 用于方法需要被多次调用的情况. 先使用本函数先取得Method,然后调用Method.invoke(Object obj, Object... args)
 	 * 
-	 * @param obj Object对象
-	 * @param methodName 方法名称
+	 * @param targetClass 目标对象Class
 	 * @param parameterTypes 方法参数类型
 	 * 
 	 * @return {@link Method}
 	 */
-	public static Method getAccessibleMethod(final Object obj, final String methodName,Class<?>... parameterTypes) {
-		return getAccessibleMethod(obj.getClass(),methodName,parameterTypes);
-	}
-	
-	/**
-	 * 循环向上转型, 获取对象的DeclaredMethod,并强制设置为可访问.
-	 * 如向上转型到Object仍无法找到, 返回null.
-	 * 
-	 * 用于方法需要被多次调用的情况. 先使用本函数先取得Method,然后调用Method.invoke(Object obj, Object... args)
-	 * 
-	 * @param o Object 对象
-	 * @param parameterTypes 方法参数类型
-	 * 
-	 * @return {@link Method}
-	 */
-	public static Method getAccessibleMethod(final Class o, final String methodName,Class<?>... parameterTypes) {
-		Assert.notNull(o, "o不能为空");
-
-		for (Class<?> superClass = o; superClass != Object.class; superClass = superClass.getSuperclass()) {
+	public static Method getAccessibleMethod(final Class targetClass, final String methodName,Class<?>... parameterTypes) {
+		Assert.notNull(targetClass, "targetClass不能为空");
+		Assert.notNull(methodName, "methodName不能为空");
+		
+		for (Class<?> superClass = targetClass; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			try {
 				Method method = superClass.getDeclaredMethod(methodName, parameterTypes);
 				method.setAccessible(true);
@@ -310,26 +296,39 @@ public abstract class ReflectionUtils {
 	/**
 	 * 循环向上转型, 获取对象的所有DeclaredMethod	 并强制设置为可访问.
 	 * 
-	 * @param o Object对象
+	 * @param target 目标对象Object
 	 * 
 	 * @return List
 	 */
-	public static List<Method> getAccessibleMethods(final Object o) {
-		return getAccessibleMethods(o.getClass());
+	public static List<Method> getAccessibleMethods(final Object target) {
+		Assert.notNull(target, "target不能为空");
+		return getAccessibleMethods(target.getClass());
 	}
 	
 	/**
 	 * 循环向上转型, 获取对象的所有DeclaredMethod	 并强制设置为可访问.
 	 * 
-	 * @param o 类型Clss
+	 * @param targetClass 目标对象Class
 	 * 
 	 * @return List
 	 */
-	public static List<Method> getAccessibleMethods(final Class o) {
-		Assert.notNull(o, "o不能为空");
+	public static List<Method> getAccessibleMethods(final Class targetClass) {
+		return getAccessibleMethods(targetClass,false);
+	}
+	/**
+	 * 获取对象的所有DeclaredMethod	 并强制设置为可访问.
+	 * 
+	 * @param targetClass 目标对象Class
+	 * @param ignoreParent 是否循环向上转型,获取所有父类的Method 
+	 * 
+	 * @return List
+	 */
+	public static List<Method> getAccessibleMethods(final Class targetClass,boolean ignoreParent) {
+		Assert.notNull(targetClass, "targetClass不能为空");
 		List<Method> methods = new ArrayList<Method>();
 		
-		for (Class<?> superClass = o; superClass != Object.class; superClass = superClass.getSuperclass()) {
+		Class<?> superClass = targetClass;
+		do {
 			Method[] result = superClass.getDeclaredMethods();
 			
 			if (ArrayUtils.isEmpty(result)) {
@@ -341,8 +340,8 @@ public abstract class ReflectionUtils {
 			}
 			
 			CollectionUtils.addAll(methods, result);
-			
-		}
+			superClass = superClass.getSuperclass();
+		}while(superClass != Object.class &&  ignoreParent);
 		
 		return methods;
 	}
@@ -350,72 +349,79 @@ public abstract class ReflectionUtils {
 	/**
 	 * 获取对象中的注解
 	 * 
-	 * @param o 目标对象
+	 * @param target 目标对象Object
 	 * @param annotationClass 注解
 	 * 
 	 * @return Object
 	 */
-	public static <T> T getAnnotation(Object o,Class annotationClass) {
-		
-		return (T)getAnnotation(o.getClass(),annotationClass);
+	public static <T> T getAnnotation(Object target,Class annotationClass) {
+		Assert.notNull(target, "target不能为空");
+		return (T)getAnnotation(target.getClass(),annotationClass);
 	}
 	
 	/**
 	 * 获取对象中的注解
 	 * 
-	 * @param o 目标对象Class
+	 * @param targetClass 目标对象Class
 	 * @param annotationClass 注解类型Class
 	 * 
 	 * @return Object
 	 */
-	public static <T extends Annotation> T getAnnotation(Class o,Class annotationClass) {
-		if (o.isAnnotationPresent(annotationClass)) {
-			return (T)o.getAnnotation(annotationClass);
+	public static <T extends Annotation> T getAnnotation(Class targetClass,Class annotationClass) {
+		Assert.notNull(targetClass, "targetClass不能为空");
+		Assert.notNull(annotationClass, "annotationClass不能为空");
+		
+		if (targetClass.isAnnotationPresent(annotationClass)) {
+			return (T)targetClass.getAnnotation(annotationClass);
 		}
+		
 		return null;
 	}
 	
 	/**
 	 * 获取Object对象中所有annotationClass类型的注解
 	 * 
-	 * @param o Object对象
+	 * @param target 目标对象Object
 	 * @param annotationClass Annotation类型
 	 * 
 	 * @return {@link Annotation}
 	 */
-	public static <T extends Annotation> List<T> getAnnotations(Object o,Class annotationClass) {
-		return getAnnotations(o.getClass(), annotationClass);
+	public static <T extends Annotation> List<T> getAnnotations(Object target,Class annotationClass) {
+		Assert.notNull(target, "target不能为空");
+		return getAnnotations(target.getClass(), annotationClass);
 	}
 	
 	/**
 	 * 
 	 * 获取对象中的所有annotationClass注解
 	 * 
-	 * @param o 目标对象Class
+	 * @param targetClass 目标对象Class
 	 * @param annotationClass 注解类型Class
 	 * 
 	 * @return List
 	 */
-	public static <T extends Annotation> List<T> getAnnotations(Class o,Class annotationClass) {
+	public static <T extends Annotation> List<T> getAnnotations(Class targetClass,Class annotationClass) {
+		Assert.notNull(targetClass, "targetClass不能为空");
+		Assert.notNull(annotationClass, "annotationClass不能为空");
 		
 		List<T> result = new ArrayList<T>();
-		Annotation annotation = o.getAnnotation(annotationClass);
+		Annotation annotation = targetClass.getAnnotation(annotationClass);
 		if (annotation != null) {
 			result.add((T) annotation);
 		}
-		Constructor[] constructors = o.getDeclaredConstructors();
+		Constructor[] constructors = targetClass.getDeclaredConstructors();
 		//获取构造方法里的注解
 		CollectionUtils.addAll(result,getAnnotations(constructors,annotationClass).iterator());
 		
-		Field[] fields = o.getDeclaredFields();
+		Field[] fields = targetClass.getDeclaredFields();
 		//获取字段中的注解
 		CollectionUtils.addAll(result,getAnnotations(fields,annotationClass).iterator());
 		
-		Method[] methods = o.getDeclaredMethods();
+		Method[] methods = targetClass.getDeclaredMethods();
 		//获取方法中的注解
 		CollectionUtils.addAll(result,getAnnotations(methods,annotationClass).iterator());
 		
-		for (Class<?> superClass = o.getSuperclass(); superClass == null || superClass == Object.class;superClass = superClass.getSuperclass()) {
+		for (Class<?> superClass = targetClass.getSuperclass(); superClass == null || superClass == Object.class;superClass = superClass.getSuperclass()) {
 			List<T> temp = getAnnotations(superClass,annotationClass);
 			if (CollectionUtils.isNotEmpty(temp)) {
 				CollectionUtils.addAll(result, temp.iterator());
@@ -434,6 +440,11 @@ public abstract class ReflectionUtils {
 	 * @return {@link Annotation}
 	 */
 	public static <T extends Annotation> T getAnnotation(Field field, Class annotationClass) {
+		
+		Assert.notNull(field, "field不能为空");
+		Assert.notNull(annotationClass, "annotationClass不能为空");
+		
+		field.setAccessible(true);
 		if (field.isAnnotationPresent(annotationClass)) {
 			return (T) field.getAnnotation(annotationClass);
 		}
@@ -449,16 +460,16 @@ public abstract class ReflectionUtils {
 	 * @return List
 	 */
 	public static <T extends Annotation> List<T> getAnnotations(Field[] fields, Class annotationClass) {
+
+		if (ArrayUtils.isEmpty(fields)) {
+			return null;
+		}
 		
 		List<T> result = new ArrayList<T>();
 		
-		if (ArrayUtils.isEmpty(fields)) {
-			return result;
-		}
-		
 		for (Field field : fields) {
 			field.setAccessible(true);
-			Annotation annotation = field.getAnnotation(annotationClass);
+			Annotation annotation = getAnnotation(field,annotationClass);
 			if (annotation != null) {
 				result.add((T) annotation);
 			}
@@ -476,6 +487,11 @@ public abstract class ReflectionUtils {
 	 * @return {@link Annotation}
 	 */
 	public static <T extends Annotation> T getAnnotation(Method method, Class annotationClass) {
+		
+		Assert.notNull(method, "method不能为空");
+		Assert.notNull(annotationClass, "annotationClass不能为空");
+		
+		method.setAccessible(true);
 		if (method.isAnnotationPresent(annotationClass)) {
 			return (T) method.getAnnotation(annotationClass);
 		}
@@ -492,15 +508,15 @@ public abstract class ReflectionUtils {
 	 */
 	public static <T extends Annotation> List<T> getAnnotations(Method[] methods, Class annotationClass) {
 		
-		List<T> result = new ArrayList<T>();
-		
 		if (ArrayUtils.isEmpty(methods)) {
-			return result;
+			return null;
 		}
 		
+		List<T> result = new ArrayList<T>();
+		
 		for (Method method : methods) {
-			method.setAccessible(true);
-			Annotation annotation = method.getAnnotation(annotationClass);
+			
+			Annotation annotation = getAnnotation(method, annotationClass);
 			if (annotation != null) {
 				result.add((T) annotation);
 			}
@@ -518,9 +534,16 @@ public abstract class ReflectionUtils {
 	 * @return {@link Annotation}
 	 */
 	public static <T extends Annotation> T getAnnotation(Constructor constructor, Class annotationClass) {
+		
+		Assert.notNull(constructor, "constructor不能为空");
+		Assert.notNull(annotationClass, "annotationClass不能为空");
+		
+		constructor.setAccessible(true);
+		
 		if (constructor.isAnnotationPresent(annotationClass)) {
 			return (T) constructor.getAnnotation(annotationClass);
 		}
+		
 		return null;
 	}
 	
@@ -534,16 +557,14 @@ public abstract class ReflectionUtils {
 	 */
 	public static <T extends Annotation> List<T> getAnnotations(Constructor[] constructors, Class annotationClass) {
 
+		if (ArrayUtils.isEmpty(constructors)) {
+			return null;
+		}
 		
 		List<T> result = new ArrayList<T>();
 		
-		if (ArrayUtils.isEmpty(constructors)) {
-			return result;
-		}
-		
 		for (Constructor constructor : constructors) {
-			constructor.setAccessible(true);
-			Annotation annotation = constructor.getAnnotation(annotationClass);
+			Annotation annotation = getAnnotation(constructor,annotationClass);
 			if (annotation != null) {
 				result.add((T) annotation);
 			}
@@ -553,6 +574,31 @@ public abstract class ReflectionUtils {
 	}
 	
 	/**
+	 * 
+	 * 更具类型获取o中的所有字段名称
+	 * 
+	 * @param targetClass 目标对象Class
+	 * @param type 要获取名称的类型
+	 * 
+	 * @return List
+	 */
+	public static List<String> getAllAccessibleFieldName(final Class targetClass,Class type) {
+		
+		Assert.notNull(targetClass, "targetClass不能为空");
+		Assert.notNull(type, "type不能为空");
+		
+		List<String> list = new ArrayList<String>();
+		
+		for (Field field : targetClass.getDeclaredFields()) {
+			if (field.getType().equals(type)) {
+				list.add(field.getName());
+			}
+		}
+		
+		return list;
+	}
+
+	/**
 	 * 通过反射, 获得Class定义中声明的父类的泛型参数的类型.
 	 * 如无法找到, 返回Object.class，否则返回首个泛参数型类型
 	 * <pre>
@@ -560,11 +606,11 @@ public abstract class ReflectionUtils {
 	 * public UserDao extends HibernateDao<User>
 	 * </pre>
 	 *
-	 * @param o 要反射的Object
+	 * @param targetClass 要反射的目标对象Class
 	 * @return Object.clss或者T.class
 	 */
-	public static <T> Class<T> getSuperClassGenricType(final Class o) {
-		return getSuperClassGenricType(o, 0);
+	public static <T> Class<T> getSuperClassGenricType(final Class targetClass) {
+		return getSuperClassGenricType(targetClass, 0);
 	}
 
 	/**
@@ -575,28 +621,30 @@ public abstract class ReflectionUtils {
 	 * public UserDao extends HibernateDao<User,Long>
 	 * </pre>
 	 *
-	 * @param o 要反射的Object
+	 * @param targetClass 要反射的目标对象Class
 	 * @param index 反省参数的位置
 	 * 
 	 * @return class
 	 */
-	public static Class getSuperClassGenricType(final Class o, final int index) {
-
-		Type genType = o.getGenericSuperclass();
+	public static Class getSuperClassGenricType(final Class targetClass, final int index) {
+		
+		Assert.notNull(targetClass, "targetClass不能为空");
+		
+		Type genType = targetClass.getGenericSuperclass();
 
 		if (!(genType instanceof ParameterizedType)) {
-			logger.warn(o.getSimpleName() + "'s superclass not ParameterizedType");
+			logger.warn(targetClass.getSimpleName() + "'s superclass not ParameterizedType");
 			return Object.class;
 		}
 
 		Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
 
 		if (index >= params.length || index < 0) {
-			logger.warn("索引: " + index + ", Size of " + o.getSimpleName() + "'s Parameterized Type: " + params.length);
+			logger.warn("Index: " + index + ", Size of " + targetClass.getSimpleName() + "'s Parameterized Type: " + params.length);
 			return Object.class;
 		}
 		if (!(params[index] instanceof Class)) {
-			logger.warn(o.getSimpleName() + " not set the actual class on superclass generic parameter");
+			logger.warn(targetClass.getSimpleName() + " not set the actual Class targetClassn superclass generic parameter");
 			return Object.class;
 		}
 
@@ -606,18 +654,38 @@ public abstract class ReflectionUtils {
 	/**
 	 * 通过Class创建对象
 	 * 
-	 * @param o 目标对象Class
+	 * @param targetClass 目标对象Class
 	 * 
 	 * @return Object
 	 */
-	public static <T> T newInstance(Class o) {
-		Assert.notNull(o, "o不能为空");
+	public static <T> T newInstance(Class targetClass) {
+		Assert.notNull(targetClass, "targetClass不能为空");
 		try {
-			return (T) o.newInstance();
+			return (T) targetClass.newInstance();
 		} catch (Exception e) {
 			throw convertReflectionExceptionToUnchecked(e);
 		} 
 		
+	}
+	
+	/**
+	 * 获取对象Class如果被cglib AOP过的对象或对象为CGLIB的Class，将获取真正的Class类型
+	 * 
+	 * @param target 对象
+	 * 
+	 * @return Class
+	 */
+	public static Class<?> getTargetClass(Object target) {
+		Assert.notNull(target, "target不能为空");
+		Class clazz = target.getClass();
+		if (clazz != null && clazz.getName().contains(CGLIB_CLASS_SEPARATOR)) {
+			Class<?> superClass = clazz.getSuperclass();
+			if (superClass != null && !Object.class.equals(superClass)) {
+				return superClass;
+			}
+		}
+		return clazz;
+
 	}
 
 	/**
