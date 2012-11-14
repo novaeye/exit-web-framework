@@ -12,6 +12,7 @@
 	<url>http://maven.apache.org</url>
 
 	<properties>
+	
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- web 依赖框架版本 -->
@@ -28,6 +29,7 @@
 		<shiro.version>1.2.1</shiro.version>
 		<ehcache.version>2.6.2</ehcache.version>
 		<cas.client.version>3.2.1</cas.client.version>
+		
 	</properties>
 
 	<repositories>
