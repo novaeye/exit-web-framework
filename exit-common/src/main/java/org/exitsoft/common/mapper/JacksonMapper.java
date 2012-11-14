@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +15,6 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.ser.FilterProvider;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 
@@ -81,7 +77,7 @@ public class JacksonMapper {
 	 * </p>
 	 * @return {@link JacksonMapper}
 	 */
-	public static JacksonMapper nonEmptyBinder() {
+	public static JacksonMapper nonEmptyMapper() {
 		
 		return new JacksonMapper(Include.NON_EMPTY);
 	}
@@ -91,7 +87,7 @@ public class JacksonMapper {
 	 * 
 	 * @return {@link JacksonMapper}
 	 */
-	public static JacksonMapper alwaysBinder() {
+	public static JacksonMapper alwaysMapper() {
 		return new JacksonMapper(Include.ALWAYS);
 	}
 	
@@ -100,7 +96,7 @@ public class JacksonMapper {
 	 * 
 	 * @return {@link JacksonMapper}
 	 */
-	public static JacksonMapper nonNullBinder() {
+	public static JacksonMapper nonNullMapper() {
 		return new JacksonMapper(Include.NON_NULL);
 	}
 
@@ -108,7 +104,7 @@ public class JacksonMapper {
 	 * 创建只输出初始值被改变的属性到Json字符串的ObjectMapper, 最节约的存储方式。
 	 * @return
 	 */
-	public static JacksonMapper nonDefaultBinder() {
+	public static JacksonMapper nonDefaultMapper() {
 		return new JacksonMapper(Include.NON_DEFAULT);
 	}
 	
@@ -192,22 +188,8 @@ public class JacksonMapper {
         } catch (IOException e) {  
             logger.warn("write to json string error:" + target, e);  
             return null;  
-        }  
+        }
     }
-    
-    /**
-     * 根据finterName动态过滤对象属性
-     * 
-     * @param filterName 过滤器名称
-     * @param properties 可变长度的属性名
-     * 
-     * @return {@link JacksonMapper}
-     */
-    public JacksonMapper filter(String filterName, String... properties) {
-		FilterProvider filterProvider = new SimpleFilterProvider().addFilter(filterName, SimpleBeanPropertyFilter.filterOutAllExcept(properties));
-		mapper.setFilters(filterProvider);
-		return this;
-	}
     
     /** 
      * 设置转换日期类型的时间科室,如果不设置默认打印Timestamp毫秒数.

@@ -4,12 +4,15 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+
 /**
  * UUID主键父类
  * 
  * @author vincent
  *
  */
+@JsonFilter("propertyFilter")
 public class UniversallyUniqueIdentifier implements Serializable{
 	
 	protected String id;

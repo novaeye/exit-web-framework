@@ -28,33 +28,32 @@ public class TestJacksonMapper {
 		String json = null;
 		
 		//测试不管任何属性的值是否为空，只要存在就序列化成json
-		json = JacksonMapper.alwaysBinder().toJson(user);
+		json = JacksonMapper.alwaysMapper().toJson(user);
 		Assert.assertTrue(StringUtils.contains(json,"\"groupsList\""));
 		
 		//测试紧存在属性的值不为空的json
 		user.setGroupsList(new ArrayList<Group>());
-		json = JacksonMapper.nonEmptyBinder().toJson(user);
+		json = JacksonMapper.nonEmptyMapper().toJson(user);
 		Assert.assertFalse(StringUtils.contains(json,"\"groupsList\""));
 		Assert.assertFalse(StringUtils.contains(json,"\"email\""));
 		
 		//测试紧存在属性的值不为null的json
-		json = JacksonMapper.nonNullBinder().toJson(user);
+		json = JacksonMapper.nonNullMapper().toJson(user);
 		Assert.assertTrue(StringUtils.contains(json,"\"groupsList\""));
 		Assert.assertTrue(StringUtils.contains(json,"\"groupNames\""));
 		
 		//测试初始值被改变的json user.setGroupsList(new ArrayList<Group>());
 		user = new User();
-		json = JacksonMapper.nonDefaultBinder().toJson(user);
+		json = JacksonMapper.nonDefaultMapper().toJson(user);
 		Assert.assertTrue(StringUtils.contains(json,"{}"));
 		
 		user.setEmail("vincent@es.com");
 		user.setUsername("vincent");
 		user.setGroupsList(new ArrayList<Group>());
-		json = JacksonMapper.nonDefaultBinder().toJson(user);
+		json = JacksonMapper.nonDefaultMapper().toJson(user);
 		
 		Assert.assertTrue(StringUtils.contains(json,"\"email\""));
 		Assert.assertTrue(StringUtils.contains(json,"\"groupsList\""));
 		Assert.assertTrue(StringUtils.contains(json,"\"groupNames\""));
 	}
-	
 }
