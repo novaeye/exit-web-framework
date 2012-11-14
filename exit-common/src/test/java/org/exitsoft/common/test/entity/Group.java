@@ -3,6 +3,8 @@ package org.exitsoft.common.test.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 
 /**
  * 组实体
@@ -10,7 +12,7 @@ import java.util.List;
  * @author vincent
  *
  */
-
+@XmlRootElement
 public class Group extends UniversallyUniqueIdentifier{
 
 	public static final String UserGroups = "userGroups";

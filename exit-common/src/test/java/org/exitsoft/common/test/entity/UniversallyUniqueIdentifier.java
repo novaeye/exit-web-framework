@@ -2,9 +2,11 @@ package org.exitsoft.common.test.entity;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang3.StringUtils;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * UUID主键父类
@@ -12,7 +14,8 @@ import com.fasterxml.jackson.annotation.JsonFilter;
  * @author vincent
  *
  */
-@JsonFilter("propertyFilter")
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.PROPERTY)
 public class UniversallyUniqueIdentifier implements Serializable{
 	
 	protected String id;

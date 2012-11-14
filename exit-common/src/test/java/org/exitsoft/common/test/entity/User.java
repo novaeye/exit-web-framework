@@ -2,8 +2,10 @@ package org.exitsoft.common.test.entity;
 
 import java.util.List;
 
-import org.exitsoft.common.utils.CollectionUtils;
+import javax.xml.bind.annotation.XmlRootElement;
 
+import org.exitsoft.common.utils.CollectionUtils;
+@XmlRootElement
 public class User extends UniversallyUniqueIdentifier{
 	//登录名称
 	private String username = "vincent";
