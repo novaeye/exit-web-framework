@@ -245,7 +245,7 @@ public abstract class ReflectionUtils {
 			
 			sc = sc.getSuperclass();
 			
-		}while(sc != Object.class && ignoreParent);
+		}while(sc != Object.class && !ignoreParent);
 		
 		return fields;
 	}
@@ -341,7 +341,7 @@ public abstract class ReflectionUtils {
 			
 			CollectionUtils.addAll(methods, result);
 			superClass = superClass.getSuperclass();
-		}while(superClass != Object.class &&  ignoreParent);
+		}while(superClass != Object.class && !ignoreParent);
 		
 		return methods;
 	}
