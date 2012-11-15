@@ -1,18 +1,24 @@
-package org.exitsoft.common.utils;
+package org.exitsoft.common.mapper;
 
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.namespace.QName;
 
 import org.apache.commons.lang3.StringUtils;
+import org.exitsoft.common.mapper.jaxb.wrapper.CollectionWrapper;
+import org.exitsoft.common.mapper.jaxb.wrapper.MapWrapper;
+import org.exitsoft.common.utils.ReflectionUtils;
+import org.springframework.util.Assert;
 
 /**
  * JAXB工具类
@@ -20,10 +26,12 @@ import org.apache.commons.lang3.StringUtils;
  * @author vincent
  *
  */
-public class JaxbUtils {
+public class JaxbMapper {
 	
 	//默认xml编码
-	private static final String DEFAULT_ENCODING = "UTF-8"; 
+	private static final String DEFAULT_ENCODING = "UTF-8";
+	
+	private static ConcurrentMap<Class<?>, JAXBContext> jaxbContexts = new ConcurrentHashMap<Class<?>, JAXBContext>();
 
 	/**
 	 * 将Java参数对象转换为xml，默认encoding为UTF-8 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
@@ -95,13 +103,50 @@ public class JaxbUtils {
 	 */
 	public static String marshaller(Collection<?> root, String rootName, Class<?> targetClass, String encoding) {
 		try {
-			CollectionWrapper wrapper = new CollectionWrapper();
-			wrapper.collection = root;
-
-			JAXBElement<CollectionWrapper> wrapperElement = new JAXBElement<CollectionWrapper>(new QName(rootName),CollectionWrapper.class, wrapper);
+			CollectionWrapper wrapper = new CollectionWrapper(root);
 
 			StringWriter writer = new StringWriter();
-			createMarshaller(targetClass, encoding).marshal(wrapperElement, writer);
+			createMarshaller(targetClass, encoding).marshal(wrapper, writer);
+
+			return writer.toString();
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * 将Java Map类型的对象转换为Xml
+	 * 
+	 * @param root Java集合
+	 * @param rootName 节点名称
+	 * @param clazz 类型Class
+	 * 
+	 * @return String
+	 */
+	public static String marshaller(Map<?,?> root, String rootName) {
+		return marshaller(root,rootName,DEFAULT_ENCODING);
+	}
+	
+	/**
+	 * 将Java Map类型的对象转换为Xml
+	 * 
+	 * @param root Java集合
+	 * @param rootName 节点名称
+	 * @param clazz 类型Class
+	 * @param encoding xml编码
+	 * 
+	 * @return String
+	 */
+	public static String marshaller(Map<?,?> root, String rootName, String encoding) {
+		try {
+			MapWrapper wrapper = new MapWrapper(root);
+			
+			StringWriter writer = new StringWriter();
+			Marshaller marshaller = JaxbMapper.createMarshaller(wrapper.getClass());
+			
+			marshaller.marshal(wrapper, writer);
 
 			return writer.toString();
 		} catch (JAXBException e) {
@@ -130,11 +175,23 @@ public class JaxbUtils {
 		
 		return null;
 	}
-
 	/**
 	 * 创建Marshaller对象
 	 * 
-	 * @param clazz
+	 * @param targetClass
+	 * 
+	 * @return {@link Marshaller}
+	 */
+	public static Marshaller createMarshaller(Class<?> targetClass) {
+		
+		
+		return createMarshaller(targetClass,null);
+	}
+	
+	/**
+	 * 创建Marshaller对象
+	 * 
+	 * @param targetClass
 	 * @param encoding
 	 * 
 	 * @return {@link Marshaller}
@@ -143,6 +200,7 @@ public class JaxbUtils {
 		try {
 			
 			JAXBContext jaxbContext = createJAXBContext(targetClass);
+			
 			Marshaller marshaller = jaxbContext.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, !StringUtils.isNotBlank(encoding) ? DEFAULT_ENCODING : encoding);
@@ -158,7 +216,7 @@ public class JaxbUtils {
 	/**
 	 * 创建UnMarshaller对象
 	 * 
-	 * @param clazz
+	 * @param targetClass
 	 * 
 	 * @return {@link Unmarshaller}
 	 */
@@ -175,24 +233,24 @@ public class JaxbUtils {
 
 	/**
 	 * 
-	 * @param clazz
+	 * @param classesToBeBound
 	 * @return
 	 */
 	protected static JAXBContext createJAXBContext(Class<?> classesToBeBound) {
-		try {
-			return JAXBContext.newInstance(classesToBeBound, CollectionWrapper.class);
-		} catch (JAXBException e) {
-			e.printStackTrace();
+		Assert.notNull(classesToBeBound, "classesToBeBound不能为空");
+		JAXBContext jaxbContext = jaxbContexts.get(classesToBeBound);
+		if (jaxbContext == null) {
+			try {
+				jaxbContext = JAXBContext.newInstance(classesToBeBound, CollectionWrapper.class);
+				jaxbContexts.putIfAbsent(classesToBeBound, jaxbContext);
+				
+			} catch (JAXBException ex) {
+				ex.printStackTrace();
+				return null;
+			}
 		}
-		return null;
-	}
 
-	/**
-	 * 封装Root Element 是 Collection的情况.
-	 */
-	public static class CollectionWrapper {
-
-		@XmlAnyElement
-		protected Collection<?> collection;
+		return jaxbContext;
 	}
+	
 }
