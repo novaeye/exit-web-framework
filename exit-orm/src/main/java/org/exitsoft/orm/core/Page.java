@@ -2,7 +2,6 @@
 package org.exitsoft.orm.core;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -102,29 +101,6 @@ public class Page<T> extends PageRequest implements Serializable{
 		} else {
 			return getPageNo();
 		}
-	}
-	
-	/**
-	 * 计算以当前页为中心的页面列表,如"首页,23,24,25,26,27,末页"
-	 * @param count 需要计算的列表大小
-	 * @return pageNo列表 
-	 */
-	public List<Integer> getSlider(int count) {
-		int halfSize = count / 2;
-		int totalPage = getTotalPages();
-
-		int startPageNo = Math.max(getPageNo() - halfSize, 1);
-		int endPageNo = Math.min(startPageNo + count - 1, totalPage);
-
-		if (endPageNo - startPageNo < count) {
-			startPageNo = Math.max(endPageNo - count, 1);
-		}
-
-		List<Integer> result = new ArrayList<Integer>();
-		for (int i = startPageNo; i <= endPageNo; i++) {
-			result.add(i);
-		}
-		return result;
 	}
 
 }
