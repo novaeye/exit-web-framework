@@ -23,11 +23,11 @@ public class Page<T> extends PageRequest implements Serializable{
 	}
 
 	public Page(PageRequest request) {
-		this.pageNo = request.pageNo;
-		this.pageSize = request.pageSize;
-		this.countTotal = request.countTotal;
-		this.orderBy = request.orderBy;
-		this.orderDir = request.orderDir;
+		this.pageNo = request.getPageNo();
+		this.pageSize = request.getPageSize();
+		this.countTotal = request.isCountTotal();
+		this.orderBy = request.getOrderBy();
+		this.orderDir = request.getOrderDir();
 	}
 
 	/**
