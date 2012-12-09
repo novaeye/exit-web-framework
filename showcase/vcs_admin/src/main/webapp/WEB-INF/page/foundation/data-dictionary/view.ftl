@@ -180,11 +180,6 @@
 			        	上一页
 			        </a>
 		        </#if>
-		        <#list page.getSlider(page.pageSize) as index>
-			        <a class="number <#if page.pageNo == index>current</#if>" href="javascript:search(${index})">
-			        	${index}
-			        </a>
-		        </#list>
 		        <#if page.hasNextPage()>
 			        <a href="javascript:search(${page.nextPage})">
 			        	下一页
