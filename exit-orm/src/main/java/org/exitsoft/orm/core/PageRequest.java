@@ -14,8 +14,10 @@ import org.springframework.util.Assert;
  * 分页参数封装类.
  * @author vincent
  */
-public class PageRequest {
+public class PageRequest implements java.io.Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 第几页
 	 */
