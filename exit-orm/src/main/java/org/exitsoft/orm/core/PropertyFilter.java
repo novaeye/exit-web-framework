@@ -1,6 +1,8 @@
 
 package org.exitsoft.orm.core;
 
+import java.io.Serializable;
+
 /**
  * orm条件过滤器，可以通过{@link PropertyFilterRestrictionHolder#createPropertyFilter(String, String)}创建，使用他创建可以直接
  * 写入表达式即可，相关表达式样式查看{@link PropertyCriterionBuilder}的实现类,如果直接创建查看{@link PropertyCriterionBuilder}
@@ -26,7 +28,7 @@ package org.exitsoft.orm.core;
  * 
  * @author vincent
  */
-public class PropertyFilter {
+public class PropertyFilter implements Serializable{
 	
 	//约束名称
 	private String restrictionName;
