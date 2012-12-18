@@ -261,7 +261,7 @@ public class AccountManager {
 	 * @return List
 	 */
 	public List<Resource> getUserResourcesByUserId(String userId) {
-		return resourceDao.findByQueryNamedUseJpaStyle(Resource.UserResources, userId);
+		return resourceDao.findByNamedQueryUseJpaStyle(Resource.UserResources, userId);
 	}
 	
 	/**
@@ -415,7 +415,7 @@ public class AccountManager {
 	 * @return List
 	 */
 	public List<Group> getUserGroupsByUserId(String userId) {
-		return groupDao.findByQueryNamedUseJpaStyle(Group.UserGroups, userId);
+		return groupDao.findByNamedQueryUseJpaStyle(Group.UserGroups, userId);
 	}
 
 }

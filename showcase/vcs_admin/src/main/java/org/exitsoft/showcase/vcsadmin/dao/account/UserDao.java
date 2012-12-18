@@ -19,7 +19,7 @@ public class UserDao extends HibernateSupportDao<User, String>{
 	 * @param password 密码
 	 */
 	public void updatePassword(String userId, String password) {
-		executeUpdateByQueryNamedUseJapStyle(User.UpdatePassword, password,userId);
+		executeUpdateByNamedQueryUseJapStyle(User.UpdatePassword, password,userId);
 	}
 
 	
