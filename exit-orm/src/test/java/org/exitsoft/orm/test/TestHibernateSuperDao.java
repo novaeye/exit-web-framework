@@ -176,10 +176,10 @@ public class TestHibernateSuperDao {
 		roleList = dao.findByPropertyFilters(filters,"name", Role.class);
 		Assert.assertEquals(roleList.size(), 3);
 		
-		userList = dao.findByQueryNamedUseJpaStyle("QueryUserResourceJpa", "admin");
+		userList = dao.findByNamedQueryUseJpaStyle("QueryUserResourceJpa", "admin");
 		Assert.assertEquals(userList.size(), 1);
 		
-		userList = dao.findByQueryNamed("QueryUserResource", "admin");
+		userList = dao.findByNamedQuery("QueryUserResource", "admin");
 		Assert.assertEquals(userList.size(), 1);
 		
 		userList = dao.findByQuery("from User u where u.loginName=?", "admin");
@@ -260,10 +260,10 @@ public class TestHibernateSuperDao {
 		role = dao.findUniqueByPropertyFilters(filters, Role.class);
 		Assert.assertEquals(role.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0010");
 		
-		user = dao.findUniqueByQueryNamedUseJapStyle("QueryUserResourceJpa", "admin");
+		user = dao.findUniqueByNamedQueryUseJapStyle("QueryUserResourceJpa", "admin");
 		Assert.assertEquals(user.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0002");
 		
-		user = dao.findUniqueByQueryNamed("QueryUserResource", "admin");
+		user = dao.findUniqueByNamedQuery("QueryUserResource", "admin");
 		Assert.assertEquals(user.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0002");
 		
 		user = dao.findUniqueByQuery("from User u where u.loginName=?", "admin");
@@ -354,6 +354,17 @@ public class TestHibernateSuperDao {
 		Assert.assertEquals(role.getResult().size(), 1);
 		Assert.assertEquals(role.getTotalPages(), 1);
 		Assert.assertEquals(role.getTotalItems(), 1);
+		
+		user = dao.findPageByNamedQuery(request, "QueryUserResource", "vincent");
+		Assert.assertEquals(user.getResult().size(), 1);
+		Assert.assertEquals(user.getTotalPages(), 1);
+		Assert.assertEquals(user.getTotalItems(), 1);
+		
+		user = dao.findPageByNamedQueryUseJpaStyle(request, "QueryUserResourceJpa", "vincent");
+		Assert.assertEquals(user.getResult().size(), 1);
+		Assert.assertEquals(user.getTotalPages(), 1);
+		Assert.assertEquals(user.getTotalItems(), 1);
+		
 	}
 	
 	@Test

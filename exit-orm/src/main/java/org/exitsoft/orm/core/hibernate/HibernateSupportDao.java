@@ -969,10 +969,12 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	}
 	
 	/**
-	 * 根据分页参数与Query获取分页对象
-	 * @param request
-	 * @param query
-	 * @return
+	 * 根据分页请求参数与Query获取分页请求对象
+	 * 
+	 * @param request 分页请求参数对象
+	 * @param query Hibernate Query
+	 * 
+	 * @return {@link Page}
 	 */
 	public <X> Page<X> findPage(PageRequest request, Query query) {
 		Page<X> page = new Page<X>(request);
@@ -982,8 +984,8 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		}
 		
 		if (request.isCountTotal()) {
-			//FIXME 修复统计query总数方法
-			long totalCount = query.list().size();
+			List<Object> values = ReflectionUtils.invokeGetterMethod(query, "values");
+			long totalCount = countHqlResult(query.getQueryString(), values.toArray());
 			page.setTotalItems(totalCount);
 		}
 		
@@ -1016,14 +1018,79 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		return page;
 	}
 	
-	public <X> Page<X> findPageForNamedQuery(PageRequest request, String namedQuery,Object... values) {
-		Query query = createQueryByQueryNamed(namedQuery, values);
+	/**
+	 * 根据NamedQuery获取分页对象
+	 * 
+	 * @param request 分页请求参数
+	 * @param namedQuery hibernate named query
+	 * @param values 值
+	 * 
+	 * @return Page
+	 */
+	public <X> Page<X> findPageByNamedQuery(PageRequest request, String namedQuery,Object... values) {
+		Query query = createQueryByNamedQuery(namedQuery, values);
+		Page<X> page = new Page<X>(request);
+		
+		if (request == null) {
+			return page;
+		}
+		
+		if (request.isCountTotal()) {
+			
+			long totalCount = countHqlResult(query.getQueryString(), values);
+			page.setTotalItems(totalCount);
+		}
+		
+		setPageRequestToQuery(query, request);
+		
+		List result = query.list();
+		page.setResult(result);
+		
+		return page;
+	}
+	
+	/**
+	 * 根据NamedQuery获取分页对象
+	 * 
+	 * @param request 分页请求参数
+	 * @param namedQuery hibernate named query
+	 * @param values 值
+	 * 
+	 * @return Page
+	 */
+	public <X> Page<X> findPageByNamedQuery(PageRequest request, String namedQuery,Map<String, Object> values) {
+		Query query = createQueryByNamedQuery(namedQuery, values);
 		return findPage(request,query);
 	}
 	
-	public <X> Page<X> findPageForNamedQueryUseJpaStyle(PageRequest request, String namedQuery,Object... values) {
-		Query query = createQueryByQueryNamedUseJpaStyle(namedQuery, values);
-		return findPage(request,query);
+	/**
+	 * 根据NamedQuery获取分页对象（使用jpa风格参数方式）
+	 * 
+	 * @param request 分页请求参数
+	 * @param namedQuery hibernate named query
+	 * @param values 值
+	 * 
+	 * @return Page
+	 */
+	public <X> Page<X> findPageByNamedQueryUseJpaStyle(PageRequest request, String namedQuery,Object... values) {
+		Query query = createQueryByNamedQueryUseJpaStyle(namedQuery, values);
+		Page<X> page = new Page<X>(request);
+		
+		if (request == null) {
+			return page;
+		}
+		
+		if (request.isCountTotal()) {
+			
+			long totalCount = countHqlResultUseJpaStyle(query.getQueryString(), values);
+			page.setTotalItems(totalCount);
+		}
+		
+		setPageRequestToQuery(query, request);
+		
+		List result = query.list();
+		page.setResult(result);
+		return page;
 	}
 	
 	/**

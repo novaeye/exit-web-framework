@@ -414,8 +414,8 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * 
 	 * @return List
 	 */
-	public <X> List<X> findByQueryNamed(String queryNamed,Map<String, Object> values) {
-		return createQueryByQueryNamed(queryNamed, values).list();
+	public <X> List<X> findByNamedQuery(String queryNamed,Map<String, Object> values) {
+		return createQueryByNamedQuery(queryNamed, values).list();
 	}
 
 	/**
@@ -430,8 +430,8 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * 
 	 * @return List
 	 */
-	public <X> List<X> findByQueryNamed(String queryNamed,Object... values) {
-		return createQueryByQueryNamed(queryNamed, values).list();
+	public <X> List<X> findByNamedQuery(String queryNamed,Object... values) {
+		return createQueryByNamedQuery(queryNamed, values).list();
 	}
 	
 	/**
@@ -446,8 +446,8 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * 
 	 * @return List
 	 */
-	public <X> List<X> findByQueryNamedUseJpaStyle(String queryNamed,Object... values) {
-		return createQueryByQueryNamedUseJpaStyle(queryNamed, values).list();
+	public <X> List<X> findByNamedQueryUseJpaStyle(String queryNamed,Object... values) {
+		return createQueryByNamedQueryUseJpaStyle(queryNamed, values).list();
 	}
 	
 	/**
@@ -509,8 +509,8 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * 
 	 * @return Object
 	 */
-	public <X> X findUniqueByQueryNamed(String queryNamed,Map<String, Object> values) {
-		return (X)createQueryByQueryNamed(queryNamed, values).uniqueResult();
+	public <X> X findUniqueByNamedQuery(String queryNamed,Map<String, Object> values) {
+		return (X)createQueryByNamedQuery(queryNamed, values).uniqueResult();
 	}
 
 	/**
@@ -525,8 +525,8 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * 
 	 * @return Object
 	 */
-	public <X> X findUniqueByQueryNamed(String queryNamed,Object... values) {
-		return (X) createQueryByQueryNamed(queryNamed, values).uniqueResult();
+	public <X> X findUniqueByNamedQuery(String queryNamed,Object... values) {
+		return (X) createQueryByNamedQuery(queryNamed, values).uniqueResult();
 	}
 	
 	/**
@@ -542,8 +542,8 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * 
 	 * @return Object
 	 */
-	public <X> X findUniqueByQueryNamedUseJapStyle(String queryNamed,Object... values) {
-		return (X) createQueryByQueryNamedUseJpaStyle(queryNamed, values).uniqueResult();
+	public <X> X findUniqueByNamedQueryUseJapStyle(String queryNamed,Object... values) {
+		return (X) createQueryByNamedQueryUseJpaStyle(queryNamed, values).uniqueResult();
 	}
 	
 	/**
@@ -752,7 +752,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * 
 	 * @return {@link Query}
 	 */
-	protected Query createQueryByQueryNamed(String queryNamed,Map<String, Object> values) {
+	protected Query createQueryByNamedQuery(String queryNamed,Map<String, Object> values) {
 		Query query = getSession().getNamedQuery(queryNamed);
 		if (values != null) {
 			query.setProperties(values);
@@ -772,7 +772,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * 
 	 * @return {@link Query}
 	 */
-	protected Query createQueryByQueryNamed(String queryNamed,Object... values) {
+	protected Query createQueryByNamedQuery(String queryNamed,Object... values) {
 		Assert.hasText(queryNamed, "QueryNamed不能为空");
 		Query query = getSession().getNamedQuery(queryNamed);
 		setQueryValues(query, values);
@@ -791,7 +791,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * 
 	 * @return {@link Query}
 	 */
-	protected Query createQueryByQueryNamedUseJpaStyle(String queryNamed,Object... values) {
+	protected Query createQueryByNamedQueryUseJpaStyle(String queryNamed,Object... values) {
 		Query query = getSession().getNamedQuery(queryNamed);
 		setQueryValuesByJpaStley(query, values);
 		return query;
@@ -1055,7 +1055,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 		String countHql = prepareCountHql(queryString);
 
 		try {
-			return (Long)createQuery(countHql, values).uniqueResult();
+			return (Long)createQueryUseJpaStyle(countHql, values).uniqueResult();
 		} catch (Exception e) {
 			throw new RuntimeException("hql不能自动计算总数:"+ countHql, e);
 		}
@@ -1380,8 +1380,8 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 *            
 	 * @return int
 	 */
-	public int executeUpdateByQueryNamed(String queryNamed,Map<String, ?> values) {
-		return createQueryByQueryNamed(queryNamed, values).executeUpdate();
+	public int executeUpdateByNamedQuery(String queryNamed,Map<String, ?> values) {
+		return createQueryByNamedQuery(queryNamed, values).executeUpdate();
 	}
 
 	/**
@@ -1395,8 +1395,8 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 *            
 	 * @return int
 	 */
-	public int executeUpdateByQueryNamed(String queryNamed,Object... values) {
-		return createQueryByQueryNamed(queryNamed, values).executeUpdate();
+	public int executeUpdateByNamedQuery(String queryNamed,Object... values) {
+		return createQueryByNamedQuery(queryNamed, values).executeUpdate();
 	}
 	
 	/**
@@ -1410,7 +1410,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 *            
 	 * @return int
 	 */
-	public int executeUpdateByQueryNamedUseJapStyle(String queryNamed,Object... values) {
-		return createQueryByQueryNamedUseJpaStyle(queryNamed, values).executeUpdate();
+	public int executeUpdateByNamedQueryUseJapStyle(String queryNamed,Object... values) {
+		return createQueryByNamedQueryUseJpaStyle(queryNamed, values).executeUpdate();
 	}
 }
