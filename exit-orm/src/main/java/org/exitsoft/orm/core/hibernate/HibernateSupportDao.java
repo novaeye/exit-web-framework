@@ -34,6 +34,7 @@ import org.springframework.util.Assert;
  * @param <T> ORM对象
  * @param <PK> 主键Id类型
  */
+@SuppressWarnings({"rawtypes","unchecked"})
 public class HibernateSupportDao<T,PK extends Serializable> extends BasicHibernateDao<T, PK>{
 
 	public HibernateSupportDao(){
@@ -768,6 +769,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	}
 	
 	/**
+	 * 
 	 * 通过orm实体的属性名称查询单个orm实体
 	 * 
 	 * @param propertyName 属性名称
@@ -959,8 +961,35 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		}
 		
 		setPageRequestToCriteria(c, request);
-
+		
 		List result = c.list();
+		page.setResult(result); 
+		
+		return page;
+	}
+	
+	/**
+	 * 根据分页参数与Query获取分页对象
+	 * @param request
+	 * @param query
+	 * @return
+	 */
+	public <X> Page<X> findPage(PageRequest request, Query query) {
+		Page<X> page = new Page<X>(request);
+		
+		if (request == null) {
+			return page;
+		}
+		
+		if (request.isCountTotal()) {
+			//FIXME 修复统计query总数方法
+			long totalCount = query.list().size();
+			page.setTotalItems(totalCount);
+		}
+		
+		setPageRequestToQuery(query, request);
+		
+		List result = query.list();
 		page.setResult(result);
 		
 		return page;
@@ -980,11 +1009,21 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		Page<X> page = createQueryPage(request, queryString, values);
 		Query q = createQuery(queryString, values);
 
-		setPageParameterToQuery(q, request);
+		setPageRequestToQuery(q, request);
 
 		List result = q.list();
 		page.setResult(result);
 		return page;
+	}
+	
+	public <X> Page<X> findPageForNamedQuery(PageRequest request, String namedQuery,Object... values) {
+		Query query = createQueryByQueryNamed(namedQuery, values);
+		return findPage(request,query);
+	}
+	
+	public <X> Page<X> findPageForNamedQueryUseJpaStyle(PageRequest request, String namedQuery,Object... values) {
+		Query query = createQueryByQueryNamedUseJpaStyle(namedQuery, values);
+		return findPage(request,query);
 	}
 	
 	/**
@@ -1001,7 +1040,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		Page<X> page = createQueryPage(request, queryString, values);
 		Query q = createQuery(queryString, values);
 
-		setPageParameterToQuery(q, request);
+		setPageRequestToQuery(q, request);
 
 		List result = q.list();
 		page.setResult(result);
@@ -1031,7 +1070,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		}
 
 		if (pageRequest.isOrderBySetted()) {
-			queryString = setOrderParameterToHql(queryString, pageRequest);
+			queryString = setPageRequestToHql(queryString, pageRequest);
 		}
 		
 		return page;
@@ -1040,7 +1079,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	/**
 	 * 在HQL的后面添加分页参数定义的orderBy, 辅助函数.
 	 */
-	protected String setOrderParameterToHql( String hql, PageRequest pageRequest) {
+	protected String setPageRequestToHql( String hql, PageRequest pageRequest) {
 		StringBuilder builder = new StringBuilder(hql);
 		builder.append(" order by");
 
@@ -1056,7 +1095,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	/**
 	 * 设置分页参数到Query对象,辅助函数.
 	 */
-	protected Query setPageParameterToQuery( Query q, PageRequest pageRequest) {
+	protected Query setPageRequestToQuery( Query q, PageRequest pageRequest) {
 		q.setFirstResult(pageRequest.getOffset());
 		q.setMaxResults(pageRequest.getPageSize());
 		return q;

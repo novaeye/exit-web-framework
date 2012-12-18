@@ -28,6 +28,7 @@ import java.io.Serializable;
  * 
  * @author vincent
  */
+@SuppressWarnings("serial")
 public class PropertyFilter implements Serializable{
 	
 	//约束名称

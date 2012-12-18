@@ -51,6 +51,7 @@ import org.springframework.util.Assert;
  * @param <T> ROM对象
  * @param <PK> ORM主键ID类型
  */
+@SuppressWarnings("unchecked")
 public class BasicHibernateDao<T,PK extends Serializable> {
 	
 	protected SessionFactory sessionFactory;
