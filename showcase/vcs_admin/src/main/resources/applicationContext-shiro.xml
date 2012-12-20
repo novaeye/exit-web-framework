@@ -16,7 +16,7 @@
     
     <!-- 自定义shiro的realm数据库授权 -->
     <bean id="authorizationRealm" class="org.exitsoft.showcase.vcsadmin.service.account.AuthorizationRealm">
-   		<property name="defaultPermissions" value="security:change-password,security:index" />
+   		<property name="defaultPermissions" value="security:change-password,security:index,data:test" />
     	<property name="authorizationCacheName" value="shiroAuthorizationCache" />
     	<property name="authenticationNames" value="jdbcAuthentication" />
     </bean>
@@ -78,11 +78,11 @@
 	    <property name="filterChainDefinitionMap" ref="chainDefinitionSectionMetaSource" />
 	</bean>
 	
-	<!-- shiro为Spring BeanPostProcessor处理器调用init()方法 -->
+	<!-- shiro为集成spring -->
 	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
 	
-	<!-- spring aop 代理创建器 -->
-    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
+	<!-- 启用shiro为spring配置的bean注释，只运行在lifecycleBeanProcessor之后  -->
+    <bean id="annotationProxy" class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
 		<property name="proxyTargetClass" value="true" />
     </bean>
     
