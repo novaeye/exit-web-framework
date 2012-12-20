@@ -404,50 +404,50 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 	
 	/**
-	 * 通过queryNamed查询全部。参数形式为命名参数形式
+	 * 通过namedQuery查询全部。参数形式为命名参数形式
 	 * <pre>
 	 * from Object o where o.property1 = :property1 and o.property2 = :proerty2
 	 * </pre>
 	 * 
-	 * @param queryNamed queryNamed
+	 * @param namedQuery namedQuery
 	 * @param values 属性名参数规则
 	 * 
 	 * @return List
 	 */
-	public <X> List<X> findByNamedQuery(String queryNamed,Map<String, Object> values) {
-		return createQueryByNamedQuery(queryNamed, values).list();
+	public <X> List<X> findByNamedQuery(String namedQuery,Map<String, Object> values) {
+		return createQueryByNamedQuery(namedQuery, values).list();
 	}
 
 	/**
-	 * 通过queryNamed查询全部,参数形式为jdbc参数形式:
+	 * 通过namedQuery查询全部,参数形式为jdbc参数形式:
 	 * <pre>
 	 * //使用是jdbc参数风格(问号后面没有带顺序值)
 	 * from object o where o.property = ? and o.property = ?
 	 * </pre>
 	 * 
-	 * @param queryNamed queryNamed
+	 * @param namedQuery namedQuery
 	 * @param values 值
 	 * 
 	 * @return List
 	 */
-	public <X> List<X> findByNamedQuery(String queryNamed,Object... values) {
-		return createQueryByNamedQuery(queryNamed, values).list();
+	public <X> List<X> findByNamedQuery(String namedQuery,Object... values) {
+		return createQueryByNamedQuery(namedQuery, values).list();
 	}
 	
 	/**
-	 * 通过queryNamed查询全部,参数形式为jpa风格形式:
+	 * 通过namedQuery查询全部,参数形式为jpa风格形式:
 	 * <pre>
 	 * //使用是jpa参数风格(问号后面带顺序值"?1")
 	 * from object o where o.property = ?1 and o.property = ?2
 	 * </pre>
 	 * 
-	 * @param queryNamed queryNamed
+	 * @param namedQuery namedQuery
 	 * @param values 值
 	 * 
 	 * @return List
 	 */
-	public <X> List<X> findByNamedQueryUseJpaStyle(String queryNamed,Object... values) {
-		return createQueryByNamedQueryUseJpaStyle(queryNamed, values).list();
+	public <X> List<X> findByNamedQueryUseJpaStyle(String namedQuery,Object... values) {
+		return createQueryByNamedQueryUseJpaStyle(namedQuery, values).list();
 	}
 	
 	/**
@@ -509,8 +509,8 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * 
 	 * @return Object
 	 */
-	public <X> X findUniqueByNamedQuery(String queryNamed,Map<String, Object> values) {
-		return (X)createQueryByNamedQuery(queryNamed, values).uniqueResult();
+	public <X> X findUniqueByNamedQuery(String namedQuery,Map<String, Object> values) {
+		return (X)createQueryByNamedQuery(namedQuery, values).uniqueResult();
 	}
 
 	/**
@@ -525,8 +525,8 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * 
 	 * @return Object
 	 */
-	public <X> X findUniqueByNamedQuery(String queryNamed,Object... values) {
-		return (X) createQueryByNamedQuery(queryNamed, values).uniqueResult();
+	public <X> X findUniqueByNamedQuery(String namedQuery,Object... values) {
+		return (X) createQueryByNamedQuery(namedQuery, values).uniqueResult();
 	}
 	
 	/**
@@ -542,8 +542,8 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * 
 	 * @return Object
 	 */
-	public <X> X findUniqueByNamedQueryUseJapStyle(String queryNamed,Object... values) {
-		return (X) createQueryByNamedQueryUseJpaStyle(queryNamed, values).uniqueResult();
+	public <X> X findUniqueByNamedQueryUseJapStyle(String namedQuery,Object... values) {
+		return (X) createQueryByNamedQueryUseJpaStyle(namedQuery, values).uniqueResult();
 	}
 	
 	/**
@@ -728,7 +728,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * from object o where o.property = ?1 and o.property = ?2
 	 * </pre>
 	 * 
-	 * @param queryNamed queryNamed
+	 * @param namedQuery namedQuery
 	 * @param values 值
 	 * 
 	 * @return {@link Query}
@@ -741,19 +741,19 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 	
 	/**
-	 * 通过queryNamed 创建Query,参数形式为命名参数形式:
+	 * 通过namedQuery 创建Query,参数形式为命名参数形式:
 	 * <pre>
 	 * //使用的是命名参数风格
 	 * from object o where o.condition = :condition
 	 * </pre>
 	 * 
-	 * @param queryNamed queryNamed
+	 * @param namedQuery namedQuery
 	 * @param values 属性名参数规则
 	 * 
 	 * @return {@link Query}
 	 */
-	protected Query createQueryByNamedQuery(String queryNamed,Map<String, Object> values) {
-		Query query = getSession().getNamedQuery(queryNamed);
+	protected Query createQueryByNamedQuery(String namedQuery,Map<String, Object> values) {
+		Query query = getSession().getNamedQuery(namedQuery);
 		if (values != null) {
 			query.setProperties(values);
 		}
@@ -761,38 +761,38 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 
 	/**
-	 * 通过queryNamed创建Query。参数形式为jdbc参数形式:
+	 * 通过namedQuery创建Query。参数形式为jdbc参数形式:
 	 * <pre>
 	 * //使用是jdbc参数风格(问号后面没有带顺序值)
 	 * from object o where o.property = ? and o.property = ?
 	 * </pre>
 	 * 
-	 * @param queryNamed queryNamed
+	 * @param namedQuery namedQuery
 	 * @param values 值
 	 * 
 	 * @return {@link Query}
 	 */
-	protected Query createQueryByNamedQuery(String queryNamed,Object... values) {
-		Assert.hasText(queryNamed, "QueryNamed不能为空");
-		Query query = getSession().getNamedQuery(queryNamed);
+	protected Query createQueryByNamedQuery(String namedQuery,Object... values) {
+		Assert.hasText(namedQuery, "namedQuery不能为空");
+		Query query = getSession().getNamedQuery(namedQuery);
 		setQueryValues(query, values);
 		return query;
 	}
 	
 	/**
-	 * 根据queryNamed创建Hibernate Query对象，参数形式为jpa风格形式:
+	 * 根据namedQuery创建Hibernate Query对象，参数形式为jpa风格形式:
 	 * <pre>
 	 * //使用是jpa参数风格(问号后面带顺序值"?1")
 	 * from object o where o.property = ?1 and o.property = ?2
 	 * </pre>
 	 * 
-	 * @param queryNamed queryNamed
+	 * @param namedQuery namedQuery
 	 * @param values 值
 	 * 
 	 * @return {@link Query}
 	 */
-	protected Query createQueryByNamedQueryUseJpaStyle(String queryNamed,Object... values) {
-		Query query = getSession().getNamedQuery(queryNamed);
+	protected Query createQueryByNamedQueryUseJpaStyle(String namedQuery,Object... values) {
+		Query query = getSession().getNamedQuery(namedQuery);
 		setQueryValuesByJpaStley(query, values);
 		return query;
 	}
@@ -1370,7 +1370,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 
 	/**
-	 * 通过queryNamed执行HQL进行批量修改/删除操作.成功后返回更新记录数,参数形式为命名参数形式:
+	 * 通过namedQuery执行HQL进行批量修改/删除操作.成功后返回更新记录数,参数形式为命名参数形式:
 	 * <pre>
 	 * //使用的是命名参数风格
 	 * update object o set o.property = :property where o.condition = :condition
@@ -1380,12 +1380,12 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 *            
 	 * @return int
 	 */
-	public int executeUpdateByNamedQuery(String queryNamed,Map<String, ?> values) {
-		return createQueryByNamedQuery(queryNamed, values).executeUpdate();
+	public int executeUpdateByNamedQuery(String namedQuery,Map<String, ?> values) {
+		return createQueryByNamedQuery(namedQuery, values).executeUpdate();
 	}
 
 	/**
-	 * 通过queryNamed执行HQL进行批量修改/删除操作.成功后返回更新记录数,参数形式为jdbc参数形式:
+	 * 通过namedQuery执行HQL进行批量修改/删除操作.成功后返回更新记录数,参数形式为jdbc参数形式:
 	 * <pre>
 	 * //使用是jdbc参数风格(问号后面没有带顺序值)
 	 * update object o set o.property=? where o.condition = ?
@@ -1395,12 +1395,12 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 *            
 	 * @return int
 	 */
-	public int executeUpdateByNamedQuery(String queryNamed,Object... values) {
-		return createQueryByNamedQuery(queryNamed, values).executeUpdate();
+	public int executeUpdateByNamedQuery(String namedQuery,Object... values) {
+		return createQueryByNamedQuery(namedQuery, values).executeUpdate();
 	}
 	
 	/**
-	 * 通过queryNamed执行HQL进行批量修改/删除操作.成功后返回更新记录数,参数形式为jpa参数形式:
+	 * 通过namedQuery执行HQL进行批量修改/删除操作.成功后返回更新记录数,参数形式为jpa参数形式:
 	 * <pre>
 	 * //使用的是jpa参数风格(问号后面带有一个顺序值"?1")
 	 * update object o set o.property=?1 where o.condition = ?2
@@ -1410,7 +1410,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 *            
 	 * @return int
 	 */
-	public int executeUpdateByNamedQueryUseJapStyle(String queryNamed,Object... values) {
-		return createQueryByNamedQueryUseJpaStyle(queryNamed, values).executeUpdate();
+	public int executeUpdateByNamedQueryUseJapStyle(String namedQuery,Object... values) {
+		return createQueryByNamedQueryUseJpaStyle(namedQuery, values).executeUpdate();
 	}
 }

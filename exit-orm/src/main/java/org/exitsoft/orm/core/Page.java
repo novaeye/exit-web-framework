@@ -1,19 +1,19 @@
-
 package org.exitsoft.orm.core;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * 与具体ORM实现无关的分页查询结果封装.
  * 
- * @param <T> Page中记录的类型.
+ * @param <T>
+ *            Page中记录的类型.
  * 
  * @author vincent
  */
 @SuppressWarnings("serial")
-public class Page<T> extends PageRequest implements Serializable{
+public class Page<T> extends PageRequest implements Serializable {
 
 	protected List<T> result = null;
 	protected long totalItems = -1;
@@ -73,8 +73,7 @@ public class Page<T> extends PageRequest implements Serializable{
 	}
 
 	/**
-	 * 取得下页的页号, 序号从1开始.
-	 * 当前页为尾页时仍返回尾页序号.
+	 * 取得下页的页号, 序号从1开始. 当前页为尾页时仍返回尾页序号.
 	 */
 	public int getNextPage() {
 		if (hasNextPage()) {
@@ -92,8 +91,7 @@ public class Page<T> extends PageRequest implements Serializable{
 	}
 
 	/**
-	 * 取得上页的页号, 序号从1开始.
-	 * 当前页为首页时返回首页序号.
+	 * 取得上页的页号, 序号从1开始. 当前页为首页时返回首页序号.
 	 */
 	public int getPrePage() {
 		if (hasPrePage()) {
@@ -101,6 +99,31 @@ public class Page<T> extends PageRequest implements Serializable{
 		} else {
 			return getPageNo();
 		}
+	}
+
+	/**
+	 * 计算以当前页为中心的页面列表,如"首页,23,24,25,26,27,末页"
+	 * 
+	 * @param count 需要计算的列表大小
+	 * 
+	 * @return pageNo列表
+	 **/
+	public List<Integer> getSlider(int count) {
+		int halfSize = count / 2;
+		int totalPage = getTotalPages();
+		int startPageNo = Math.max(getPageNo() - halfSize, 1);
+
+		int endPageNo = Math.min(startPageNo + count - 1, totalPage);
+		if (endPageNo - startPageNo < count) {
+			startPageNo = Math.max(endPageNo - count, 1);
+		}
+
+		List<Integer> result = new ArrayList<Integer>();
+		for (int i = startPageNo; i <= endPageNo; i++) {
+			result.add(i);
+
+		}
+		return result;
 	}
 
 }
