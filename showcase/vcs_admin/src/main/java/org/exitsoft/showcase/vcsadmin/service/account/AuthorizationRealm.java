@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -34,9 +33,9 @@ public class AuthorizationRealm extends AuthorizingRealm{
 	@Autowired
 	private AccountManager accountManager;
 	
-	private String defaultPermissions;
+	private List<String> defaultPermissions;
 	
-	private String defaultRoles;
+	private List<String> defaultRoles;
 	
 	private String authenticationNames;
 	
@@ -45,7 +44,7 @@ public class AuthorizationRealm extends AuthorizingRealm{
 	 * 
 	 * @param defaultPermissions permission
 	 */
-	public void setDefaultPermissions(String defaultPermissions) {
+	public void setDefaultPermissions(List<String> defaultPermissions) {
 		this.defaultPermissions = defaultPermissions;
 	}
 	
@@ -54,7 +53,7 @@ public class AuthorizationRealm extends AuthorizingRealm{
 	 * 
 	 * @param defaultRoles role
 	 */
-	public void setDefaultRoles(String defaultRoles) {
+	public void setDefaultRoles(List<String> defaultRoles) {
 		this.defaultRoles = defaultRoles;
 	}
 	
@@ -122,10 +121,10 @@ public class AuthorizationRealm extends AuthorizingRealm{
         List<String> roles = getValue(temp,"roles\\[(.*?)\\]");
        
         //添加默认的roles到roels
-        String[] dRoles = StringUtils.split(defaultRoles,",");
-        if (ArrayUtils.isNotEmpty(dRoles)) {
-            CollectionUtils.addAll(roles, dRoles);
+        if (CollectionUtils.isNotEmpty(defaultRoles)) {
+        	CollectionUtils.addAll(roles, defaultRoles.iterator());
         }
+        
         //将当前用户拥有的roles设置到SimpleAuthorizationInfo中
         info.addRoles(roles);
 		
@@ -143,10 +142,10 @@ public class AuthorizationRealm extends AuthorizingRealm{
         List<String> permissions = getValue(temp,"perms\\[(.*?)\\]");
        
         //添加默认的permissions到permissions
-        String[] dPermissions = StringUtils.split(defaultPermissions,",");
-        if (ArrayUtils.isNotEmpty(dPermissions)) {
-            CollectionUtils.addAll(permissions, dPermissions);
+        if (CollectionUtils.isNotEmpty(defaultPermissions)) {
+        	CollectionUtils.addAll(permissions, defaultPermissions.iterator());
         }
+        
         //将当前用户拥有的permissions设置到SimpleAuthorizationInfo中
         info.addStringPermissions(permissions);
 		

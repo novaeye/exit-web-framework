@@ -7,7 +7,12 @@
     
     <!-- 自定义shiro的realm数据库授权 -->
     <bean id="authorizationRealm" class="org.exitsoft.showcase.vcsadmin.service.account.AuthorizationRealm">
-   		<property name="defaultPermissions" value="security:change-password,security:index,data:test" />
+   		<property name="defaultPermissions">
+   			<list>
+   				<value>security:change-password</value>
+   				<value>security:index</value>
+   			</list>
+   		</property>
     	<property name="authorizationCacheName" value="shiroAuthorizationCache" />
     	<property name="authenticationNames" value="jdbcAuthentication" />
     </bean>
