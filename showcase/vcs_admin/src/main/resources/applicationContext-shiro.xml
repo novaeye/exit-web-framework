@@ -1,29 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
 	<description>apache shiro 配置</description>
     
-    <!-- 自定义shiro的realm数据库授权 -->
-    <bean id="authorizationRealm" class="org.exitsoft.showcase.vcsadmin.service.account.AuthorizationRealm">
-   		<property name="defaultPermissions">
+    <!-- 自定义shiro的realm数据库身份验证 -->
+	<bean id="jdbcAuthenticationRealm" class="org.exitsoft.showcase.vcsadmin.service.account.JdbcAuthenticationRealm">
+		<property name="name" value="jdbcAuthentication" />
+		<property name="credentialsMatcher">
+			<bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+				<property name="hashAlgorithmName" value="MD5" />
+			</bean>
+		</property>
+		<property name="defaultPermissions">
    			<list>
    				<value>security:change-password</value>
    				<value>security:index</value>
    			</list>
    		</property>
     	<property name="authorizationCacheName" value="shiroAuthorizationCache" />
-    	<property name="authenticationNames" value="jdbcAuthentication" />
-    </bean>
-    
-    <!-- 自定义shiro的realm数据库身份验证 -->
-	<bean id="jdbcAuthenticationRealm" class="org.exitsoft.showcase.vcsadmin.service.account.JdbcAuthenticationRealm">
-		<property name="credentialsMatcher">
-			<bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
-				<property name="hashAlgorithmName" value="MD5" />
-			</bean>
-		</property>
 	</bean>
 	
 	<!-- shiro 的缓存管理,使用spring的ehCacheManagerFactory,
@@ -36,12 +33,7 @@
     <!-- 使用默认的WebSecurityManager -->
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<!-- realm认证和授权,从数据库读取资源 -->
-		<property name="realms">
-			<list>
-				<ref bean="jdbcAuthenticationRealm"/>
-				<ref bean="authorizationRealm"/>
-			</list>
-		</property>
+		<property name="realm" ref="jdbcAuthenticationRealm" />
 		<!-- cacheManager,集合spring缓存工厂 -->
 		<property name="cacheManager" ref="cacheManager" />
 	</bean>
@@ -51,7 +43,7 @@
 		<!-- 默认的连接配置 -->
 		<property name="filterChainDefinitions">
 			<value>
-				/login = authc
+				/login = validteCodeAuthc
 				/logout = logout
 				/resources/** = anon
 				/index = perms[security:index]
@@ -62,6 +54,11 @@
     
 	<!-- 将shiro与spring集合 -->
 	<bean id="shiroSecurityFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="filters">
+			<map>
+				<entry key="validteCodeAuthc" value-ref="validateCodeAuthenticationFilter" />
+			</map>
+		</property>
 		<!-- shiro的核心安全接口 -->
     	<property name="securityManager" ref="securityManager" />
     	<!-- 要求登录时的链接 该连接是org.exitsoft.showcase.vcsadmin.web.SystemCommonController.login()方法-->

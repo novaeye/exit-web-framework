@@ -1,15 +1,11 @@
 package org.exitsoft.showcase.vcsadmin.service.account;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -23,12 +19,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
 /**
- * apache shiro 的授权类
+ * apache shiro 的公用授权类
  * 
  * @author vincent
  *
  */
-public class AuthorizationRealm extends AuthorizingRealm{
+public abstract class AuthorizationRealm extends AuthorizingRealm{
 
 	@Autowired
 	private AccountManager accountManager;
@@ -36,8 +32,6 @@ public class AuthorizationRealm extends AuthorizingRealm{
 	private List<String> defaultPermissions;
 	
 	private List<String> defaultRoles;
-	
-	private String authenticationNames;
 	
 	/**
 	 * 默认permission，如果有多个用逗号分割
@@ -56,15 +50,6 @@ public class AuthorizationRealm extends AuthorizingRealm{
 	public void setDefaultRoles(List<String> defaultRoles) {
 		this.defaultRoles = defaultRoles;
 	}
-	
-	/**
-	 * 认证时使用的authentication名称，如果存在多个用逗号分割如："JdbcAuthentication,CasAuthentication"
-	 * 
-	 * @param authenticationNames authentication名称，如果存在多个用逗号分割如："JdbcAuthentication,CasAuthentication"
-	 */
-	public void setAuthenticationNames(String authenticationNames) {
-		this.authenticationNames = authenticationNames;
-	}
 
 	/**
 	 * 
@@ -75,17 +60,7 @@ public class AuthorizationRealm extends AuthorizingRealm{
         
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         
-        String[] names = StringUtils.split(authenticationNames, ",");
-        
-        CommonVariableModel model = null;
-        
-        for (String name : names){
-        	Iterator<?> iterator = principals.fromRealm(name).iterator();
-        	if (iterator.hasNext()) {
-        		model = (CommonVariableModel)iterator.next();
-        		break;
-        	}
-        }
+        CommonVariableModel model = (CommonVariableModel) principals.getPrimaryPrincipal();
         
         Assert.notNull(model, "找不到principals中的CommonVariableModel");
         
@@ -175,14 +150,5 @@ public class AuthorizationRealm extends AuthorizingRealm{
         }
         
 		return result;
-	}
-
-	/**
-	 * 空方法由其他的AuthenticatingRealm子类实现
-	 */
-	@Override
-	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-		
-		return null;
 	}
 }

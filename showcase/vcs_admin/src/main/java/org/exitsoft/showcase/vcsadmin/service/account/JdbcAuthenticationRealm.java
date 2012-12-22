@@ -7,7 +7,6 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.realm.AuthenticatingRealm;
 import org.exitsoft.showcase.vcsadmin.common.model.CommonVariableModel;
 import org.exitsoft.showcase.vcsadmin.entity.account.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author vincent
  *
  */
-public class JdbcAuthenticationRealm extends AuthenticatingRealm{
-	
-	public static String NAME = "jdbcAuthentication";
+public class JdbcAuthenticationRealm extends AuthorizationRealm{
 	
 	@Autowired
 	private AccountManager accountManager;
@@ -47,7 +44,7 @@ public class JdbcAuthenticationRealm extends AuthenticatingRealm{
         
         CommonVariableModel model = new CommonVariableModel(user);
         
-        return new SimpleAuthenticationInfo(model,user.getPassword(),NAME);
+        return new SimpleAuthenticationInfo(model,user.getPassword(),getName());
 	}
 	
 

@@ -1,12 +1,21 @@
 package org.exitsoft.showcase.vcsadmin.web;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
+import javax.servlet.http.HttpSession;
+
+import org.exitsoft.common.utils.ValidateCodeUtils;
 import org.exitsoft.showcase.vcsadmin.common.SystemVariableUtils;
 import org.exitsoft.showcase.vcsadmin.service.account.AccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
@@ -60,7 +69,7 @@ public class SystemCommonController {
 	 */
 	@ResponseBody
 	@RequestMapping("/changePassword")
-	public String changePassword(@RequestParam("oldPassword")String oldPassword,@RequestParam("newPassword")String newPassword) {
+	public String changePassword(String oldPassword,String newPassword) {
 		
 		if (accountManager.updateUserPassword(oldPassword,newPassword)) {
 			return "true";
@@ -68,5 +77,26 @@ public class SystemCommonController {
 		
 		return "false";
 		
+	}
+	
+	/**
+	 * 生成验证码
+	 * 
+	 * @return byte[]
+	 * @throws IOException 
+	 */
+	@RequestMapping("/validateCode")
+	public ResponseEntity<byte[]> validateCode(HttpSession session) throws IOException {
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.IMAGE_JPEG);
+		
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		
+		session.setAttribute("validateCode", ValidateCodeUtils.getCode(70, 28, 4, outputStream).toLowerCase());
+		byte[] bs = outputStream.toByteArray();
+		outputStream.close();
+		
+		return new ResponseEntity<byte[]>(bs,headers, HttpStatus.OK);
 	}
 }

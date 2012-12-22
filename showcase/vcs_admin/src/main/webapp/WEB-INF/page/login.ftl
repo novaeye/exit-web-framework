@@ -18,6 +18,9 @@
 	function login(){
 		$("#login_form").submit();
 	}
+	function reloadValidateCode() {
+		$("#validateCodeImg").attr("src","validateCode?date = " + new Date());
+	}
 </script>
 
 </head>
@@ -30,6 +33,9 @@
         	<span class="login24_icon">用户登录</span>
 		</div>
         <div class="panel_content">
+        	<#if shiroLoginFailure?has_content>
+        		<center><font color="#FF0000">${shiroLoginFailure}</font></center>
+        	</#if>
         	<form id="login_form" method="post" action="login">
             	<div class="column">
                 	<label for="username">
@@ -45,6 +51,16 @@
                     </label>
                     <div class="field">
                     	<input type="password" name="password" id="password" class="text_input_big" size="25" value="admin"/>
+                	</div>
+                </div>
+                <div class="column">
+                	<label for="validateCode">
+                    	验证码:
+                    </label>
+                    <div class="field">
+                    	<input type="text" name="validateCode" id="validateCode" class="text_input_big" size="8" />
+                    	<img id="validateCodeImg" src="validateCode" width="70" height="28"  align="absmiddle"/>
+                    	<a href="javascript:reloadValidateCode();">看不请?</a>
                 	</div>
                 </div>
             </form>
