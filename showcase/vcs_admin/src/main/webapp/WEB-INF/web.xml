@@ -103,7 +103,7 @@
 	</error-page>
 	<error-page>
 		<error-code>401</error-code>
-		<location>/WEB-INF/page/error/404.jsp</location>
+		<location>/WEB-INF/page/error/401.jsp</location>
 	</error-page>
 	<error-page>
 		<error-code>500</error-code>
