@@ -5,14 +5,8 @@
 	
 	<description>apache shiro 配置</description>
 	
-	<!-- 采用缓存sessionDao来管理本地sessionid对象 -->
-	<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
-        <property name="sessionDAO">
-	        <bean class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
-		        <property name="activeSessionsCacheName" value="shiroActiveSessionCache" />
-		    </bean>
-        </property>
-    </bean>
+	<!-- 让shrio采用Servlet Session(HttpSession)来管理session -->
+	<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.ServletContainerSessionManager" />
     
     <!-- 自定义shiro的realm数据库授权 -->
     <bean id="authorizationRealm" class="org.exitsoft.showcase.vcsadmin.service.account.AuthorizationRealm">

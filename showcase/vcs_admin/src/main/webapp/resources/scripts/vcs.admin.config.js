@@ -65,9 +65,10 @@ $(document).ready(function(){
 	
 	initTheView();
 	
-	$(document).ajaxError(function(event,request, settings){
-	     alert("系统错误");
-	     window.location.reload();
+	$(document).ajaxError(function(event,response, settings){
+		
+		$("#main_content").empty().html(response.responseText);
+		
 	});
 	
 });
