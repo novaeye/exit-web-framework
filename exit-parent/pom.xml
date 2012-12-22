@@ -28,7 +28,6 @@
 		<freemarker.version>2.3.19</freemarker.version>
 		<shiro.version>1.2.1</shiro.version>
 		<ehcache.version>2.6.2</ehcache.version>
-		<cas.client.version>3.2.1</cas.client.version>
 		
 	</properties>
 
@@ -371,17 +370,6 @@
 				<version>${shiro.version}</version>
 			</dependency>
 			
-			<dependency>  
-				<groupId>org.apache.shiro</groupId>  
-				<artifactId>shiro-cas</artifactId>
-				<version>${shiro.version}</version>  
-			</dependency>
-			
-			<dependency>  
-				<groupId>org.jasig.cas.client</groupId>  
-				<artifactId>cas-client-core</artifactId>  
-				<version>${cas.client.version}</version>  
-			</dependency>
 			<!-- spring security web mvc -->
 			<dependency>
 				<groupId>org.springframework</groupId>
