@@ -4,9 +4,6 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
 	
 	<description>apache shiro 配置</description>
-	
-	<!-- 让shrio采用Servlet Session(HttpSession)来管理session -->
-	<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.ServletContainerSessionManager" />
     
     <!-- 自定义shiro的realm数据库授权 -->
     <bean id="authorizationRealm" class="org.exitsoft.showcase.vcsadmin.service.account.AuthorizationRealm">
@@ -40,8 +37,6 @@
 				<ref bean="authorizationRealm"/>
 			</list>
 		</property>
-		<!-- sessionManager,使用缓存sessionDao -->
-		<property name="sessionManager" ref="sessionManager" />
 		<!-- cacheManager,集合spring缓存工厂 -->
 		<property name="cacheManager" ref="cacheManager" />
 	</bean>
