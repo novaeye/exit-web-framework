@@ -189,7 +189,7 @@
 	            <div id="navigation">
 	            	<ul>
 	                	<li>
-	                    	<a href="javascript:void(0);"><span onclick="loadModule(this,'12312312');" class="home32_icon">首 页</span></a>
+	                    	<a href="#"><span class="home32_icon">首 页</span></a>
 	                    </li>
 	                    <#list menusList as e>
 		                    <li>
