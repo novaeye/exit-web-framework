@@ -221,7 +221,7 @@
 	    	</div>
 	        <!-- 页面内容容器结束 -->
 	        <div class="panel_footer" id="footer">
-	        	Copyright © 2011 VCS. Powered by vicnet .
+	        	Copyright © 2011 VCS. Powered by vincent .
 	        </div>
 	        
 	    </div>
