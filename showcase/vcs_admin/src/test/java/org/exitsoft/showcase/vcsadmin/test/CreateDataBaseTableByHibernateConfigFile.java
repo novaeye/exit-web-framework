@@ -1,4 +1,4 @@
-package org.exitsoft.showcase.vcsadmin.app;
+package org.exitsoft.showcase.vcsadmin.test;
 
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.ImprovedNamingStrategy;

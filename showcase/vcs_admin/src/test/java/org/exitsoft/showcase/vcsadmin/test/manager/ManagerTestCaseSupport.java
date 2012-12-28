@@ -1,4 +1,4 @@
-package org.exitsoft.showcase.vcsadmin.unit;
+package org.exitsoft.showcase.vcsadmin.test.manager;
 
 import java.util.HashMap;
 
@@ -8,6 +8,7 @@ import org.exitsoft.common.unit.Fixtures;
 import org.hibernate.SessionFactory;
 import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -21,8 +22,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("/applicationContext-test.xml")
-public class ManagerTestCaseSuper {
+@ContextConfiguration("/applicationContext-core-test.xml")
+public class ManagerTestCaseSupport {
 	
 	
 	protected DataSource dataSource;
@@ -62,7 +63,7 @@ public class ManagerTestCaseSuper {
 	 * @throws Exception
 	 */
 	@Before
-	public void reloadSampleData() throws Exception {
+	public void install() throws Exception {
 		if (dataSourceHandler == null) {
 			Fixtures.loadData(dataSource, "/sample-data.xml");
 			dataSourceHandler = dataSource;
@@ -75,11 +76,14 @@ public class ManagerTestCaseSuper {
 	 * @throws Exception
 	 */
 	@AfterClass
-	public static void cleanData() throws Exception {
+	public static void uninstall() throws Exception {
 		Fixtures.deleteData(dataSourceHandler, "/sample-data.xml");
 		dataSourceHandler = null;
 	}
 
-	
+	@Test
+	public void emptyTestMethod() {
+		
+	}
 	
 }

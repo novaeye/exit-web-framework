@@ -13,7 +13,7 @@ import org.exitsoft.showcase.vcsadmin.common.enumeration.entity.State;
 import org.exitsoft.showcase.vcsadmin.entity.account.User;
 import org.exitsoft.showcase.vcsadmin.service.ServiceException;
 import org.exitsoft.showcase.vcsadmin.service.account.AccountManager;
-import org.exitsoft.showcase.vcsadmin.unit.ManagerTestCaseSuper;
+import org.exitsoft.showcase.vcsadmin.test.manager.ManagerTestCaseSupport;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author vincent
  *
  */
-public class TestUserManager extends ManagerTestCaseSuper{
+public class TestUserManager extends ManagerTestCaseSupport{
 
 	@Autowired
 	private AccountManager accountManager;

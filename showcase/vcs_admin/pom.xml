@@ -132,14 +132,6 @@
 			<artifactId>commons-io</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.jasypt</groupId>
-			<artifactId>jasypt</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.jasypt</groupId>
-			<artifactId>jasypt-spring31</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>asm</groupId>
 			<artifactId>asm</artifactId>
 		</dependency>
@@ -289,20 +281,6 @@
 	                            <source>${basedir}/src/foundation/java</source>   
 	                        </sources>
 	                    </configuration>  
-	                </execution>
-	                <execution>
-	                	<id>add-foundation-resource</id>  
-	                    <phase>generate-sources</phase>  
-	                    <goals>  
-	                        <goal>add-resource</goal> 
-	                    </goals>  
-	                    <configuration>
-	                        <resources>
-	                        	<resource>
-	                        		<directory>${basedir}/src/test/resources</directory>
-	                        	</resource>
-	                        </resources>
-	                    </configuration>
 	                </execution>
 	            </executions>  
 	        </plugin>

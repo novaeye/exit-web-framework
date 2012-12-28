@@ -9,7 +9,7 @@ import org.exitsoft.showcase.vcsadmin.common.enumeration.entity.GroupType;
 import org.exitsoft.showcase.vcsadmin.common.enumeration.entity.State;
 import org.exitsoft.showcase.vcsadmin.entity.account.Group;
 import org.exitsoft.showcase.vcsadmin.service.account.AccountManager;
-import org.exitsoft.showcase.vcsadmin.unit.ManagerTestCaseSuper;
+import org.exitsoft.showcase.vcsadmin.test.manager.ManagerTestCaseSupport;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author vincent
  *
  */
-public class TestGroupManager extends ManagerTestCaseSuper{
+public class TestGroupManager extends ManagerTestCaseSupport{
 
 	@Autowired
 	private AccountManager accountManager;

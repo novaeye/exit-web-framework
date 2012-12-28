@@ -12,7 +12,7 @@ import org.exitsoft.showcase.vcsadmin.common.enumeration.SystemDictionaryCode;
 import org.exitsoft.showcase.vcsadmin.entity.foundation.DataDictionary;
 import org.exitsoft.showcase.vcsadmin.entity.foundation.DictionaryCategory;
 import org.exitsoft.showcase.vcsadmin.service.foundation.SystemDictionaryManager;
-import org.exitsoft.showcase.vcsadmin.unit.ManagerTestCaseSuper;
+import org.exitsoft.showcase.vcsadmin.test.manager.ManagerTestCaseSupport;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author vincent
  *
  */
-public class TestDataDictionaryManager extends ManagerTestCaseSuper{
+public class TestDataDictionaryManager extends ManagerTestCaseSupport{
 	
 	@Autowired
 	private SystemDictionaryManager systemDictionaryManager;

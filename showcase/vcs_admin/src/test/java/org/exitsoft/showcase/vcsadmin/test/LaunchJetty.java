@@ -1,4 +1,4 @@
-package org.exitsoft.showcase.vcsadmin.app;
+package org.exitsoft.showcase.vcsadmin.test;
 
 import org.eclipse.jetty.server.Server;
 import org.exitsoft.common.unit.JettyFactory;

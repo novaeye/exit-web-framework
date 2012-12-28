@@ -123,19 +123,19 @@
 		            			</div>
 		            		</td>
 		                	<td>
-		                    	${e.username}
+		                    	${e.username!""}
 		                    </td>
 		                    <td>
-		                    	${e.realname}
+		                    	${e.realname!""}
 		                    </td>
 		                    <td>
-		                    	${e.email}
+		                    	${e.email!""}
 		                    </td>
 		                    <td>
-		                    	${e.stateName}
+		                    	${e.stateName!""}
 		                    </td>
 		                    <td>
-		                    	${e.groupNames}
+		                    	${e.groupNames!""}
 		                    </td>
 		                    <td align="center">
 		                    	<@shiro.hasPermission name="user:read">

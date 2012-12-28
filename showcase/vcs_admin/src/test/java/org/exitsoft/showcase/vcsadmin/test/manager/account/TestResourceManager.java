@@ -8,7 +8,7 @@ import java.util.List;
 import org.exitsoft.showcase.vcsadmin.common.enumeration.entity.ResourceType;
 import org.exitsoft.showcase.vcsadmin.entity.account.Resource;
 import org.exitsoft.showcase.vcsadmin.service.account.AccountManager;
-import org.exitsoft.showcase.vcsadmin.unit.ManagerTestCaseSuper;
+import org.exitsoft.showcase.vcsadmin.test.manager.ManagerTestCaseSupport;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author vincent
  *
  */
-public class TestResourceManager extends ManagerTestCaseSuper{
+public class TestResourceManager extends ManagerTestCaseSupport{
 	
 	@Autowired
 	private AccountManager accountManager;

@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.exitsoft.showcase.vcsadmin.entity.foundation.DictionaryCategory;
 import org.exitsoft.showcase.vcsadmin.service.foundation.SystemDictionaryManager;
-import org.exitsoft.showcase.vcsadmin.unit.ManagerTestCaseSuper;
+import org.exitsoft.showcase.vcsadmin.test.manager.ManagerTestCaseSupport;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author vincent
  *
  */
-public class TestDictionaryCategoryManager extends ManagerTestCaseSuper {
+public class TestDictionaryCategoryManager extends ManagerTestCaseSupport {
 
 	@Autowired
 	private SystemDictionaryManager systemDictionaryManager;
