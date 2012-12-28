@@ -6,6 +6,7 @@ import javax.servlet.ServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.apache.shiro.web.util.WebUtils;
@@ -20,7 +21,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class ValidateCodeAuthenticationFilter extends FormAuthenticationFilter{
 	
-	//默认验证码参数名称
+	/**
+	 * 默认验证码参数名称
+	 */
 	public static final String DEFAULT_VALIDATE_CODE_PARAM = "validateCode";
 	//验证码参数名称
     private String validateCodeParam = DEFAULT_VALIDATE_CODE_PARAM;
@@ -35,8 +38,9 @@ public class ValidateCodeAuthenticationFilter extends FormAuthenticationFilter{
 		
 		Session session = getSubject(request, response).getSession(false);
 		String code = (String) session.getAttribute(getSessionValidateCodeKey());
+		String submitCode = getValidateCode(request);
 		
-		if (!StringUtils.equals(code,getValidateCode(request))) {
+		if (StringUtils.isEmpty(submitCode) || !StringUtils.equals(code,submitCode.toLowerCase())) {
 			return onLoginFailure(this.createToken(request, response), new AccountException("验证码不正确"), request, response);
 		}
 		
@@ -63,6 +67,7 @@ public class ValidateCodeAuthenticationFilter extends FormAuthenticationFilter{
 
 	/**
 	 * 设置在session中的存储验证码的key名称
+	 * 
 	 * @param sessionValidateCodeKey 存储验证码的key名称
 	 */
 	public void setSessionValidateCodeKey(String sessionValidateCodeKey) {
@@ -78,6 +83,13 @@ public class ValidateCodeAuthenticationFilter extends FormAuthenticationFilter{
 		return sessionValidateCodeKey;
 	}
 
+	/**
+	 * 获取用户输入的验证码
+	 * 
+	 * @param request ServletRequest
+	 * 
+	 * @return String
+	 */
 	public String getValidateCode(ServletRequest request) {
 		return WebUtils.getCleanParam(request, getValidateCodeParam());
 	}
@@ -87,6 +99,10 @@ public class ValidateCodeAuthenticationFilter extends FormAuthenticationFilter{
 	 */
 	@Override
 	protected void setFailureAttribute(ServletRequest request,AuthenticationException ae) {
-		request.setAttribute(getFailureKeyAttribute(), ae.getMessage());
+		if (ae instanceof IncorrectCredentialsException) {
+			request.setAttribute(getFailureKeyAttribute(), "用户名密码不正确");
+		} else {
+			request.setAttribute(getFailureKeyAttribute(), ae.getMessage());
+		}
 	}
 }

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.exitsoft.common.utils.ValidateCodeUtils;
 import org.exitsoft.showcase.vcsadmin.common.SystemVariableUtils;
 import org.exitsoft.showcase.vcsadmin.service.account.AccountManager;
+import org.exitsoft.showcase.vcsadmin.service.account.ValidateCodeAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -92,8 +93,9 @@ public class SystemCommonController {
 		headers.setContentType(MediaType.IMAGE_JPEG);
 		
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		String validateCode = ValidateCodeUtils.getCode(70, 28, 4, outputStream).toLowerCase();
 		
-		session.setAttribute("validateCode", ValidateCodeUtils.getCode(70, 28, 4, outputStream).toLowerCase());
+		session.setAttribute(ValidateCodeAuthenticationFilter.DEFAULT_VALIDATE_CODE_PARAM,validateCode);
 		byte[] bs = outputStream.toByteArray();
 		outputStream.close();
 		

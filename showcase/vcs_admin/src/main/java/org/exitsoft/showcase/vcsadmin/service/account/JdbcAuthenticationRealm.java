@@ -4,9 +4,11 @@ import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.exitsoft.showcase.vcsadmin.common.enumeration.entity.State;
 import org.exitsoft.showcase.vcsadmin.common.model.CommonVariableModel;
 import org.exitsoft.showcase.vcsadmin.entity.account.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,10 @@ public class JdbcAuthenticationRealm extends AuthorizationRealm{
         
         if (user == null) {
             throw new UnknownAccountException("用户不存在");
+        }
+        
+        if (user.getState().equals(State.Disable.getValue())) {
+        	 throw new DisabledAccountException("你的账户是禁用的账户");
         }
         
         CommonVariableModel model = new CommonVariableModel(user);
