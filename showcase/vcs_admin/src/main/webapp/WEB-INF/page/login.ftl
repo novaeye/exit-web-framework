@@ -19,7 +19,7 @@
 		$("#login_form").submit();
 	}
 	function reloadValidateCode() {
-		$("#validateCodeImg").attr("src","validateCode?date = " + new Date());
+		$("#validateCodeImg").attr("src","validateCode?date = " + new Date() + Math.floor(Math.random()*24));
 	}
 </script>
 
