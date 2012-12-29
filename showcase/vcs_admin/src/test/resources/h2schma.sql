@@ -3,8 +3,8 @@ alter table tb_dictionary_category drop constraint FK181DDF369F71C3FA
 alter table tb_group drop constraint FKFA285D6EF126EC69
 alter table tb_group_resource drop constraint FK898FD3BF1385CFA8
 alter table tb_group_resource drop constraint FK898FD3BFB6BB21EC
-alter table tb_group_user drop constraint FK92B07BFC1385CFA8
 alter table tb_group_user drop constraint FK92B07BFCCD9EF5CC
+alter table tb_group_user drop constraint FK92B07BFC1385CFA8
 alter table tb_resource drop constraint FKECCF42BF521D7150
 drop table tb_data_dictionary if exists
 drop table tb_dictionary_category if exists
@@ -25,6 +25,6 @@ alter table tb_dictionary_category add constraint FK181DDF369F71C3FA foreign key
 alter table tb_group add constraint FKFA285D6EF126EC69 foreign key (fk_parent_id) references tb_group
 alter table tb_group_resource add constraint FK898FD3BF1385CFA8 foreign key (fk_group_id) references tb_group
 alter table tb_group_resource add constraint FK898FD3BFB6BB21EC foreign key (fk_resource_id) references tb_resource
-alter table tb_group_user add constraint FK92B07BFC1385CFA8 foreign key (fk_group_id) references tb_group
 alter table tb_group_user add constraint FK92B07BFCCD9EF5CC foreign key (fk_user_id) references tb_user
+alter table tb_group_user add constraint FK92B07BFC1385CFA8 foreign key (fk_group_id) references tb_group
 alter table tb_resource add constraint FKECCF42BF521D7150 foreign key (fk_parent_id) references tb_resource
