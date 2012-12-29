@@ -149,7 +149,7 @@
 		                    	${e.typeName!""}
 		                    </td>
 		                    <td>
-		                    	${e.parentName}
+		                    	${e.parentName!""}
 		                    </td>
 		                    <td>
 		                    	${e.remark!""}

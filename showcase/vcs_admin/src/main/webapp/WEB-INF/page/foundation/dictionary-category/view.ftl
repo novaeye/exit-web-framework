@@ -116,7 +116,7 @@
 		                    	${e.code!""}
 		                    </td>
 		                    <td>
-		                    	${e.parentName}
+		                    	${e.parentName!""}
 		                    </td>
 		                    <td>
 		                    	${e.remark!""}
