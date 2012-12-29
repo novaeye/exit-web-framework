@@ -4,6 +4,6 @@ echo [INFO] create project to myeclipse
 
 cd %~dp0
 cd ..
-call mvn eclipse:myeclipse
+call mvn clean eclipse:myeclipse
 cd bin
 pause
