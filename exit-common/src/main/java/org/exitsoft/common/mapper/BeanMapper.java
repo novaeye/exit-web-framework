@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.dozer.DozerBeanMapper;
+import org.dozer.loader.api.BeanMappingBuilder;
 import org.exitsoft.common.utils.ReflectionUtils;
 
 /**
@@ -20,7 +21,18 @@ import org.exitsoft.common.utils.ReflectionUtils;
 public class BeanMapper {
 	
 	private static DozerBeanMapper  dozer = new DozerBeanMapper();
-
+	
+	/**
+	 * 添加API映射到给定映射器中
+	 * 
+	 * @param beanMappingBuilder 定映射器
+	 */
+	public static void addMapping(BeanMappingBuilder beanMappingBuilder) {
+		
+		dozer.addMapping(beanMappingBuilder);
+		
+	}
+	
 	/**
 	 * 构造新的destinationClass实例对象，通过source对象中的字段内容
 	 * 映射到destinationClass实例对象中，并返回新的destinationClass实例对象。
