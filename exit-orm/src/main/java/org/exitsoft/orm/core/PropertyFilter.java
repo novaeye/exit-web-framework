@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 /**
  * orm属性过滤器，可以通过{@link PropertyFilterBuilder#createPropertyFilter(String, String)}创建，使用他创建可以直接
- * 写入表达式即可，相关表达式样式查看{@link PropertyCriterionBuilder}的实现类,如果直接创建查看{@link PropertyCriterionBuilder}
+ * 写入表达式即可，相关表达式样式查看{@link CriterionBuilder}的实现类,如果直接创建查看{@link CriterionBuilder}
  * 实现类的实际restrictionName值和{@link PropertyType}枚举值,如果一个属性对比多个值可以使用逗号(,)分割
  * <p>
  * 	例子:
@@ -24,7 +24,7 @@ import java.io.Serializable;
  * 
  * @see PropertyFilterBuilder#createPropertyFilter(String, String)
  * @see PropertyFilterBuilder#createPropertyFilter(String[], String[])
- * @see PropertyCriterionBuilder
+ * @see CriterionBuilder
  * 
  * @author vincent
  */
@@ -49,7 +49,7 @@ public class PropertyFilter implements Serializable{
 	
 	/**
 	 * 构造方法，可以通过{@link PropertyFilterBuilder#createPropertyFilter(String, String)}创建，使用他创建可以直接
-	 * 写入表达式即可，相关表达式样式查看{@link PropertyCriterionBuilder}的实现类,如果直接创建查看{@link PropertyCriterionBuilder}
+	 * 写入表达式即可，相关表达式样式查看{@link CriterionBuilder}的实现类,如果直接创建查看{@link CriterionBuilder}
 	 * 实现类的实际restrictionName值和{@link PropertyType}枚举值,如果一个属性对比多个值可以使用逗号(,)分割
 	 * 
 	 * <p>

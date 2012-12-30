@@ -12,7 +12,7 @@ import org.hibernate.criterion.Criterion;
  * @author vincent
  *
  */
-public interface PropertyCriterionBuilder {
+public interface CriterionBuilder {
 	
 	/**
 	 * 获取Hibernate的约束标准

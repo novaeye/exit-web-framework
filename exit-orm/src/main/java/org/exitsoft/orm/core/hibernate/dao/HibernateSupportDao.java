@@ -13,7 +13,7 @@ import org.exitsoft.orm.core.PageRequest;
 import org.exitsoft.orm.core.PageRequest.Sort;
 import org.exitsoft.orm.core.PropertyFilter;
 import org.exitsoft.orm.core.hibernate.HibernatePropertyFilters;
-import org.exitsoft.orm.core.hibernate.PropertyCriterionBuilder;
+import org.exitsoft.orm.core.hibernate.CriterionBuilder;
 import org.exitsoft.orm.core.hibernate.restriction.support.EqRestriction;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -524,7 +524,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * 
 	 * @param propertyName orm实体属性名称
 	 * @param value 值
-	 * @param restrictionName 约束名称,参考{@link PropertyCriterionBuilder}的实现类
+	 * @param restrictionName 约束名称,参考{@link CriterionBuilder}的实现类
 	 * 
 	 * @return List
 	 */
@@ -551,7 +551,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * @param propertyName orm实体属性名称
 	 * @param value 值
 	 * @param orderBy 排序表达式，规则为:属性名称_排序规则,如:property_asc或property_desc,可以支持多个属性排序，用逗号分割,如:"property1_asc,proerty2_desc",也可以"property"不加排序规则时默认是desc
-	 * @param restrictionName 约束名称,参考{@link PropertyCriterionBuilder}的实现类
+	 * @param restrictionName 约束名称,参考{@link CriterionBuilder}的实现类
 	 * 
 	 * @return List
 	 */
@@ -591,7 +591,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * 
 	 * @param propertyName orm实体属性名称
 	 * @param value 值
-	 * @param restrictionName 约束名称,参考{@link PropertyCriterionBuilder}的实现类
+	 * @param restrictionName 约束名称,参考{@link CriterionBuilder}的实现类
 	 * @param persistentClass orm实体Class
 	 * 
 	 * @return List
@@ -605,7 +605,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * 
 	 * @param propertyName orm实体属性名称
 	 * @param value 值
-	 * @param restrictionName 约束名称,参考{@link PropertyCriterionBuilder}的实现类
+	 * @param restrictionName 约束名称,参考{@link CriterionBuilder}的实现类
 	 * @param persistentClass orm实体Class
 	 * @param orderBy 排序表达式，规则为:属性名称_排序规则,如:property_asc或property_desc,可以支持多个属性排序，用逗号分割,如:"property1_asc,proerty2_desc",也可以"property"不加排序规则时默认是desc
 	 * 
@@ -760,7 +760,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * 
 	 * @param propertyName 属性名称
 	 * @param value 值
-	 * @param restrictionName 约束名称 参考{@link PropertyCriterionBuilder}的所有实现类
+	 * @param restrictionName 约束名称 参考{@link CriterionBuilder}的所有实现类
 	 * 
 	 * @return Object
 	 */
@@ -787,7 +787,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * 
 	 * @param propertyName 属性名称
 	 * @param value 值
-	 * @param restrictionName 约束名称 参考{@link PropertyCriterionBuilder}的所有实现类
+	 * @param restrictionName 约束名称 参考{@link CriterionBuilder}的所有实现类
 	 * @param persistentClass orm实体Class
 	 * 
 	 * @return Object

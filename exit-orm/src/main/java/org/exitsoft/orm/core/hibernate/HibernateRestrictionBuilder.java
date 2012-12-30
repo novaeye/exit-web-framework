@@ -21,21 +21,21 @@ import org.hibernate.criterion.Criterion;
  * @author vincent
  *
  */
-public class HibernateRestrictionBuilder extends PropertyFilterBuilder<PropertyCriterionBuilder,Criterion>{
+public class HibernateRestrictionBuilder extends PropertyFilterBuilder<CriterionBuilder,Criterion>{
 	
 	public HibernateRestrictionBuilder() {
 		
-		PropertyCriterionBuilder eqRestriction = new EqRestriction();
-		PropertyCriterionBuilder neRestriction = new NeRestriction();
-		PropertyCriterionBuilder geRestriction = new GeRestriction();
-		PropertyCriterionBuilder gtRestriction = new GtRestriction();
-		PropertyCriterionBuilder inRestriction = new InRestriction();
-		PropertyCriterionBuilder lLikeRestriction = new LLikeRestriction();
-		PropertyCriterionBuilder leRestriction = new LeRestriction();
-		PropertyCriterionBuilder likeRestriction = new LikeRestriction();
-		PropertyCriterionBuilder ltRestriction = new LtRestriction();
-		PropertyCriterionBuilder notInRestriction = new NinRestriction();
-		PropertyCriterionBuilder rLikeRestriction = new RLikeRestriction();
+		CriterionBuilder eqRestriction = new EqRestriction();
+		CriterionBuilder neRestriction = new NeRestriction();
+		CriterionBuilder geRestriction = new GeRestriction();
+		CriterionBuilder gtRestriction = new GtRestriction();
+		CriterionBuilder inRestriction = new InRestriction();
+		CriterionBuilder lLikeRestriction = new LLikeRestriction();
+		CriterionBuilder leRestriction = new LeRestriction();
+		CriterionBuilder likeRestriction = new LikeRestriction();
+		CriterionBuilder ltRestriction = new LtRestriction();
+		CriterionBuilder notInRestriction = new NinRestriction();
+		CriterionBuilder rLikeRestriction = new RLikeRestriction();
 		
 		getRestrictionsMap().put(eqRestriction.getRestrictionName(), eqRestriction);
 		getRestrictionsMap().put(neRestriction.getRestrictionName(), neRestriction);
@@ -52,13 +52,13 @@ public class HibernateRestrictionBuilder extends PropertyFilterBuilder<PropertyC
 	
 	@Override
 	public Criterion getRestriction(PropertyFilter filter) {
-		PropertyCriterionBuilder criterionBuilder = getRestrictionsMap().get(filter.getRestrictionName());
+		CriterionBuilder criterionBuilder = getRestrictionsMap().get(filter.getRestrictionName());
 		return criterionBuilder.build(filter);
 	}
 
 	@Override
 	public Criterion getRestriction(String propertyName, Object value,String restrictionName) {
-		PropertyCriterionBuilder restriction = getRestrictionsMap().get(restrictionName);
+		CriterionBuilder restriction = getRestrictionsMap().get(restrictionName);
 		return restriction.build(propertyName, value);
 	}
 	

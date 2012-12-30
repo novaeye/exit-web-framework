@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.exitsoft.common.utils.ConvertUtils;
 import org.exitsoft.orm.core.MatchValue;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.hibernate.PropertyCriterionBuilder;
+import org.exitsoft.orm.core.hibernate.CriterionBuilder;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Junction;
@@ -29,7 +29,7 @@ import org.hibernate.criterion.Restrictions;
  * @author vincent
  *
  */
-public abstract class PropertyValueRestrictionSupport implements PropertyCriterionBuilder{
+public abstract class PropertyValueRestrictionSupport implements CriterionBuilder{
 	
 	//or值分隔符
 	private String orValueSeparator = "|";
