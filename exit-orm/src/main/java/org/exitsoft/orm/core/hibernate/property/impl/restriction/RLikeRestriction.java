@@ -8,7 +8,7 @@ import org.hibernate.criterion.Restrictions;
 /**
  * 右模糊约束 ( from object o where o.value like '?%') RestrictionName:RLIKE
  * <p>
- * 表达式:RLIKE_属性类型_属性名称[_OR_属性名称...]
+ * 表达式:RLIKE属性类型_属性名称[_OR_属性名称...]
  * </p>
  * 
  * @author vincent

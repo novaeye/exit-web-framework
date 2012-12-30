@@ -7,7 +7,7 @@ import org.hibernate.criterion.Restrictions;
 /**
  * 不包含约束 (from object o where o.value not in (?,?,?,?,?))RestrictionName:NIN
  * <p>
- * 表达式:NIN_属性类型_属性名称[_OR_属性名称...]
+ * 表达式:NIN属性类型_属性名称[_OR_属性名称...]
  * </p>
  * 
  * @author vincent

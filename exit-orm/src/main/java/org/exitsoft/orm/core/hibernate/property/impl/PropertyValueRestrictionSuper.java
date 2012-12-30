@@ -31,6 +31,11 @@ import org.hibernate.criterion.Restrictions;
  */
 public abstract class PropertyValueRestrictionSuper implements PropertyCriterionBuilder{
 	
+	//or值分隔符
+	private String orValueSeparator = "|";
+	//and值分隔符
+	private String andValueSeparator = ",";
+	
 	public PropertyValueRestrictionSuper() {
 		
 	}
@@ -79,12 +84,12 @@ public abstract class PropertyValueRestrictionSuper implements PropertyCriterion
 		
 		List<Object> values = new ArrayList<Object>();
 		
-		if (StringUtils.contains(matchValue, ",")) {
-			String[] siplit = StringUtils.splitByWholeSeparator(matchValue, ",");
+		if (StringUtils.contains(matchValue, andValueSeparator)) {
+			String[] siplit = StringUtils.splitByWholeSeparator(matchValue, andValueSeparator);
 			CollectionUtils.addAll(values, (Object[])ConvertUtils.convertToObject(siplit, type));
 			return new MatchValue(false, values);
-		} else if (StringUtils.contains(matchValue, "|")){
-			String[] siplit = StringUtils.splitByWholeSeparator(matchValue, "|");
+		} else if (StringUtils.contains(matchValue, orValueSeparator)){
+			String[] siplit = StringUtils.splitByWholeSeparator(matchValue, orValueSeparator);
 			CollectionUtils.addAll(values, (Object[])ConvertUtils.convertToObject(siplit, type));
 			return new MatchValue(true, values);
 		} else {
@@ -93,5 +98,41 @@ public abstract class PropertyValueRestrictionSuper implements PropertyCriterion
 		}
 		
 	}
+
+	/**
+	 * 获取or值分隔符
+	 * 
+	 * @return String
+	 */
+	public String getOrValueSeparator() {
+		return orValueSeparator;
+	}
+
+	/**
+	 * 设置or值分隔符
+	 * @param orValueSeparator or值分隔符
+	 */
+	public void setOrValueSeparator(String orValueSeparator) {
+		this.orValueSeparator = orValueSeparator;
+	}
+
+	/**
+	 * 获取and值分隔符
+	 * 
+	 * @return String
+	 */
+	public String getAndValueSeparator() {
+		return andValueSeparator;
+	}
+
+	/**
+	 * 设置and值分隔符
+	 * @param andValueSeparator and值分隔符
+	 */
+	public void setAndValueSeparator(String andValueSeparator) {
+		this.andValueSeparator = andValueSeparator;
+	}
+	
+	
 	
 }

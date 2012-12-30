@@ -9,7 +9,7 @@ import org.hibernate.criterion.Restrictions;
 /**
  * 等于约束 (from object o where o.value = ?) RestrictionName:EQ
  * <p>
- * 表达式:EQ_属性类型_属性名称[_OR_属性名称...]
+ * 表达式:EQ属性类型_属性名称[_OR_属性名称...]
  * </p>
  * 
  * @author vincent

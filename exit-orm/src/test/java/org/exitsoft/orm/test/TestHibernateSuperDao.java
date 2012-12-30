@@ -107,54 +107,54 @@ public class TestHibernateSuperDao {
 		
 		//---------------------------------------------Expression test--------------------------------------------------//
 		
-		userList = dao.findByExpression("EQ_S_loginName", "admin");
+		userList = dao.findByExpression("EQS_loginName", "admin");
 		Assert.assertEquals(userList.size(), 1);
 		
-		userList = dao.findByExpression("EQ_I_state", "1","loginName_ASC,realName_desc");
+		userList = dao.findByExpression("EQI_state", "1","loginName_ASC,realName_desc");
 		Assert.assertEquals(userList.size(), 8);
 		
-		userList = dao.findByExpression("EQ_I_state", "1","loginName_asc,realName_DESC");
+		userList = dao.findByExpression("EQI_state", "1","loginName_asc,realName_DESC");
 		Assert.assertEquals(userList.size(), 8);
 		
-		userList = dao.findByExpression("EQ_I_state", "1","loginName,realName_DESC");
+		userList = dao.findByExpression("EQI_state", "1","loginName,realName_DESC");
 		Assert.assertEquals(userList.size(), 8);
 		
-		userList = dao.findByExpression("EQ_I_state", "1","loginName_asc,realName");
+		userList = dao.findByExpression("EQI_state", "1","loginName_asc,realName");
 		Assert.assertEquals(userList.size(), 8);
 		
-		roleList = dao.findByExpression("EQ_S_name", "系统管理员", Role.class);
+		roleList = dao.findByExpression("EQS_name", "系统管理员", Role.class);
 		Assert.assertEquals(roleList.size(), 1);
 		
-		roleList = dao.findByExpression("NE_S_name", null, "name_asc",Role.class);
+		roleList = dao.findByExpression("NES_name", null, "name_asc",Role.class);
 		Assert.assertEquals(roleList.size(), 3);
 		
 		//---------------------------------------------Expressions test--------------------------------------------------//
 		
-		userList = dao.findByExpressions(new String[]{"EQ_S_loginName","EQ_S_realName"}, new String[]{"admin","admin"});
+		userList = dao.findByExpressions(new String[]{"EQS_loginName","EQS_realName"}, new String[]{"admin","admin"});
 		Assert.assertEquals(userList.size(), 1);
 		
-		userList = dao.findByExpressions(new String[]{"LIKE_S_loginName","EQ_I_state"}, new String[]{"m","1"});
+		userList = dao.findByExpressions(new String[]{"LIKES_loginName","EQI_state"}, new String[]{"m","1"});
 		Assert.assertEquals(userList.size(), 4);
 		
-		userList = dao.findByExpressions(new String[]{"LIKE_S_loginName","EQ_I_state"}, new String[]{"m","1"},"loginName_ASC,realName_desc");
+		userList = dao.findByExpressions(new String[]{"LIKES_loginName","EQI_state"}, new String[]{"m","1"},"loginName_ASC,realName_desc");
 		Assert.assertEquals(userList.size(), 4);
 		
-		userList = dao.findByExpressions(new String[]{"LIKE_S_loginName","EQ_I_state"}, new String[]{"m","1"},"loginName");
+		userList = dao.findByExpressions(new String[]{"LIKES_loginName","EQI_state"}, new String[]{"m","1"},"loginName");
 		Assert.assertEquals(userList.size(), 4);
 		
-		userList = dao.findByExpressions(new String[]{"LIKE_S_loginName","EQ_I_state"}, new String[]{"m","1"},"realName_asc");
+		userList = dao.findByExpressions(new String[]{"LIKES_loginName","EQI_state"}, new String[]{"m","1"},"realName_asc");
 		Assert.assertEquals(userList.size(), 4);
 		
-		roleList = dao.findByExpressions(new String[]{"LIKE_S_name"}, new String[]{"系统"},Role.class);
+		roleList = dao.findByExpressions(new String[]{"LIKES_name"}, new String[]{"系统"},Role.class);
 		Assert.assertEquals(roleList.size(), 3);
 		
-		roleList = dao.findByExpressions(new String[]{"LIKE_S_name"}, new String[]{"系统"},"name",Role.class);
+		roleList = dao.findByExpressions(new String[]{"LIKES_name"}, new String[]{"系统"},"name",Role.class);
 		Assert.assertEquals(roleList.size(), 3);
 		
 		//---------------------------------------------PropertyFiter test--------------------------------------------------//
 		
 		List<PropertyFilter> filters = new ArrayList<PropertyFilter>();
-		filters = PropertyFilterRestrictionHolder.createPropertyFilter(new String[]{"LIKE_S_loginName","EQ_I_state"}, new String[]{"m","1"});
+		filters = PropertyFilterRestrictionHolder.createPropertyFilter(new String[]{"LIKES_loginName","EQI_state"}, new String[]{"m","1"});
 		
 		userList = dao.findByPropertyFilters(filters);
 		Assert.assertEquals(userList.size(), 4);
@@ -168,7 +168,7 @@ public class TestHibernateSuperDao {
 		userList = dao.findByPropertyFilters(filters,"realName_asc");
 		Assert.assertEquals(userList.size(), 4);
 		
-		filters = PropertyFilterRestrictionHolder.createPropertyFilter(new String[]{"LIKE_S_name"}, new String[]{"系统"});
+		filters = PropertyFilterRestrictionHolder.createPropertyFilter(new String[]{"LIKES_name"}, new String[]{"系统"});
 		
 		roleList = dao.findByPropertyFilters(filters, Role.class);
 		Assert.assertEquals(roleList.size(), 3);
@@ -237,25 +237,25 @@ public class TestHibernateSuperDao {
 		role = dao.findUniqueByCriterions(new Criterion[]{Restrictions.eq("name", "系统")}, Role.class);
 		Assert.assertEquals(role.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0010");
 		
-		user = dao.findUniqueByExpression("EQ_S_loginName", "admin");
+		user = dao.findUniqueByExpression("EQS_loginName", "admin");
 		Assert.assertEquals(user.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0002");
 		
-		role = dao.findUniqueByExpression("EQ_S_name", "系统",Role.class);
+		role = dao.findUniqueByExpression("EQS_name", "系统",Role.class);
 		Assert.assertEquals(role.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0010");
 		
-		user = dao.findUniqueByExpressions(new String[]{"EQ_S_loginName"}, new String[]{"admin"});
+		user = dao.findUniqueByExpressions(new String[]{"EQS_loginName"}, new String[]{"admin"});
 		Assert.assertEquals(user.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0002");
 		
-		role = dao.findUniqueByExpressions(new String[]{"EQ_S_name"}, new String[]{"系统"},Role.class);
+		role = dao.findUniqueByExpressions(new String[]{"EQS_name"}, new String[]{"系统"},Role.class);
 		Assert.assertEquals(role.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0010");
 		
 		List<PropertyFilter> filters = new ArrayList<PropertyFilter>();
-		filters = PropertyFilterRestrictionHolder.createPropertyFilter(new String[]{"EQ_S_loginName"}, new String[]{"admin"});
+		filters = PropertyFilterRestrictionHolder.createPropertyFilter(new String[]{"EQS_loginName"}, new String[]{"admin"});
 		
 		user = dao.findUniqueByPropertyFilters(filters);
 		Assert.assertEquals(user.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0002");
 		
-		filters = PropertyFilterRestrictionHolder.createPropertyFilter(new String[]{"EQ_S_name"}, new String[]{"系统"});
+		filters = PropertyFilterRestrictionHolder.createPropertyFilter(new String[]{"EQS_name"}, new String[]{"系统"});
 		
 		role = dao.findUniqueByPropertyFilters(filters, Role.class);
 		Assert.assertEquals(role.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0010");
@@ -306,19 +306,19 @@ public class TestHibernateSuperDao {
 		Assert.assertEquals(user.getTotalPages(), 4);
 		Assert.assertEquals(user.getTotalItems(), 8);
 		
-		user = dao.findPage(request, "EQ_I_state","1");
+		user = dao.findPage(request, "EQI_state","1");
 		Assert.assertEquals(user.getResult().size(), 2);
 		Assert.assertEquals(user.getTotalPages(), 4);
 		Assert.assertEquals(user.getTotalItems(), 8);
 		
-		List<PropertyFilter> filters = PropertyFilterRestrictionHolder.createPropertyFilter(new String[]{"EQ_I_state"}, new String[]{"1"});
+		List<PropertyFilter> filters = PropertyFilterRestrictionHolder.createPropertyFilter(new String[]{"EQI_state"}, new String[]{"1"});
 		
 		user = dao.findPage(request, filters);
 		Assert.assertEquals(user.getResult().size(), 2);
 		Assert.assertEquals(user.getTotalPages(), 4);
 		Assert.assertEquals(user.getTotalItems(), 8);
 		
-		user = dao.findPage(request, new String[]{"EQ_I_state"}, new String[]{"1"});
+		user = dao.findPage(request, new String[]{"EQI_state"}, new String[]{"1"});
 		Assert.assertEquals(user.getResult().size(), 2);
 		Assert.assertEquals(user.getTotalPages(), 4);
 		Assert.assertEquals(user.getTotalItems(), 8);
@@ -333,19 +333,19 @@ public class TestHibernateSuperDao {
 		Assert.assertEquals(role.getTotalPages(), 1);
 		Assert.assertEquals(role.getTotalItems(), 1);
 		
-		role = dao.findPage(request,"EQ_S_name","系统管理员",Role.class);
+		role = dao.findPage(request,"EQS_name","系统管理员",Role.class);
 		Assert.assertEquals(role.getResult().size(), 1);
 		Assert.assertEquals(role.getTotalPages(), 1);
 		Assert.assertEquals(role.getTotalItems(), 1);
 		
-		filters = PropertyFilterRestrictionHolder.createPropertyFilter(new String[]{"EQ_S_name"}, new String[]{"系统管理员"});
+		filters = PropertyFilterRestrictionHolder.createPropertyFilter(new String[]{"EQS_name"}, new String[]{"系统管理员"});
 		
 		role = dao.findPage(request,filters,Role.class);
 		Assert.assertEquals(role.getResult().size(), 1);
 		Assert.assertEquals(role.getTotalPages(), 1);
 		Assert.assertEquals(role.getTotalItems(), 1);
 		
-		role = dao.findPage(request,new String[]{"EQ_S_name"}, new String[]{"系统管理员"},Role.class);
+		role = dao.findPage(request,new String[]{"EQS_name"}, new String[]{"系统管理员"},Role.class);
 		Assert.assertEquals(role.getResult().size(), 1);
 		Assert.assertEquals(role.getTotalPages(), 1);
 		Assert.assertEquals(role.getTotalItems(), 1);
@@ -371,55 +371,55 @@ public class TestHibernateSuperDao {
 	public void testAllRestriction() {
 		List<User> userList = new ArrayList<User>();
 		
-		userList = dao.findByExpression("EQ_D_createTime", "2012-08-12");
+		userList = dao.findByExpression("EQD_createTime", "2012-08-12");
 		
-		userList = dao.findByExpression("EQ_S_wubiCode", null);
+		userList = dao.findByExpression("EQS_wubiCode", null);
 		Assert.assertEquals(userList.size(), 1);
-		userList = dao.findByExpression("EQ_S_wubiCode", "");
+		userList = dao.findByExpression("EQS_wubiCode", "");
 		Assert.assertEquals(userList.size(),6);
-		userList = dao.findByExpression("EQ_S_wubiCode", "123");
+		userList = dao.findByExpression("EQS_wubiCode", "123");
 		Assert.assertEquals(userList.size(), 1);
 		
-		userList = dao.findByExpression("NE_S_wubiCode", null);
+		userList = dao.findByExpression("NES_wubiCode", null);
 		Assert.assertEquals(userList.size(), 7);
-		userList = dao.findByExpression("NE_S_wubiCode", "");
+		userList = dao.findByExpression("NES_wubiCode", "");
 		Assert.assertEquals(userList.size(), 1);
-		userList = dao.findByExpression("NE_S_wubiCode", "123");
+		userList = dao.findByExpression("NES_wubiCode", "123");
 		Assert.assertEquals(userList.size(), 6);
 		
-		userList = dao.findByExpression("LIKE_S_loginName", "m");
+		userList = dao.findByExpression("LIKES_loginName", "m");
 		Assert.assertEquals(userList.size(), 4);
-		userList = dao.findByExpression("RLIKE_S_loginName", "m");
+		userList = dao.findByExpression("RLIKES_loginName", "m");
 		Assert.assertEquals(userList.size(), 3);
-		userList = dao.findByExpression("LLIKE_S_loginName", "n");
+		userList = dao.findByExpression("LLIKES_loginName", "n");
 		Assert.assertEquals(userList.size(), 1);
 		
-		userList = dao.findByExpression("LE_I_state", "1");
+		userList = dao.findByExpression("LEI_state", "1");
 		Assert.assertEquals(userList.size(), 8);
-		userList = dao.findByExpression("LT_I_state", "2");
-		Assert.assertEquals(userList.size(), 8);
-		
-		userList = dao.findByExpression("GE_I_state", "1");
-		Assert.assertEquals(userList.size(), 8);
-		userList = dao.findByExpression("GT_I_state", "0");
+		userList = dao.findByExpression("LTI_state", "2");
 		Assert.assertEquals(userList.size(), 8);
 		
-		userList = dao.findByExpression("IN_S_loginName", "admin,vincent");
+		userList = dao.findByExpression("GEI_state", "1");
+		Assert.assertEquals(userList.size(), 8);
+		userList = dao.findByExpression("GTI_state", "0");
+		Assert.assertEquals(userList.size(), 8);
+		
+		userList = dao.findByExpression("INS_loginName", "admin,vincent");
 		Assert.assertEquals(userList.size(), 2);
 		
-		userList = dao.findByExpression("NIN_S_loginName", "admin,vincent");
+		userList = dao.findByExpression("NINS_loginName", "admin,vincent");
 		Assert.assertEquals(userList.size(), 6);
 		
-		userList = dao.findByExpression("EQ_S_loginName","admin|vincent");
+		userList = dao.findByExpression("EQS_loginName","admin|vincent");
 		Assert.assertEquals(userList.size(), 2);
 		
-		userList = dao.findByExpression("EQ_S_loginName","admin,vincent");
+		userList = dao.findByExpression("EQS_loginName","admin,vincent");
 		Assert.assertEquals(userList.size(),0);
 		
-		userList = dao.findByExpression("EQ_S_loginName","admin,null");
+		userList = dao.findByExpression("EQS_loginName","admin,null");
 		Assert.assertEquals(userList.size(),0);
 		
-		userList = dao.findByExpression("EQ_S_loginName_OR_realName","null|admin");
+		userList = dao.findByExpression("EQS_loginName_OR_realName","null|admin");
 		Assert.assertEquals(userList.size(), 1);
 		
 	}

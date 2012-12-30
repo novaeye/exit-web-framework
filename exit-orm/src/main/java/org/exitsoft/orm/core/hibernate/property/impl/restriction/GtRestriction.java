@@ -7,7 +7,7 @@ import org.hibernate.criterion.Restrictions;
 /**
  * 大于约束 (from object o where o.value > ?)RestrictionName:GT
  * <p>
- * 表达式:GT_属性类型_属性名称[_OR_属性名称...]
+ * 表达式:GT属性类型_属性名称[_OR_属性名称...]
  * </p>
  * 
  * @author vincent

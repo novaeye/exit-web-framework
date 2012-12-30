@@ -25,6 +25,7 @@ import org.exitsoft.orm.core.hibernate.property.impl.restriction.NeRestriction;
 import org.exitsoft.orm.core.hibernate.property.impl.restriction.NinRestriction;
 import org.exitsoft.orm.core.hibernate.property.impl.restriction.RLikeRestriction;
 import org.hibernate.criterion.Criterion;
+import org.springframework.util.Assert;
 
 /**
  * Hibernate属性过滤器约束持有者，帮助HibernateDao对buildCriterion方法创建相对的Criterion对象给Hibernate查询
@@ -95,7 +96,7 @@ public class PropertyFilterRestrictionHolder {
 	 * 	如：
 	 * </p>
 	 * <code>
-	 * 	PropertyFilerRestriction.createrPropertyFilter(new String[]{"EQ_S_propertyName1","NE_I_propertyName2"},new String[]{"vincent","vincent_OR_admin"})
+	 * 	PropertyFilerRestriction.createrPropertyFilter(new String[]{"EQS_propertyName1","NEI_propertyName2"},new String[]{"vincent","vincent_OR_admin"})
 	 * </code>
 	 * <p>
 	 * 	对比值长度与表达式长度必须相等
@@ -130,7 +131,7 @@ public class PropertyFilterRestrictionHolder {
 	 * 	如：
 	 * </p>
 	 * <code>
-	 * 	PropertyFilerRestriction.createrPropertyFilter("EQ_S_propertyName","vincent")
+	 * 	PropertyFilerRestriction.createrPropertyFilter("EQS_propertyName","vincent")
 	 * </code>
 	 * 
 	 * @param expressions 表达式
@@ -140,13 +141,18 @@ public class PropertyFilterRestrictionHolder {
 	 */
 	public static PropertyFilter createPropertyFilter(String expression,String matchValue) {
 		
-		String restrictionsName = StringUtils.substringBefore(expression, "_");
+		Assert.hasText(expression, "表达式不能为空");
 		
+		String restrictionsNameAndClassType = StringUtils.substringBefore(expression, "_");
+		
+		String restrictionsName = StringUtils.substring(restrictionsNameAndClassType, 0,restrictionsNameAndClassType.length() - 1);
+		String classType = StringUtils.substring(restrictionsNameAndClassType, restrictionsNameAndClassType.length() - 1, restrictionsNameAndClassType.length());
+				
 		if (!criterionMap.containsKey(restrictionsName)) {
 			throw new IllegalAccessError("[" + expression + "]表达式找不到相应的约束名称,获取的值为:" + restrictionsName);
 
 		}
-		String classType = StringUtils.substringBetween(expression, "_");
+		
 		PropertyType propertyType = null;
 		try {
 			propertyType = PropertyType.valueOf(classType);
@@ -157,7 +163,7 @@ public class PropertyFilterRestrictionHolder {
 		String[] propertyNames = null;
 		
 		if (StringUtils.contains(expression,"_OR_")) {
-			String temp = StringUtils.substringAfter(expression, restrictionsName + "_" + classType + "_");
+			String temp = StringUtils.substringAfter(expression, restrictionsNameAndClassType + "_");
 			propertyNames = StringUtils.splitByWholeSeparator(temp, "_OR_");
 		} else {
 			propertyNames = new String[1];
@@ -187,7 +193,7 @@ public class PropertyFilterRestrictionHolder {
 	
 	/**
 	 * 从HttpRequest参数中创建PropertyFilter列表, 默认Filter属性名前缀为filter.
-	 * 当参数存在{filter_EQ_S_property1:value,filter_EQ_S_property2:''}该形式的时候，将不会创建filter_EQ_S_property2等于""值的实例
+	 * 当参数存在{filter_EQS_property1:value,filter_EQS_property2:''}该形式的时候，将不会创建filter_EQS_property2等于""值的实例
 	 * 参考{@link PropertyFilterRestrictionHolder#buildPropertyFilter(HttpServletRequest, String, boolean)}
 	 * 
 	 * @param request HttpServletRequest
@@ -197,8 +203,8 @@ public class PropertyFilterRestrictionHolder {
 	}
 	
 	/**
-	 * 从HttpRequest参数中创建PropertyFilter列表,当参数存在{filter_EQ_S_property1:value,filter_EQ_S_property2:''}
-	 * 该形式的时候，将不会创建filter_EQ_S_property2等于""值的实例
+	 * 从HttpRequest参数中创建PropertyFilter列表,当参数存在{filter_EQS_property1:value,filter_EQS_property2:''}
+	 * 该形式的时候，将不会创建filter_EQS_property2等于""值的实例
 	 * 参考{@link PropertyFilterRestrictionHolder#buildPropertyFilter(HttpServletRequest, String, boolean)}
 	 * 
 	 * @param request HttpServletRequest
@@ -211,18 +217,18 @@ public class PropertyFilterRestrictionHolder {
 	}
 	
 	/**
-	 * 从HttpRequest参数中创建PropertyFilter列表,当参数存在{filter_EQ_S_property1:value,filter_EQ_S_property2:''}
-	 * 该形式的时候，将不会创建filter_EQ_S_property2等于""值的实例
+	 * 从HttpRequest参数中创建PropertyFilter列表,当参数存在{filter_EQS_property1:value,filter_EQS_property2:''}
+	 * 该形式的时候，将不会创建filter_EQS_property2等于""值的实例
 	 * 参考{@link PropertyFilterRestrictionHolder#buildPropertyFilter(HttpServletRequest, String, boolean)}
 	 * 
 	 * <pre>
-	 * 当页面提交的参数为:{filter_EQ_S_property1:value,filter_EQ_S_property2:''}
+	 * 当页面提交的参数为:{filter_EQS_property1:value,filter_EQS_property2:''}
 	 * List filters =buildPropertyFilter(request,"filter",false);
-	 * 当前filters:EQ_S_proerpty1="value",EQ_S_proerpty1=""
+	 * 当前filters:EQS_proerpty1="value",EQS_proerpty1=""
 	 * 
-	 * 当页面提交的参数为:{filter_EQ_S_property1:value,filter_EQ_S_property2:''}
+	 * 当页面提交的参数为:{filter_EQS_property1:value,filter_EQS_property2:''}
 	 * List filters =buildPropertyFilter(request,"filter",true);
-	 * 当前filters:EQ_S_proerpty1="value"
+	 * 当前filters:EQS_proerpty1="value"
 	 * </pre>
 	 * 
 	 * @param request HttpServletRequest
@@ -238,13 +244,13 @@ public class PropertyFilterRestrictionHolder {
 	 * 从HttpRequest参数中创建PropertyFilter列表,例子:
 	 * 
 	 * <pre>
-	 * 当页面提交的参数为:{filter_EQ_S_property1:value,filter_EQ_S_property2:''}
+	 * 当页面提交的参数为:{filter_EQS_property1:value,filter_EQS_property2:''}
 	 * List filters =buildPropertyFilter(request,"filter",false);
-	 * 当前filters:EQ_S_proerpty1="value",EQ_S_proerpty1=""
+	 * 当前filters:EQS_proerpty1="value",EQS_proerpty1=""
 	 * 
-	 * 当页面提交的参数为:{filter_EQ_S_property1:value,filter_EQ_S_property2:''}
+	 * 当页面提交的参数为:{filter_EQS_property1:value,filter_EQS_property2:''}
 	 * List filters =buildPropertyFilter(request,"filter",true);
-	 * 当前filters:EQ_S_proerpty1="value"
+	 * 当前filters:EQS_proerpty1="value"
 	 * </pre>
 	 * 
 	 * @param request HttpServletRequest
@@ -266,16 +272,16 @@ public class PropertyFilterRestrictionHolder {
 	 * 
 	 * <pre>
      * Map o = new HashMap();
-	 * o.put("EQ_S_property1","value");
-	 * o.put("EQ_S_property2","");
+	 * o.put("EQS_property1","value");
+	 * o.put("EQS_property2","");
 	 * List filters = buildPropertyFilter(o,false);
-	 * 当前filters:EQ_S_proerpty1="value",EQ_S_proerpty1=""
+	 * 当前filters:EQS_proerpty1="value",EQS_proerpty1=""
 	 * 
 	 * Map o = new HashMap();
-	 * o.put("EQ_S_property1","value");
-	 * o.put("EQ_S_property2","");
+	 * o.put("EQS_property1","value");
+	 * o.put("EQS_property2","");
 	 * List filters = buildPropertyFilter(o,true);
-	 * 当前filters:EQ_S_proerpty1="value"
+	 * 当前filters:EQS_proerpty1="value"
      * </pre>
 	 * 
 	 * 

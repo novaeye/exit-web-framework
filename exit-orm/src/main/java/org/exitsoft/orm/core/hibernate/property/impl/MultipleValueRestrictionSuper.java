@@ -17,7 +17,7 @@ import org.springframework.util.Assert;
  * 	例如:
  * </p>
  * 
- * IN_I_property = "1,2,3,4";
+ * INI_property = "1,2,3,4";
  * <p>
  * 会产生的sql为: property in (1,2,3,4)
  * 

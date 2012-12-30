@@ -7,7 +7,7 @@ import org.hibernate.criterion.Restrictions;
 /**
  * 小于等于约束 ( from object o where o.value <= ?) RestrictionName:LR
  * <p>
- * 表达式:LE_属性类型_属性名称[_OR_属性名称...]
+ * 表达式:LE属性类型_属性名称[_OR_属性名称...]
  * </p>
  * 
  * @author vincent
