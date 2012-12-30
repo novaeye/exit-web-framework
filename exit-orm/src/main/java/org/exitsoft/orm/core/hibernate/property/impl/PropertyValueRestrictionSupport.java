@@ -29,14 +29,14 @@ import org.hibernate.criterion.Restrictions;
  * @author vincent
  *
  */
-public abstract class PropertyValueRestrictionSuper implements PropertyCriterionBuilder{
+public abstract class PropertyValueRestrictionSupport implements PropertyCriterionBuilder{
 	
 	//or值分隔符
 	private String orValueSeparator = "|";
 	//and值分隔符
 	private String andValueSeparator = ",";
 	
-	public PropertyValueRestrictionSuper() {
+	public PropertyValueRestrictionSupport() {
 		
 	}
 	

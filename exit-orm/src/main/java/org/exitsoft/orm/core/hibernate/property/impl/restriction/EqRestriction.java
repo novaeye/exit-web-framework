@@ -2,7 +2,7 @@ package org.exitsoft.orm.core.hibernate.property.impl.restriction;
 
 import org.apache.commons.lang3.StringUtils;
 import org.exitsoft.orm.core.MatchValue;
-import org.exitsoft.orm.core.hibernate.property.impl.PropertyValueRestrictionSuper;
+import org.exitsoft.orm.core.hibernate.property.impl.PropertyValueRestrictionSupport;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
@@ -15,7 +15,7 @@ import org.hibernate.criterion.Restrictions;
  * @author vincent
  *
  */
-public class EqRestriction extends PropertyValueRestrictionSuper {
+public class EqRestriction extends PropertyValueRestrictionSupport {
 
 	public final static String RestrictionName = "EQ";
 

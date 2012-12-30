@@ -82,7 +82,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * 
 	 * @param sessionFactory
 	 */
-	@Autowired
+	@Autowired(required = false)
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}

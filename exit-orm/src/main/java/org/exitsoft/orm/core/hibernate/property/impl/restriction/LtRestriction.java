@@ -1,6 +1,6 @@
 package org.exitsoft.orm.core.hibernate.property.impl.restriction;
 
-import org.exitsoft.orm.core.hibernate.property.impl.PropertyValueRestrictionSuper;
+import org.exitsoft.orm.core.hibernate.property.impl.PropertyValueRestrictionSupport;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
@@ -13,7 +13,7 @@ import org.hibernate.criterion.Restrictions;
  * @author vincent
  *
  */
-public class LtRestriction extends PropertyValueRestrictionSuper{
+public class LtRestriction extends PropertyValueRestrictionSupport{
 
 	public final static String RestrictionName = "LT";
 	

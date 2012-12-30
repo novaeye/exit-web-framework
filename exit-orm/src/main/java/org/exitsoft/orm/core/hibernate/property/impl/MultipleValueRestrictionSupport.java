@@ -3,7 +3,6 @@ package org.exitsoft.orm.core.hibernate.property.impl;
 import org.apache.commons.lang3.StringUtils;
 import org.exitsoft.common.utils.ConvertUtils;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.hibernate.property.PropertyCriterionBuilder;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
@@ -24,11 +23,11 @@ import org.springframework.util.Assert;
  * @author vincent
  *
  */
-public abstract class MultipleValueRestrictionSuper implements PropertyCriterionBuilder{
+public abstract class MultipleValueRestrictionSupport extends PropertyValueRestrictionSupport{
 	
 	public Object convertMatchValue(String value, Class<?> type) {
 		Assert.notNull(value,"值不能为空");
-		String[] result = StringUtils.splitByWholeSeparator(value, ",");
+		String[] result = StringUtils.splitByWholeSeparator(value, getAndValueSeparator());
 		
 		return  ConvertUtils.convertToObject(result,type);
 	}

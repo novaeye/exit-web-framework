@@ -1,6 +1,6 @@
 package org.exitsoft.orm.core.hibernate.property.impl.restriction;
 
-import org.exitsoft.orm.core.hibernate.property.impl.PropertyValueRestrictionSuper;
+import org.exitsoft.orm.core.hibernate.property.impl.PropertyValueRestrictionSupport;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
@@ -14,7 +14,7 @@ import org.hibernate.criterion.Restrictions;
  * @author vincent
  *
  */
-public class LLikeRestriction extends PropertyValueRestrictionSuper{
+public class LLikeRestriction extends PropertyValueRestrictionSupport{
 
 	public final static String RestrictionName = "LLIKE";
 	
