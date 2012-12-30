@@ -1,4 +1,4 @@
-package org.exitsoft.orm.core.spring.data.jpa;
+package org.exitsoft.orm.core.spring.data.jpa.repository;
 
 import java.io.Serializable;
 import java.util.List;

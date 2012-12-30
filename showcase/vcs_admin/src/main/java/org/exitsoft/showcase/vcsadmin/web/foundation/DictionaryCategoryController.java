@@ -10,7 +10,7 @@ import org.exitsoft.orm.core.Page;
 import org.exitsoft.orm.core.PageRequest;
 import org.exitsoft.orm.core.PageRequest.Sort;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.hibernate.property.PropertyFilterRestrictionHolder;
+import org.exitsoft.orm.core.hibernate.HibernatePropertyFilters;
 import org.exitsoft.showcase.vcsadmin.entity.foundation.DictionaryCategory;
 import org.exitsoft.showcase.vcsadmin.service.foundation.SystemDictionaryManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ public class DictionaryCategoryController {
 	@RequestMapping("view")
 	public Page<DictionaryCategory> view(PageRequest pageRequest,HttpServletRequest request) {
 		
-		List<PropertyFilter> filters = PropertyFilterRestrictionHolder.buildFromHttpRequest(request);
+		List<PropertyFilter> filters = HibernatePropertyFilters.buildFromHttpRequest(request);
 		
 		if (!pageRequest.isOrderBySetted()) {
 			pageRequest.setOrderBy("id");
@@ -95,7 +95,7 @@ public class DictionaryCategoryController {
 		String id = request.getParameter("id");
 		
 		if (StringUtils.isNotEmpty(id)) {
-			filters.add(PropertyFilterRestrictionHolder.createPropertyFilter("NE_S_id", id));
+			filters.add(HibernatePropertyFilters.createPropertyFilter("NE_S_id", id));
 		}
 		//展示父类下来框时，不要连自己也在下拉框里
 		request.setAttribute("categoriesList", systemDictionaryManager.getAllDictionaryCategories(filters));

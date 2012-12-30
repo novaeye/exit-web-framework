@@ -1,6 +1,6 @@
 package org.exitsoft.showcase.vcsadmin.dao.foundation;
 
-import org.exitsoft.orm.core.hibernate.HibernateSupportDao;
+import org.exitsoft.orm.core.hibernate.dao.HibernateSupportDao;
 import org.exitsoft.showcase.vcsadmin.entity.foundation.DataDictionary;
 import org.springframework.stereotype.Repository;
 

@@ -8,7 +8,7 @@ import java.util.List;
 import org.exitsoft.orm.core.Page;
 import org.exitsoft.orm.core.PageRequest;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.hibernate.property.PropertyFilterRestrictionHolder;
+import org.exitsoft.orm.core.hibernate.HibernatePropertyFilters;
 import org.exitsoft.showcase.vcsadmin.common.enumeration.entity.State;
 import org.exitsoft.showcase.vcsadmin.entity.account.User;
 import org.exitsoft.showcase.vcsadmin.service.ServiceException;
@@ -84,7 +84,7 @@ public class TestUserManager extends ManagerTestCaseSupport{
 	public void testSearchUserPage() {
 		PageRequest request = new PageRequest(1,1);
 		List<PropertyFilter> filters = new ArrayList<PropertyFilter>();
-		filters.add(PropertyFilterRestrictionHolder.createPropertyFilter("EQI_state", "1"));
+		filters.add(HibernatePropertyFilters.createPropertyFilter("EQI_state", "1"));
 		Page<User> page = accountManager.searchUserPage(request, filters);
 		assertEquals(page.getResult().size(), 1);
 		assertEquals(page.getTotalItems(), 2);

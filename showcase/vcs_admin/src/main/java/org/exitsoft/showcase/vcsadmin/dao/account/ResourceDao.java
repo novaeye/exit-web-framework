@@ -1,6 +1,6 @@
 package org.exitsoft.showcase.vcsadmin.dao.account;
 
-import org.exitsoft.orm.core.hibernate.HibernateSupportDao;
+import org.exitsoft.orm.core.hibernate.dao.HibernateSupportDao;
 import org.exitsoft.showcase.vcsadmin.entity.account.Resource;
 import org.springframework.stereotype.Repository;
 

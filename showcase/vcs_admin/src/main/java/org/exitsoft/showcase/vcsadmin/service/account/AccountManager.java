@@ -9,7 +9,7 @@ import org.apache.shiro.crypto.hash.SimpleHash;
 import org.exitsoft.orm.core.Page;
 import org.exitsoft.orm.core.PageRequest;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.hibernate.property.PropertyFilterRestrictionHolder;
+import org.exitsoft.orm.core.hibernate.HibernatePropertyFilters;
 import org.exitsoft.showcase.vcsadmin.common.SystemVariableUtils;
 import org.exitsoft.showcase.vcsadmin.common.enumeration.entity.GroupType;
 import org.exitsoft.showcase.vcsadmin.common.enumeration.entity.ResourceType;
@@ -399,10 +399,10 @@ public class AccountManager {
 		List<PropertyFilter> filters = new ArrayList<PropertyFilter>();
 		
 		if (StringUtils.isNotEmpty(ignoreIdValue)) {
-			filters.add(PropertyFilterRestrictionHolder.createPropertyFilter("NES_id", ignoreIdValue));
+			filters.add(HibernatePropertyFilters.createPropertyFilter("NES_id", ignoreIdValue));
 		}
 		
-		filters.add(PropertyFilterRestrictionHolder.createPropertyFilter("EQS_type", groupType.getValue()));
+		filters.add(HibernatePropertyFilters.createPropertyFilter("EQS_type", groupType.getValue()));
 		
 		return groupDao.findByPropertyFilters(filters);
 	}

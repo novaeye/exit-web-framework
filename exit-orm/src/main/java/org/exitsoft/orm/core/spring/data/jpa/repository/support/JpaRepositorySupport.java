@@ -1,4 +1,4 @@
-package org.exitsoft.orm.core.spring.data.jpa.impl;
+package org.exitsoft.orm.core.spring.data.jpa.repository.support;
 
 import java.io.Serializable;
 import java.util.List;
@@ -9,7 +9,7 @@ import org.exitsoft.common.utils.ConvertUtils;
 import org.exitsoft.common.utils.ReflectionUtils;
 import org.exitsoft.orm.annotation.StateDelete;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.spring.data.jpa.BasicJpaRepository;
+import org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository;
 import org.exitsoft.orm.enumeration.ExecuteMehtod;
 import org.exitsoft.orm.strategy.CodeStrategy;
 import org.exitsoft.orm.strategy.annotation.ConvertCode;
@@ -23,7 +23,7 @@ import org.springframework.data.jpa.repository.support.PersistenceProvider;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-public class BasicSimpleJpaRepository<T, ID extends Serializable>  extends SimpleJpaRepository<T, ID> implements BasicJpaRepository<T, ID>{
+public class JpaRepositorySupport<T, ID extends Serializable>  extends SimpleJpaRepository<T, ID> implements BasicJpaRepository<T, ID>{
 	
 	private final JpaEntityInformation<T, ?> entityInformation;
 	private final EntityManager em;
@@ -31,7 +31,7 @@ public class BasicSimpleJpaRepository<T, ID extends Serializable>  extends Simpl
 
 	private LockMetadataProvider lockMetadataProvider;
 	
-	public BasicSimpleJpaRepository(Class<T> domainClass, EntityManager em) {
+	public JpaRepositorySupport(Class<T> domainClass, EntityManager em) {
 		super(domainClass, em);
 		this.entityInformation = JpaEntityInformationSupport.getMetadata(domainClass, em);
 		this.em = em;
@@ -39,7 +39,7 @@ public class BasicSimpleJpaRepository<T, ID extends Serializable>  extends Simpl
 		
 	}
 	
-	public BasicSimpleJpaRepository(JpaEntityInformation<T, ?> entityInformation, EntityManager em) {
+	public JpaRepositorySupport(JpaEntityInformation<T, ?> entityInformation, EntityManager em) {
 		super(entityInformation, em);
 
 		this.entityInformation = entityInformation;
@@ -117,7 +117,7 @@ public class BasicSimpleJpaRepository<T, ID extends Serializable>  extends Simpl
 
 	@Override
 	public List<T> findAll(List<PropertyFilter> filters) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

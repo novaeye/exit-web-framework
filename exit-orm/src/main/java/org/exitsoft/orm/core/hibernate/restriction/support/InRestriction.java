@@ -1,6 +1,6 @@
-package org.exitsoft.orm.core.hibernate.property.impl.restriction;
+package org.exitsoft.orm.core.hibernate.restriction.support;
 
-import org.exitsoft.orm.core.hibernate.property.impl.MultipleValueRestrictionSupport;
+import org.exitsoft.orm.core.hibernate.restriction.MultipleValueRestrictionSupport;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 

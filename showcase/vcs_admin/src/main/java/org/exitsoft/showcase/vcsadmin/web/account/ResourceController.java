@@ -9,7 +9,7 @@ import org.exitsoft.orm.core.Page;
 import org.exitsoft.orm.core.PageRequest;
 import org.exitsoft.orm.core.PageRequest.Sort;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.hibernate.property.PropertyFilterRestrictionHolder;
+import org.exitsoft.orm.core.hibernate.HibernatePropertyFilters;
 import org.exitsoft.showcase.vcsadmin.common.SystemVariableUtils;
 import org.exitsoft.showcase.vcsadmin.common.enumeration.SystemDictionaryCode;
 import org.exitsoft.showcase.vcsadmin.entity.account.Resource;
@@ -46,7 +46,7 @@ public class ResourceController {
 	@RequestMapping("view")
 	public Page<Resource> view(PageRequest pageRequest,HttpServletRequest request) {
 		
-		List<PropertyFilter> filters = PropertyFilterRestrictionHolder.buildFromHttpRequest(request);
+		List<PropertyFilter> filters = HibernatePropertyFilters.buildFromHttpRequest(request);
 		
 		request.setAttribute("resourceType", SystemVariableUtils.getDataDictionariesByCategoryCode(SystemDictionaryCode.ResourceType));
 		request.setAttribute("resourcesList", accountManager.getAllResources());

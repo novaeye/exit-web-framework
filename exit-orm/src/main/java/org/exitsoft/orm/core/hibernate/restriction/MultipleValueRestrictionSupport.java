@@ -1,4 +1,4 @@
-package org.exitsoft.orm.core.hibernate.property.impl;
+package org.exitsoft.orm.core.hibernate.restriction;
 
 import org.apache.commons.lang3.StringUtils;
 import org.exitsoft.common.utils.ConvertUtils;
