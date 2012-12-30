@@ -212,7 +212,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * 
 	 * @param entity 对象必须是session中的对象或含PK属性的transient对象.
 	 */
-	public void deleteByEntity(T entity) {
+	public void delete(T entity) {
 		
 		if (entity == null) {
 			logger.warn("要删除的对象为:null");
@@ -236,7 +236,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * @param id 主键ID
 	 */
 	public void delete(PK id) {
-		deleteByEntity(get(id));
+		delete(get(id));
 	}
 
 	/**
@@ -264,7 +264,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 		}
 		
 		for (Iterator<T> it = list.iterator(); it.hasNext();) {
-			deleteByEntity(it.next());
+			delete(it.next());
 		}
 	}
 	

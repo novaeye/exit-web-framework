@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.exitsoft</groupId>
 		<artifactId>exitsoft-parent</artifactId>
-		<version>1.0.0</version>
+		<version>1.1.0</version>
 		<relativePath>../exit-parent/</relativePath>
 	</parent>
 	<artifactId>exitsoft-common</artifactId>

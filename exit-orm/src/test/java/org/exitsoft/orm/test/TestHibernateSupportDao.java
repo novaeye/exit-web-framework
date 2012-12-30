@@ -21,17 +21,15 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.EncodedResource;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -43,26 +41,28 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/applicationContext-test.xml")
-public class TestHibernateSuperDao {
+public class TestHibernateSupportDao {
 
 	private HibernateSupportDao<User, String> dao;
 	
+	@Autowired
 	private DataSource dataSource;
 	
-	private JdbcTemplate jdbcTemplate;
+	private static DataSource dataSourceHandler;
 	
-	@Autowired
-	private ApplicationContext applicationContext;
-	
-	
-	@Autowired
-	public void setDataSource(DataSource dataSource) throws Exception {
-		this.dataSource = dataSource;
-		jdbcTemplate =  new JdbcTemplate(this.dataSource);
-		Resource resource = this.applicationContext.getResource("classpath:/h2schma.sql");
-		JdbcTestUtils.executeSqlScript(jdbcTemplate, new EncodedResource(resource,"UTF-8"), false);
+	@Before
+	public void install() throws Exception {
+		if (dataSourceHandler == null) {
+			Fixtures.loadData(dataSource, "/sample-data.xml");
+			dataSourceHandler = dataSource;
+		}
 
-		Fixtures.loadData(this.dataSource, "/sample-data.xml");
+	}
+	
+	@AfterClass
+	public static void uninstall() throws Exception {
+		Fixtures.deleteData(dataSourceHandler, "/sample-data.xml");
+		dataSourceHandler = null;
 	}
 	
 	@Autowired

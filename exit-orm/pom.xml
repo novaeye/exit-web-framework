@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.exitsoft</groupId>
 		<artifactId>exitsoft-parent</artifactId>
-		<version>1.0.0</version>
+		<version>1.1.0</version>
 		<relativePath>../exit-parent/</relativePath>
 	</parent>
 	<artifactId>exitsoft-orm</artifactId>
@@ -17,7 +17,7 @@
 		<dependency>
 			<groupId>org.exitsoft</groupId>
 			<artifactId>exitsoft-common</artifactId>
-			<version>1.0.0</version>
+			<version>1.1.0</version>
 		</dependency>
 		
 		<dependency>
@@ -47,6 +47,11 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.data</groupId>
+		    <artifactId>spring-data-jpa</artifactId>
+		   <optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>

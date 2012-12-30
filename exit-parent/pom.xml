@@ -5,7 +5,7 @@
 
 	<groupId>org.exitsoft</groupId>
 	<artifactId>exitsoft-parent</artifactId>
-	<version>1.0.0</version>
+	<version>1.1.0</version>
 	<packaging>pom</packaging>
 
 	<name>exitsoft parend</name>
@@ -146,6 +146,13 @@
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-jdbc</artifactId>
 				<version>${spring.version}</version>
+			</dependency>
+			
+			<!-- spring data jpa -->
+			<dependency>
+			    <groupId>org.springframework.data</groupId>
+			    <artifactId>spring-data-jpa</artifactId>
+			    <version>1.2.0.RELEASE</version>
 			</dependency>
 
 			<!-- sqlserver driver -->
