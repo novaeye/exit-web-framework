@@ -216,7 +216,7 @@ public class AccountManager {
 	 * @return List
 	 */
 	public List<Resource> getAllParentMenuResources() {
-		return resourceDao.findByExpressions(new String[]{"EQ_S_parent.id","EQ_S_type"}, new String[]{null,ResourceType.Menu.getValue()});
+		return resourceDao.findByExpressions(new String[]{"EQS_parent.id","EQS_type"}, new String[]{null,ResourceType.Menu.getValue()});
 	}
 	
 	/**
@@ -247,7 +247,7 @@ public class AccountManager {
 	public List<Resource> getAllResources(String ignoreIdValue) {
 		
 		if(StringUtils.isNotEmpty(ignoreIdValue)) {
-			return resourceDao.findByExpression("NE_S_id", ignoreIdValue);
+			return resourceDao.findByExpression("NES_id", ignoreIdValue);
 		}
 		
 		return resourceDao.getAll();
@@ -399,10 +399,10 @@ public class AccountManager {
 		List<PropertyFilter> filters = new ArrayList<PropertyFilter>();
 		
 		if (StringUtils.isNotEmpty(ignoreIdValue)) {
-			filters.add(PropertyFilterRestrictionHolder.createPropertyFilter("NE_S_id", ignoreIdValue));
+			filters.add(PropertyFilterRestrictionHolder.createPropertyFilter("NES_id", ignoreIdValue));
 		}
 		
-		filters.add(PropertyFilterRestrictionHolder.createPropertyFilter("EQ_S_type", groupType.getValue()));
+		filters.add(PropertyFilterRestrictionHolder.createPropertyFilter("EQS_type", groupType.getValue()));
 		
 		return groupDao.findByPropertyFilters(filters);
 	}

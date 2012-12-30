@@ -58,7 +58,7 @@ public class GroupController {
 			pageRequest.setOrderDir(Sort.DESC);
 		}
 		
-		filters.add(PropertyFilterRestrictionHolder.createPropertyFilter("EQ_S_type", GroupType.RoleGorup.getValue()));
+		filters.add(PropertyFilterRestrictionHolder.createPropertyFilter("EQS_type", GroupType.RoleGorup.getValue()));
 		
 		return accountManager.searchGroupPage(pageRequest, filters);
 	}

@@ -31,24 +31,24 @@
 	<div id="search_group_dailog">
 		<form id="search_form" action="account/group/view" method="post">
 			<div class="column">
-		        <label for="filter_RLIKE_S_name">
+		        <label for="filter_RLIKES_name">
 					组名称:
 		        </label>
 		        <div class="field">
-		            <input type="text" id="filter_RLIKE_S_name" name="filter_RLIKE_S_name" class="text_input_big" size="25" value="${RequestParameters.filter_RLIKE_S_name!""}"/>
+		            <input type="text" id="filter_RLIKES_name" name="filter_RLIKES_name" class="text_input_big" size="25" value="${RequestParameters.filter_RLIKES_name!""}"/>
 		        </div>
 		    </div>
 		    <div class="column">
-		        <label for="filter_EQ_S_state">
+		        <label for="filter_EQS_state">
 					状态:
 		        </label>
 		        <div class="field">
-		            <select class="selection" name="filter_EQ_S_state" id="filter_EQ_S_state" size="25">
-		           		<option>
+		            <select class="selection" name="filter_EQI_state" id="filter_EQI_state" size="25">
+		           		<option value="">
 							全部
 		                </option>
 		                <#list states as s>
-			                <option value="${s.value}">
+			                <option value="${s.value}" <#if RequestParameters['filter_EQI_state']?has_content && RequestParameters['filter_EQI_state'] ==s.value >selected="selected"</#if>>
 								${s.name}
 			                </option>
 		                </#list>
@@ -56,13 +56,16 @@
 		        </div>
 		     </div>
 		     <div class="column">
-		        <label for="filter_EQ_S_type">
+		        <label for="filter_EQS_parent.id">
 					所属父类:
 		        </label>
 		        <div class="field">
-		        	<select class="selection" name="filter_EQ_S_type" id="filter_EQ_S_type" size="25">
+		        	<select class="selection" name="filter_EQS_parent.id" id="filter_EQS_parent.id" size="25">
+		        		<option value="">
+							无
+		                </option>
 		           		<#list groupsList as gl>
-			           		<option value="${gl.id}" <#if RequestParameters['filter_EQ_S_parent.id']?has_content && RequestParameters['filter_EQ_S_parent.id'] == gl.id >selected="selected"</#if> >
+			           		<option value="${gl.id}" <#if RequestParameters['filter_EQS_parent.id']?has_content && RequestParameters['filter_EQS_parent.id'] == gl.id >selected="selected"</#if> >
 								${gl.name}
 			                </option>
 		           		</#list>

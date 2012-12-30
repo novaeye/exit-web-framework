@@ -31,28 +31,28 @@
 	<div id="search_dictionary_category_dailog">
 		<form id="search_form" action="foundation/dictionary-category/view" method="post">
 			<div class="column">
-		        <label for="filter_RLIKE_S_name">
+		        <label for="filter_RLIKES_name">
 					类别名称:
 		        </label>
 		        <div class="field">
-		            <input type="text" id="filter_RLIKE_S_name" name="filter_RLIKE_S_name" class="text_input_big" size="25" value="${RequestParameters.filter_RLIKE_S_name!""}"/>
+		            <input type="text" id="filter_RLIKES_name" name="filter_RLIKES_name" class="text_input_big" size="25" value="${RequestParameters.filter_RLIKES_name!""}"/>
 		        </div>
-		        <label for="filter_EQ_S_code">
+		        <label for="filter_EQS_code">
 					类别代码:
 		        </label>
 		        <div class="field">
-		            <input type="text" id="filter_EQ_S_code" name="filter_EQ_S_code" class="text_input_big" size="25" value="${RequestParameters.filter_EQ_S_code!""}" />
+		            <input type="text" id="filter_EQS_code" name="filter_EQS_code" class="text_input_big" size="25" value="${RequestParameters.filter_EQS_code!""}" />
 		        </div>
 		    </div>
 		    <div class="column">
-		    	<label for="filter_EQ_S_parent.id">
+		    	<label for="filter_EQS_parent.id">
 		    		所属父类:
 		    	</label>
 		    	<div class="field">
-		    		<select class="selection" height="150" search="true" name="filter_EQ_S_parent.id" id="filter_EQ_S_parent.id" size="66">
-		    			<option>无</option>
+		    		<select class="selection" height="150" search="true" name="filter_EQS_parent.id" id="filter_EQS_parent.id" size="66">
+		    			<option value="">无</option>
 		                <#list categoriesList as cl>
-		                	<option value="${cl.id}" <#if RequestParameters['filter_EQ_S_parent.id']?has_content && RequestParameters['filter_EQ_S_parent.id'] == cl.id>selected="selected"</#if> >${cl.name}</option>
+		                	<option value="${cl.id}" <#if RequestParameters['filter_EQS_parent.id']?has_content && RequestParameters['filter_EQS_parent.id'] == cl.id>selected="selected"</#if> >${cl.name}</option>
 		                </#list>
 		           </select>
 		    	</div>

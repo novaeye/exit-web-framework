@@ -31,39 +31,39 @@
 	<div id="search_data_dictionary_dailog">
 		<form id="search_form" action="foundation/data-dictionary/view" method="post">
 			<div class="column">
-		        <label for="filter_RLIKE_S_name">
+		        <label for="filter_RLIKES_name">
 					字典名称:
 		        </label>
 		        <div class="field">
-		            <input type="text" id="filter_RLIKE_S_name" name="filter_RLIKE_S_name" class="text_input_big" size="25" value="${RequestParameters.filter_RLIKE_S_name!""}"/>
+		            <input type="text" id="filter_RLIKES_name" name="filter_RLIKES_name" class="text_input_big" size="25" value="${RequestParameters.filter_RLIKES_name!""}"/>
 		        </div>
-		        <label for="filter_EQ_S_code">
-					字典代码:
+		        <label for="filter_EQS_value">
+					字典值:
 		        </label>
 		        <div class="field">
-		            <input type="text" id="filter_EQ_S_code" name="filter_EQ_S_code" class="text_input_big" size="25" value="${RequestParameters.filter_EQ_S_code!""}" />
+		            <input type="text" id="filter_EQS_value" name="filter_EQS_value" class="text_input_big" size="25" value="${RequestParameters.filter_EQS_value!""}" />
 		        </div>
 		    </div>
 		    <div class="column">
-		    	<label for="filter_EQ_S_type">
+		    	<label for="filter_EQS_type">
 		    		值类型:
 		    	</label>
 		    	<div class="field">
-		    		<select class="selection" name="filter_EQ_S_type" id="filter_EQ_S_type" size="25">
-		    			<option>无</option>
+		    		<select class="selection" name="filter_EQS_type" id="filter_EQS_type" size="25">
+		    			<option value="">无</option>
 		                <#list valueTypes as vt>
-		                	<option value="${vt.value}" <#if RequestParameters.filter_EQ_S_type?has_content && RequestParameters.filter_EQ_S_type == vt.value>selected="selected"</#if> >${vt.name}</option>
+		                	<option value="${vt.value}" <#if RequestParameters.filter_EQS_type?has_content && RequestParameters.filter_EQS_type == vt.value>selected="selected"</#if> >${vt.name}</option>
 		                </#list>
 		            </select>
 		    	</div>
-		    	<label for="filter_EQ_S_parent.id">
+		    	<label for="filter_EQS_parent.id">
 		    		所属类别:
 		    	</label>
 		    	<div class="field">
-		    		<select class="selection" height="150" search="true" name="filter_EQ_S_category.id" id="filter_EQ_S_category.id" size="25">
-		    			<option>无</option>
+		    		<select class="selection" height="150" search="true" name="filter_EQS_category.id" id="filter_EQS_category.id" size="25">
+		    			<option value="">无</option>
 		                <#list categoriesList as cl>
-		                	<option value="${cl.id}" <#if RequestParameters['filter_EQ_S_category.id']?has_content && RequestParameters['filter_EQ_S_category.id'] == cl.id>selected="selected"</#if> >${cl.name}</option>
+		                	<option value="${cl.id}" <#if RequestParameters['filter_EQS_category.id']?has_content && RequestParameters['filter_EQS_category.id'] == cl.id>selected="selected"</#if> >${cl.name}</option>
 		                </#list>
 		           </select>
 		    	</div>

@@ -31,36 +31,36 @@
 	<div id="search_user_dailog">
 		<form id="search_form" action="account/user/view" method="post">
 			<div class="column">
-		        <label for="filter_RLIKE_S_username">
+		        <label for="filter_RLIKES_username">
 					登录帐号:
 		        </label>
 		        <div class="field">
-		            <input type="text" id="filter_RLIKE_S_username" name="filter_RLIKE_S_username" class="text_input_big" size="25" value="${RequestParameters.filter_RLIKE_S_username!""}"/>
+		            <input type="text" id="filter_RLIKES_username" name="filter_RLIKES_username" class="text_input_big" size="25" value="${RequestParameters.filter_RLIKES_username!""}"/>
 		        </div>
-		        <label for="filter_RLIKE_S_realname">
+		        <label for="filter_RLIKES_realname">
 					真实姓名:
 		        </label>
 		        <div class="field">
-		            <input type="text" id="filter_RLIKE_S_realname" name="filter_RLIKE_S_realname" class="text_input_big" size="25" value="${RequestParameters.filter_RLIKE_S_realname!""}" />
+		            <input type="text" id="filter_RLIKES_realname" name="filter_RLIKES_realname" class="text_input_big" size="25" value="${RequestParameters.filter_RLIKES_realname!""}" />
 		        </div>
 		    </div>
 		    <div class="column">
-		        <label for="filter_RLIKE_S_email">
+		        <label for="filter_RLIKES_email">
 					电子邮件:
 		        </label>
 		        <div class="field">
-		          <input type="text" id="filter_RLIKE_S_email" name="filter_RLIKE_S_email" class="text_input_big" size="25" value="${RequestParameters.filter_RLIKE_S_email!""}"/>
+		          <input type="text" id="filter_RLIKES_email" name="filter_RLIKES_email" class="text_input_big" size="25" value="${RequestParameters.filter_RLIKES_email!""}"/>
 		        </div>
-		        <label for="filter_EQ_S_state">
+		        <label for="filter_EQS_state">
 					状态:
 		        </label>
 		        <div class="field">
-		           <select class="selection" name="filter_EQ_I_state" id="filter_EQ_S_state" size="25">
+		           <select class="selection" name="filter_EQI_state" id="filter_EQS_state" size="25">
 		           		<option value="">
 							全部
 		                </option>
 		                <#list states as s>
-			                <option value="${s.value}" <#if RequestParameters.filter_EQ_I_state?has_content && s.value == RequestParameters.filter_EQ_I_state>selected="selected"</#if>>
+			                <option value="${s.value}" <#if RequestParameters.filter_EQI_state?has_content && s.value == RequestParameters.filter_EQI_state>selected="selected"</#if>>
 								${s.name}
 			                </option>
 		                </#list>

@@ -84,7 +84,7 @@ public class TestUserManager extends ManagerTestCaseSupport{
 	public void testSearchUserPage() {
 		PageRequest request = new PageRequest(1,1);
 		List<PropertyFilter> filters = new ArrayList<PropertyFilter>();
-		filters.add(PropertyFilterRestrictionHolder.createPropertyFilter("EQ_I_state", "1"));
+		filters.add(PropertyFilterRestrictionHolder.createPropertyFilter("EQI_state", "1"));
 		Page<User> page = accountManager.searchUserPage(request, filters);
 		assertEquals(page.getResult().size(), 1);
 		assertEquals(page.getTotalItems(), 2);
