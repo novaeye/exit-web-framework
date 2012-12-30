@@ -2,12 +2,13 @@
 .project
 .classpath
 
+*/logs/
 */target/
 */.settings/
 */.project
 */.classpath
 
-generated-sources/*
+generated-sources/
 
 showcase/*/logs/
 showcase/*/target/
