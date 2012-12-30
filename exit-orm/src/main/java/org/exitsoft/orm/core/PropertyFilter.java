@@ -4,7 +4,7 @@ package org.exitsoft.orm.core;
 import java.io.Serializable;
 
 /**
- * orm条件过滤器，可以通过{@link PropertyFilterRestrictionHolder#createPropertyFilter(String, String)}创建，使用他创建可以直接
+ * orm属性过滤器，可以通过{@link PropertyFilterRestrictionHolder#createPropertyFilter(String, String)}创建，使用他创建可以直接
  * 写入表达式即可，相关表达式样式查看{@link PropertyCriterionBuilder}的实现类,如果直接创建查看{@link PropertyCriterionBuilder}
  * 实现类的实际restrictionName值和{@link PropertyType}枚举值,如果一个属性对比多个值可以使用逗号(,)分割
  * <p>

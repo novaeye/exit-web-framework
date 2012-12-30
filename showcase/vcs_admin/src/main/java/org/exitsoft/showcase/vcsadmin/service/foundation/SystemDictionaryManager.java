@@ -69,7 +69,7 @@ public class SystemDictionaryManager {
 	 * 获取数据字典分页对象
 	 * 
 	 * @param request 分页参数请求
-	 * @param filters 属性过滤器
+	 * @param filters 属性过滤器集合
 	 * 
 	 * @return Page
 	 */
@@ -144,7 +144,7 @@ public class SystemDictionaryManager {
 	 * 获取字典列别分页对象
 	 * 
 	 * @param request 分页参数请求
-	 * @param filters 属性过滤器
+	 * @param filters 属性过滤器集合
 	 * 
 	 * @return {@link Page}
 	 */
@@ -162,9 +162,9 @@ public class SystemDictionaryManager {
 	}
 	
 	/**
-	 * 根据条件过滤器获取或有字典类别
+	 * 根据属性过滤器获取或有字典类别
 	 * 
-	 * @param filters 条件过滤器
+	 * @param filters 属性过滤器集合
 	 * 
 	 * @return List
 	 */

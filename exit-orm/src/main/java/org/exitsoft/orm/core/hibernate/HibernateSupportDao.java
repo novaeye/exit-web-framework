@@ -630,7 +630,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	/**
 	 * 通过{@link PropertyFilter} 查询单个orm实体
 	 * 
-	 * @param filters 条件过滤器
+	 * @param filters 属性过滤器
 	 * 
 	 * @return Object
 	 * 
@@ -642,7 +642,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	/**
 	 * 通过{@link PropertyFilter} 查询单个orm实体
 	 * 
-	 * @param filters 条件过滤器
+	 * @param filters 属性过滤器
 	 * @param persistentClass orm 实体Class
 	 * 
 	 * @return Object
@@ -838,7 +838,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	}
 	
 	/**
-	 * 通过分页参数，和条件过滤器查询分页
+	 * 通过分页参数，和属性过滤器查询分页
 	 * 
 	 * @param request
 	 * @param filters

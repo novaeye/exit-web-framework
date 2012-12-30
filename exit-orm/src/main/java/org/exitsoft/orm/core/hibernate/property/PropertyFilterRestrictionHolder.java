@@ -90,7 +90,7 @@ public class PropertyFilterRestrictionHolder {
 	}
 	
 	/**
-	 * 通过表达式和对比值创建条件过滤器集合,要求表达式与值必须相等
+	 * 通过表达式和对比值创建属性过滤器集合,要求表达式与值必须相等
 	 * <p>
 	 * 	如：
 	 * </p>
@@ -125,7 +125,7 @@ public class PropertyFilterRestrictionHolder {
 	}
 	
 	/**
-	 * 通过表达式和对比值创建条件过滤器
+	 * 通过表达式和对比值创建属性过滤器
 	 * <p>
 	 * 	如：
 	 * </p>
