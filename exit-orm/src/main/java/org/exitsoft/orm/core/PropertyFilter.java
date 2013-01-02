@@ -151,13 +151,14 @@ public class PropertyFilter implements Serializable{
 	public void setMatchValue(String matchValue) {
 		this.matchValue = matchValue;
 	}
+	
 	/**
 	 * 是否存在多个属性，如果是返回true,否则返回false
 	 * 
 	 * @return boolean
 	 */
 	public boolean hasMultiplePropertyNames() {
-		return this.propertyNames != null || this.propertyNames.length > 1;
+		return this.propertyNames != null && this.propertyNames.length > 1;
 	}
 	
 	/**

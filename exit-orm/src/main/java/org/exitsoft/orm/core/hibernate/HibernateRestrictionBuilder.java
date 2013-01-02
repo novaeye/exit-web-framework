@@ -52,12 +52,22 @@ public class HibernateRestrictionBuilder extends PropertyFilterBuilder<Criterion
 	
 	@Override
 	public Criterion getRestriction(PropertyFilter filter) {
+		
+		if (!getRestrictionsMap().containsKey(filter.getRestrictionName())) {
+			throw new IllegalArgumentException("找不到约束名:" + filter.getRestrictionName());
+		}
+		
 		CriterionBuilder criterionBuilder = getRestrictionsMap().get(filter.getRestrictionName());
 		return criterionBuilder.build(filter);
 	}
 
 	@Override
 	public Criterion getRestriction(String propertyName, Object value,String restrictionName) {
+		
+		if (!getRestrictionsMap().containsKey(restrictionName)) {
+			throw new IllegalArgumentException("找不到约束名:" + restrictionName);
+		}
+		
 		CriterionBuilder restriction = getRestrictionsMap().get(restrictionName);
 		return restriction.build(propertyName, value);
 	}

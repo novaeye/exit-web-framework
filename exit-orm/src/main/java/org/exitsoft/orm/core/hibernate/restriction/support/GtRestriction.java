@@ -1,6 +1,6 @@
 package org.exitsoft.orm.core.hibernate.restriction.support;
 
-import org.exitsoft.orm.core.hibernate.restriction.PropertyValueRestrictionSupport;
+import org.exitsoft.orm.core.hibernate.restriction.CriterionSingleValueSupport;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
@@ -13,7 +13,7 @@ import org.hibernate.criterion.Restrictions;
  * @author vincent
  *
  */
-public class GtRestriction extends PropertyValueRestrictionSupport{
+public class GtRestriction extends CriterionSingleValueSupport{
 	
 	public final static String RestrictionName = "GT";
 	

@@ -1,6 +1,6 @@
 package org.exitsoft.orm.core.hibernate.restriction.support;
 
-import org.exitsoft.orm.core.hibernate.restriction.PropertyValueRestrictionSupport;
+import org.exitsoft.orm.core.hibernate.restriction.CriterionSingleValueSupport;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
@@ -13,7 +13,7 @@ import org.hibernate.criterion.Restrictions;
  * @author vincent
  *
  */
-public class LeRestriction extends PropertyValueRestrictionSupport{
+public class LeRestriction extends CriterionSingleValueSupport{
 
 	public final static String RestrictionName = "LE";
 	

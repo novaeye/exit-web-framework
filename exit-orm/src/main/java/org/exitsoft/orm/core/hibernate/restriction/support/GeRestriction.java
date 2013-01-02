@@ -1,11 +1,11 @@
 package org.exitsoft.orm.core.hibernate.restriction.support;
 
-import org.exitsoft.orm.core.hibernate.restriction.PropertyValueRestrictionSupport;
+import org.exitsoft.orm.core.hibernate.restriction.CriterionSingleValueSupport;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
 /**
- * 大于约束 (from object o where o.value >= ?)RestrictionName:GE
+ * 大于等于约束 (from object o where o.value >= ?)RestrictionName:GE
  * <p>
  * 表达式:GE属性类型_属性名称[_OR_属性名称...]
  * </p>
@@ -13,7 +13,7 @@ import org.hibernate.criterion.Restrictions;
  * @author vincent
  *
  */
-public class GeRestriction extends PropertyValueRestrictionSupport{
+public class GeRestriction extends CriterionSingleValueSupport{
 	
 	public final static String RestrictionName = "GE";
 	

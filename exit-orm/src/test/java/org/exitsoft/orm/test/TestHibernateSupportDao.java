@@ -8,15 +8,15 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.exitsoft.common.unit.Fixtures;
+import org.exitsoft.orm.core.PropertyFilterUtils;
 import org.exitsoft.orm.core.Page;
 import org.exitsoft.orm.core.PageRequest;
 import org.exitsoft.orm.core.PropertyFilter;
 import org.exitsoft.orm.core.PropertyFilterBuilder;
-import org.exitsoft.orm.core.hibernate.HibernatePropertyFilters;
 import org.exitsoft.orm.core.hibernate.HibernateRestrictionBuilder;
-import org.exitsoft.orm.core.hibernate.dao.HibernateSupportDao;
 import org.exitsoft.orm.core.hibernate.restriction.support.LikeRestriction;
 import org.exitsoft.orm.core.hibernate.restriction.support.NeRestriction;
+import org.exitsoft.orm.core.hibernate.support.HibernateSupportDao;
 import org.exitsoft.orm.test.entity.Role;
 import org.exitsoft.orm.test.entity.User;
 import org.hibernate.SessionFactory;
@@ -156,7 +156,7 @@ public class TestHibernateSupportDao {
 		//---------------------------------------------PropertyFiter test--------------------------------------------------//
 		
 		List<PropertyFilter> filters = new ArrayList<PropertyFilter>();
-		filters = HibernatePropertyFilters.createPropertyFilters(new String[]{"LIKES_loginName","EQI_state"}, new String[]{"m","1"});
+		filters = PropertyFilterUtils.createPropertyFilters(new String[]{"LIKES_loginName","EQI_state"}, new String[]{"m","1"});
 		
 		userList = dao.findByPropertyFilters(filters);
 		Assert.assertEquals(userList.size(), 4);
@@ -170,7 +170,7 @@ public class TestHibernateSupportDao {
 		userList = dao.findByPropertyFilters(filters,"realName_asc");
 		Assert.assertEquals(userList.size(), 4);
 		
-		filters = HibernatePropertyFilters.createPropertyFilters(new String[]{"LIKES_name"}, new String[]{"系统"});
+		filters = PropertyFilterUtils.createPropertyFilters(new String[]{"LIKES_name"}, new String[]{"系统"});
 		
 		roleList = dao.findByPropertyFilters(filters, Role.class);
 		Assert.assertEquals(roleList.size(), 3);
@@ -252,12 +252,12 @@ public class TestHibernateSupportDao {
 		Assert.assertEquals(role.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0010");
 		
 		List<PropertyFilter> filters = new ArrayList<PropertyFilter>();
-		filters = HibernatePropertyFilters.createPropertyFilters(new String[]{"EQS_loginName"}, new String[]{"admin"});
+		filters = PropertyFilterUtils.createPropertyFilters(new String[]{"EQS_loginName"}, new String[]{"admin"});
 		
 		user = dao.findUniqueByPropertyFilters(filters);
 		Assert.assertEquals(user.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0002");
 		
-		filters = HibernatePropertyFilters.createPropertyFilters(new String[]{"EQS_name"}, new String[]{"系统"});
+		filters = PropertyFilterUtils.createPropertyFilters(new String[]{"EQS_name"}, new String[]{"系统"});
 		
 		role = dao.findUniqueByPropertyFilters(filters, Role.class);
 		Assert.assertEquals(role.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0010");
@@ -313,7 +313,7 @@ public class TestHibernateSupportDao {
 		Assert.assertEquals(user.getTotalPages(), 4);
 		Assert.assertEquals(user.getTotalItems(), 8);
 		
-		List<PropertyFilter> filters = HibernatePropertyFilters.createPropertyFilters(new String[]{"EQI_state"}, new String[]{"1"});
+		List<PropertyFilter> filters = PropertyFilterUtils.createPropertyFilters(new String[]{"EQI_state"}, new String[]{"1"});
 		
 		user = dao.findPage(request, filters);
 		Assert.assertEquals(user.getResult().size(), 2);
@@ -340,7 +340,7 @@ public class TestHibernateSupportDao {
 		Assert.assertEquals(role.getTotalPages(), 1);
 		Assert.assertEquals(role.getTotalItems(), 1);
 		
-		filters = HibernatePropertyFilters.createPropertyFilters(new String[]{"EQS_name"}, new String[]{"系统管理员"});
+		filters = PropertyFilterUtils.createPropertyFilters(new String[]{"EQS_name"}, new String[]{"系统管理员"});
 		
 		role = dao.findPage(request,filters,Role.class);
 		Assert.assertEquals(role.getResult().size(), 1);

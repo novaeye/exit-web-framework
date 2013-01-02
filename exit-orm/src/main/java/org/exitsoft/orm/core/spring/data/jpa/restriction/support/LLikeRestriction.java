@@ -1,6 +1,11 @@
-package org.exitsoft.orm.core.hibernate.restriction.support;
+package org.exitsoft.orm.core.spring.data.jpa.restriction.support;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
 
 import org.exitsoft.orm.core.hibernate.restriction.CriterionSingleValueSupport;
+import org.exitsoft.orm.core.spring.data.jpa.restriction.PredicateSingleValueSupport;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
@@ -14,7 +19,7 @@ import org.hibernate.criterion.Restrictions;
  * @author vincent
  *
  */
-public class LLikeRestriction extends CriterionSingleValueSupport{
+public class LLikeRestriction extends PredicateSingleValueSupport{
 
 	public final static String RestrictionName = "LLIKE";
 	
@@ -23,11 +28,14 @@ public class LLikeRestriction extends CriterionSingleValueSupport{
 		return RestrictionName;
 	}
 
-	
-	public Criterion build(String propertyName, Object value) {
+
+	@Override
+	public Predicate build(Path expression, Object value,CriteriaBuilder builder) {
 		
-		return Restrictions.like(propertyName, value.toString(), MatchMode.END);
+		return builder.like(expression, "%" + value);
 	}
+
+
 
 }
 

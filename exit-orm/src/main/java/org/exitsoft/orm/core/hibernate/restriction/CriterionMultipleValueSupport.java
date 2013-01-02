@@ -23,7 +23,7 @@ import org.springframework.util.Assert;
  * @author vincent
  *
  */
-public abstract class MultipleValueRestrictionSupport extends PropertyValueRestrictionSupport{
+public abstract class CriterionMultipleValueSupport extends CriterionSingleValueSupport{
 	
 	public Object convertMatchValue(String value, Class<?> type) {
 		Assert.notNull(value,"值不能为空");

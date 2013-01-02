@@ -1,6 +1,6 @@
 package org.exitsoft.orm.core.hibernate.restriction.support;
 
-import org.exitsoft.orm.core.hibernate.restriction.MultipleValueRestrictionSupport;
+import org.exitsoft.orm.core.hibernate.restriction.CriterionMultipleValueSupport;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
@@ -13,7 +13,7 @@ import org.hibernate.criterion.Restrictions;
  * @author vincent
  *
  */
-public class InRestriction extends MultipleValueRestrictionSupport{
+public class InRestriction extends CriterionMultipleValueSupport{
 
 	public final static String RestrictionName = "IN";
 	

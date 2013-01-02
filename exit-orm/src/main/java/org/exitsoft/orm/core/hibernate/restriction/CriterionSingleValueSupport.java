@@ -29,91 +29,59 @@ import org.hibernate.criterion.Restrictions;
  * @author vincent
  *
  */
-public abstract class PropertyValueRestrictionSupport implements CriterionBuilder{
+public abstract class CriterionSingleValueSupport implements CriterionBuilder{
 	
 	//or值分隔符
 	private String orValueSeparator = "|";
 	//and值分隔符
 	private String andValueSeparator = ",";
 	
-	public PropertyValueRestrictionSupport() {
+	public CriterionSingleValueSupport() {
 		
 	}
-	
 	
 	public Criterion build(PropertyFilter filter) {
 		String matchValue = filter.getMatchValue();
 		Class<?> propertyType = filter.getPropertyType();
 		
-		MatchValue matchValueModel = createMatchValueModel(matchValue, propertyType);
+		MatchValue matchValueModel = MatchValue.createMatchValueModel(matchValue, propertyType,andValueSeparator,orValueSeparator);
 		
-		Junction junction = null;
+		Junction criterion = null;
 		
 		if (matchValueModel.hasOrOperate()) {
-			junction = Restrictions.disjunction();
+			criterion = Restrictions.disjunction();
 		} else {
-			junction = Restrictions.conjunction();
+			criterion = Restrictions.conjunction();
 		}
 		
 		for (Object value : matchValueModel.getValues()) {
 			
 			if (filter.hasMultiplePropertyNames()) {
-				Disjunction disjunction = Restrictions.disjunction();
+				List<Criterion> disjunction = new ArrayList<Criterion>();
 				for (String propertyName:filter.getPropertyNames()) {
 					disjunction.add(build(propertyName,value));
 				}
-				junction.add(disjunction);
+				criterion.add(Restrictions.or(disjunction.toArray(new Criterion[disjunction.size()])));
 			} else {
-				junction.add(build(filter.getSinglePropertyName(),value));
+				criterion.add(build(filter.getSinglePropertyName(),value));
 			}
 			
 		}
 		
-		return junction;
+		return criterion;
 	}
 	
+	
 	/**
-	 * 创建对比值模型，如果多值将以逗号","或者竖杠"|"分割
+	 * 获取值对比模型
 	 * 
-	 * @param matchValue
-	 * @param type
+	 * @param matchValue 值
+	 * @param propertyType 值类型
 	 * 
-	 * @return
+	 * @return {@link MatchValue}
 	 */
-	public MatchValue createMatchValueModel(String matchValue,Class<?> type) {
-		
-		List<Object> values = new ArrayList<Object>();
-		
-		if (StringUtils.contains(matchValue, andValueSeparator)) {
-			String[] siplit = StringUtils.splitByWholeSeparator(matchValue, andValueSeparator);
-			CollectionUtils.addAll(values, (Object[])ConvertUtils.convertToObject(siplit, type));
-			return new MatchValue(false, values);
-		} else if (StringUtils.contains(matchValue, orValueSeparator)){
-			String[] siplit = StringUtils.splitByWholeSeparator(matchValue, orValueSeparator);
-			CollectionUtils.addAll(values, (Object[])ConvertUtils.convertToObject(siplit, type));
-			return new MatchValue(true, values);
-		} else {
-			values.add(ConvertUtils.convertToObject(matchValue, type));
-			return new MatchValue(false, values);
-		}
-		
-	}
-
-	/**
-	 * 获取or值分隔符
-	 * 
-	 * @return String
-	 */
-	public String getOrValueSeparator() {
-		return orValueSeparator;
-	}
-
-	/**
-	 * 设置or值分隔符
-	 * @param orValueSeparator or值分隔符
-	 */
-	public void setOrValueSeparator(String orValueSeparator) {
-		this.orValueSeparator = orValueSeparator;
+	public MatchValue getMatchValue(String matchValue,Class<?> propertyType) {
+		return MatchValue.createMatchValueModel(matchValue, propertyType,andValueSeparator,orValueSeparator);
 	}
 
 	/**
@@ -132,7 +100,5 @@ public abstract class PropertyValueRestrictionSupport implements CriterionBuilde
 	public void setAndValueSeparator(String andValueSeparator) {
 		this.andValueSeparator = andValueSeparator;
 	}
-	
-	
 	
 }

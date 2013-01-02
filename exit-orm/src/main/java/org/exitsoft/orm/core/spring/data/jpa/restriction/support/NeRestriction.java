@@ -1,7 +1,9 @@
-package org.exitsoft.orm.core.hibernate.restriction.support;
+package org.exitsoft.orm.core.spring.data.jpa.restriction.support;
 
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Restrictions;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+
 
 /**
  * 不等于约束 ( from object o where o.value <> ?) RestrictionName:NE
@@ -23,13 +25,10 @@ public class NeRestriction extends EqRestriction{
 		return RestrictionName;
 	}
 
-
-	
-	public Criterion build(String propertyName, Object value) {
+	@Override
+	public Predicate build(Path expression, Object value,CriteriaBuilder builder) {
 		
-		return value == null ? Restrictions.isNotNull(propertyName) : Restrictions.ne(propertyName, value);
-		
+		return value == null ? builder.isNotNull(expression) : builder.notEqual(expression, value);
 	}
-
 	
 }

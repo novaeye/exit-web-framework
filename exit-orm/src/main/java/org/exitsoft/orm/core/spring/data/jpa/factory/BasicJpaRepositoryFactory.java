@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 import javax.persistence.EntityManager;
 
-import org.exitsoft.orm.core.spring.data.jpa.repository.support.JpaRepositorySupport;
+import org.exitsoft.orm.core.spring.data.jpa.repository.support.JpaSupportRepository;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;
 import org.springframework.data.jpa.repository.support.LockModeRepositoryPostProcessor;
@@ -45,7 +45,7 @@ public class BasicJpaRepositoryFactory extends JpaRepositoryFactory{
 		if (isQueryDslExecutor(repositoryInterface)) {
 			repo = new QueryDslJpaRepository(entityInformation, entityManager);
 		} else {
-			repo = new JpaRepositorySupport(entityInformation, entityManager);
+			repo = new JpaSupportRepository(entityInformation, entityManager);
 		}
 		
 		repo.setLockMetadataProvider(LockModeRepositoryPostProcessor.INSTANCE.getLockMetadataProvider());
@@ -59,7 +59,7 @@ public class BasicJpaRepositoryFactory extends JpaRepositoryFactory{
 		if (isQueryDslExecutor(metadata.getRepositoryInterface())) {
 			return QueryDslJpaRepository.class;
 		} else {
-			return JpaRepositorySupport.class;
+			return JpaSupportRepository.class;
 		}
 	}
 }

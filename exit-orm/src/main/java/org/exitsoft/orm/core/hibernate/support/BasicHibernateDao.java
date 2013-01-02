@@ -1,4 +1,4 @@
-package org.exitsoft.orm.core.hibernate.dao;
+package org.exitsoft.orm.core.hibernate.support;
 
 import java.io.Serializable;
 import java.util.Collection;

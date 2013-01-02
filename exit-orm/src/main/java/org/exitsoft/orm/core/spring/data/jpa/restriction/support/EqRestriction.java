@@ -1,10 +1,12 @@
-package org.exitsoft.orm.core.hibernate.restriction.support;
+package org.exitsoft.orm.core.spring.data.jpa.restriction.support;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
 
 import org.apache.commons.lang3.StringUtils;
 import org.exitsoft.orm.core.MatchValue;
-import org.exitsoft.orm.core.hibernate.restriction.CriterionSingleValueSupport;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Restrictions;
+import org.exitsoft.orm.core.spring.data.jpa.restriction.PredicateSingleValueSupport;
 
 /**
  * 等于约束 (from object o where o.value = ?) RestrictionName:EQ
@@ -15,15 +17,9 @@ import org.hibernate.criterion.Restrictions;
  * @author vincent
  *
  */
-public class EqRestriction extends CriterionSingleValueSupport {
-
+public class EqRestriction extends PredicateSingleValueSupport{
+	
 	public final static String RestrictionName = "EQ";
-
-	
-	public String getRestrictionName() {
-		return RestrictionName;
-	}
-	
 	
 	public MatchValue createMatchValueModel(String matchValue,Class<?> type) {
 		
@@ -37,12 +33,14 @@ public class EqRestriction extends CriterionSingleValueSupport {
 		}
 		return matchValueModel;
 	}
-	
-	
-	public Criterion build(String propertyName, Object value) {
-		
-		return value == null ? Restrictions.isNull(propertyName) : Restrictions.eq(propertyName, value);
-		
+
+	public String getRestrictionName() {
+		return RestrictionName;
 	}
+
+	public Predicate build(Path expression, Object value,CriteriaBuilder builder) {
+		return value == null ? builder.isNull(expression) : builder.equal(expression, value);
+	}
+
 	
 }
