@@ -6,11 +6,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.exitsoft.common.utils.ServletUtils;
+import org.exitsoft.orm.core.PropertyFilterUtils;
 import org.exitsoft.orm.core.Page;
 import org.exitsoft.orm.core.PageRequest;
 import org.exitsoft.orm.core.PageRequest.Sort;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.hibernate.HibernatePropertyFilters;
 import org.exitsoft.showcase.vcsadmin.common.SystemVariableUtils;
 import org.exitsoft.showcase.vcsadmin.common.enumeration.SystemDictionaryCode;
 import org.exitsoft.showcase.vcsadmin.common.enumeration.entity.GroupType;
@@ -48,7 +48,7 @@ public class GroupController {
 	@RequestMapping("view")
 	public Page<Group> view(PageRequest pageRequest,HttpServletRequest request) {
 		
-		List<PropertyFilter> filters = HibernatePropertyFilters.buildFromHttpRequest(request);
+		List<PropertyFilter> filters = PropertyFilterUtils.buildFromHttpRequest(request);
 		
 		request.setAttribute("states", SystemVariableUtils.getDataDictionariesByCategoryCode(SystemDictionaryCode.State,"3"));
 		request.setAttribute("groupsList", accountManager.getAllGroup(GroupType.RoleGorup));
@@ -58,7 +58,7 @@ public class GroupController {
 			pageRequest.setOrderDir(Sort.DESC);
 		}
 		
-		filters.add(HibernatePropertyFilters.createPropertyFilter("EQS_type", GroupType.RoleGorup.getValue()));
+		filters.add(PropertyFilterUtils.createPropertyFilter("EQS_type", GroupType.RoleGorup.getValue()));
 		
 		return accountManager.searchGroupPage(pageRequest, filters);
 	}

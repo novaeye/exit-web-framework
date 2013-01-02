@@ -5,11 +5,11 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.exitsoft.orm.core.PropertyFilterUtils;
 import org.exitsoft.orm.core.Page;
 import org.exitsoft.orm.core.PageRequest;
 import org.exitsoft.orm.core.PageRequest.Sort;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.hibernate.HibernatePropertyFilters;
 import org.exitsoft.showcase.vcsadmin.common.SystemVariableUtils;
 import org.exitsoft.showcase.vcsadmin.common.enumeration.SystemDictionaryCode;
 import org.exitsoft.showcase.vcsadmin.entity.foundation.DataDictionary;
@@ -46,7 +46,7 @@ public class DataDictionaryController {
 	@RequestMapping("view")
 	public Page<DataDictionary> view(PageRequest pageRequest,HttpServletRequest request) {
 		
-		List<PropertyFilter> filters = HibernatePropertyFilters.buildFromHttpRequest(request);
+		List<PropertyFilter> filters = PropertyFilterUtils.buildFromHttpRequest(request);
 		
 		if (!pageRequest.isOrderBySetted()) {
 			pageRequest.setOrderBy("id");
