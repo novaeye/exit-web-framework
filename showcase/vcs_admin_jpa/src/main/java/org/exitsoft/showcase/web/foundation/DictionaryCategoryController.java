@@ -44,7 +44,7 @@ public class DictionaryCategoryController {
 	 */
 	@RequestMapping("view")
 	public Page<DictionaryCategory> view(
-			@PageableDefaults(pageNumber = 0, value = 10, sort = { "id" }, sortDir = Direction.DESC) Pageable pageable,
+			@PageableDefaults(sort = { "id" }, sortDir = Direction.DESC) Pageable pageable,
 			HttpServletRequest request) {
 		
 		List<PropertyFilter> filters = PropertyFilterUtils.buildFromHttpRequest(request);
