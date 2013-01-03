@@ -38,6 +38,7 @@ public class EqRestriction extends PredicateSingleValueSupport{
 		return RestrictionName;
 	}
 
+	@SuppressWarnings({ "rawtypes"})
 	public Predicate build(Path expression, Object value,CriteriaBuilder builder) {
 		return value == null ? builder.isNull(expression) : builder.equal(expression, value);
 	}

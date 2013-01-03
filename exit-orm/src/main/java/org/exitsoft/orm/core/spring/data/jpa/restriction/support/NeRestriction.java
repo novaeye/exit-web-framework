@@ -25,7 +25,7 @@ public class NeRestriction extends EqRestriction{
 		return RestrictionName;
 	}
 
-	@Override
+	@SuppressWarnings("rawtypes")
 	public Predicate build(Path expression, Object value,CriteriaBuilder builder) {
 		
 		return value == null ? builder.isNotNull(expression) : builder.notEqual(expression, value);

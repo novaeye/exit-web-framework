@@ -23,10 +23,9 @@ public class InRestriction extends PredicateMultipleValueSupport{
 	public String getRestrictionName() {
 		return RestrictionName;
 	}
-
-
-	@Override
-	public Predicate buildRestriction(Path<?> expression, Object[] values,CriteriaBuilder builder) {
+	
+	@SuppressWarnings("rawtypes")
+	public Predicate buildRestriction(Path expression, Object[] values,CriteriaBuilder builder) {
 		return expression.in(values);
 	}
 	

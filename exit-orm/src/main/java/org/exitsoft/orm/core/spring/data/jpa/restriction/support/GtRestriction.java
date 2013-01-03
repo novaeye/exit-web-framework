@@ -25,8 +25,7 @@ public class GtRestriction extends PredicateSingleValueSupport{
 		return RestrictionName;
 	}
 
-
-	@Override
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Predicate build(Path expression, Object value,CriteriaBuilder builder) {
 		
 		return builder.greaterThan(expression,(Comparable) value);

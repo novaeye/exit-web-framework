@@ -25,6 +25,7 @@ public class LeRestriction extends PredicateSingleValueSupport{
 		return RestrictionName;
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Predicate build(Path expression, Object value,CriteriaBuilder builder) {
 		return builder.lessThanOrEqualTo(expression, (Comparable)value);
 	}

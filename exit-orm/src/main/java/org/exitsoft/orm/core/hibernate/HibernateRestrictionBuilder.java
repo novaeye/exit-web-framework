@@ -50,6 +50,10 @@ public class HibernateRestrictionBuilder extends PropertyFilterBuilder<Criterion
 		getRestrictionsMap().put(notInRestriction.getRestrictionName(), notInRestriction);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.PropertyFilterBuilder#getRestriction(org.exitsoft.orm.core.PropertyFilter)
+	 */
 	@Override
 	public Criterion getRestriction(PropertyFilter filter) {
 		
@@ -61,6 +65,10 @@ public class HibernateRestrictionBuilder extends PropertyFilterBuilder<Criterion
 		return criterionBuilder.build(filter);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.PropertyFilterBuilder#getRestriction(java.lang.String, java.lang.Object, java.lang.String)
+	 */
 	@Override
 	public Criterion getRestriction(String propertyName, Object value,String restrictionName) {
 		

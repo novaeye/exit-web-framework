@@ -26,6 +26,7 @@ public class GeRestriction extends PredicateSingleValueSupport{
 		return RestrictionName;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Predicate build(Path expression, Object value,CriteriaBuilder builder) {
 		
 		return builder.greaterThanOrEqualTo(expression, (Comparable) value);

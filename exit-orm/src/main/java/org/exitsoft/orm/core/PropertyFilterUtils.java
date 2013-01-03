@@ -12,6 +12,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.exitsoft.common.utils.ServletUtils;
 import org.springframework.util.Assert;
 
+/**
+ * 属性过滤器工具类
+ * 
+ * @author vincent
+ *
+ */
 public abstract class PropertyFilterUtils {
 	
 	/**

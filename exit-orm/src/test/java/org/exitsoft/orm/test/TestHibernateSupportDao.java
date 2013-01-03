@@ -8,12 +8,10 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.exitsoft.common.unit.Fixtures;
-import org.exitsoft.orm.core.PropertyFilterUtils;
 import org.exitsoft.orm.core.Page;
 import org.exitsoft.orm.core.PageRequest;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.PropertyFilterBuilder;
-import org.exitsoft.orm.core.hibernate.HibernateRestrictionBuilder;
+import org.exitsoft.orm.core.PropertyFilterUtils;
 import org.exitsoft.orm.core.hibernate.restriction.support.LikeRestriction;
 import org.exitsoft.orm.core.hibernate.restriction.support.NeRestriction;
 import org.exitsoft.orm.core.hibernate.support.HibernateSupportDao;
@@ -29,7 +27,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -374,35 +371,44 @@ public class TestHibernateSupportDao {
 		List<User> userList = new ArrayList<User>();
 		
 		userList = dao.findByExpression("EQD_createTime", "2012-08-12");
+		Assert.assertEquals(userList.size(), 8);
 		
 		userList = dao.findByExpression("EQS_wubiCode", null);
 		Assert.assertEquals(userList.size(), 1);
+		
 		userList = dao.findByExpression("EQS_wubiCode", "");
 		Assert.assertEquals(userList.size(),6);
+		
 		userList = dao.findByExpression("EQS_wubiCode", "123");
 		Assert.assertEquals(userList.size(), 1);
 		
 		userList = dao.findByExpression("NES_wubiCode", null);
 		Assert.assertEquals(userList.size(), 7);
+		
 		userList = dao.findByExpression("NES_wubiCode", "");
 		Assert.assertEquals(userList.size(), 1);
+		
 		userList = dao.findByExpression("NES_wubiCode", "123");
 		Assert.assertEquals(userList.size(), 6);
 		
 		userList = dao.findByExpression("LIKES_loginName", "m");
 		Assert.assertEquals(userList.size(), 4);
+		
 		userList = dao.findByExpression("RLIKES_loginName", "m");
 		Assert.assertEquals(userList.size(), 3);
+		
 		userList = dao.findByExpression("LLIKES_loginName", "n");
 		Assert.assertEquals(userList.size(), 1);
 		
 		userList = dao.findByExpression("LEI_state", "1");
 		Assert.assertEquals(userList.size(), 8);
+		
 		userList = dao.findByExpression("LTI_state", "2");
 		Assert.assertEquals(userList.size(), 8);
 		
 		userList = dao.findByExpression("GEI_state", "1");
 		Assert.assertEquals(userList.size(), 8);
+		
 		userList = dao.findByExpression("GTI_state", "0");
 		Assert.assertEquals(userList.size(), 8);
 		

@@ -19,6 +19,12 @@ import org.exitsoft.orm.core.spring.data.jpa.restriction.support.NeRestriction;
 import org.exitsoft.orm.core.spring.data.jpa.restriction.support.NinRestriction;
 import org.exitsoft.orm.core.spring.data.jpa.restriction.support.RLikeRestriction;
 
+/**
+ * jpa约束捆绑者，，将所有的{@link PredicateBuilder}实现类添加到{@link PropertyFilterBuilder#getRestrictionsMap()}中，让
+ * 
+ * @author vincent
+ *
+ */
 public class JpaRestrictionBuilder extends PropertyFilterBuilder<PredicateBuilder, Predicate>{
 	
 	private Root<?> root;
@@ -51,6 +57,13 @@ public class JpaRestrictionBuilder extends PropertyFilterBuilder<PredicateBuilde
 		getRestrictionsMap().put(notInRestriction.getRestrictionName(), notInRestriction);
 	}
 	
+	public JpaRestrictionBuilder(Root<?> root, CriteriaQuery<?> query,CriteriaBuilder builder) {
+		this();
+		this.root = root;
+		this.query = query;
+		this.builder = builder;
+	}
+
 	public Predicate getRestriction(PropertyFilter filter) {
 		if (!getRestrictionsMap().containsKey(filter.getRestrictionName())) {
 			throw new IllegalArgumentException("找不到约束名:" + filter.getRestrictionName());

@@ -3,14 +3,10 @@ package org.exitsoft.orm.core.hibernate.restriction;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.exitsoft.common.utils.ConvertUtils;
 import org.exitsoft.orm.core.MatchValue;
 import org.exitsoft.orm.core.PropertyFilter;
 import org.exitsoft.orm.core.hibernate.CriterionBuilder;
 import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Restrictions;
 
@@ -40,6 +36,10 @@ public abstract class CriterionSingleValueSupport implements CriterionBuilder{
 		
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.hibernate.CriterionBuilder#build(org.exitsoft.orm.core.PropertyFilter)
+	 */
 	public Criterion build(PropertyFilter filter) {
 		String matchValue = filter.getMatchValue();
 		Class<?> propertyType = filter.getPropertyType();

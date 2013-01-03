@@ -8,12 +8,22 @@ import javax.persistence.criteria.Root;
 
 import org.exitsoft.orm.core.PropertyFilter;
 
+/**
+ * 
+ * 辅助{@link JpaRestrictionBuilder}类创建PropertyFilter后使用哪种约束条件向{@link CriteriaBuilder}添加{@link Predicate}进行条件过滤查询的接口
+ * 
+ * @author vincent
+ *
+ */
 public interface PredicateBuilder {
 
 	/**
 	 * 获取Jpa的约束标准
 	 * 
 	 * @param filter 属性过滤器
+	 * @param root Query roots 
+	 * @param query Query 
+	 * @param builder CriteriaBuilder
 	 * 
 	 * @return {@link Predicate}
 	 * 
@@ -30,8 +40,9 @@ public interface PredicateBuilder {
 	/**
 	 * 获取Jpa的约束标准
 	 * 
-	 * @param propertyName 属性名
+	 * @param expression root路径
 	 * @param value 值
+	 * @param builder CriteriaBuilder
 	 * 
 	 * @return {@link Predicate}
 	 * 

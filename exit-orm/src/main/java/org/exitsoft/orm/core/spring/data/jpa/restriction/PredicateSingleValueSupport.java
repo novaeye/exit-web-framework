@@ -6,10 +6,27 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.lang3.StringUtils;
 import org.exitsoft.orm.core.MatchValue;
 import org.exitsoft.orm.core.PropertyFilter;
 import org.exitsoft.orm.core.spring.data.jpa.PredicateBuilder;
 
+
+/**
+ * 处理{@link PropertyFilter#getMatchValue()}的基类，本类对3种值做处理
+ * <p>
+ * 1.值等于正常值的，如："amdin"，会产生的squall为:property = 'admin'
+ * </p>
+ * <p>
+ * 2.值等于或值的，如："admin_OR_vincent"，会产生的sql为:property = 'admin' or property = 'vincent'
+ * </p>
+ * <p>
+ * 3.值等于与值的,如:"admin_AND_vincent"，会产生的sql为:property = 'admin' and property = 'vincent'
+ * </p>
+ * 
+ * @author vincent
+ *
+ */
 public abstract class PredicateSingleValueSupport implements PredicateBuilder{
 	
 	//or值分隔符
@@ -21,6 +38,10 @@ public abstract class PredicateSingleValueSupport implements PredicateBuilder{
 		
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.PredicateBuilder#build(org.exitsoft.orm.core.PropertyFilter, javax.persistence.criteria.Root, javax.persistence.criteria.CriteriaQuery, javax.persistence.criteria.CriteriaBuilder)
+	 */
 	public Predicate build(PropertyFilter filter, Root<?> root,CriteriaQuery<?> query, CriteriaBuilder builder) {
 
 		String matchValue = filter.getMatchValue();
@@ -39,14 +60,40 @@ public abstract class PredicateSingleValueSupport implements PredicateBuilder{
 		for (Object value : matchValueModel.getValues()) {
 			if (filter.hasMultiplePropertyNames()) {
 				for (String propertyName:filter.getPropertyNames()) {
-					predicate.getExpressions().add(build(root.get(propertyName), value, builder));
+					
+					predicate.getExpressions().add(build(getPath(propertyName,root), value, builder));
 				}
 			} else {
-				predicate.getExpressions().add(build(root.get(filter.getSinglePropertyName()), value, builder));
+				predicate.getExpressions().add(build(getPath(filter.getSinglePropertyName(),root), value, builder));
 			}
 		}
 		
 		return predicate;
+	}
+	
+	/**
+	 * 获取属性名字路径
+	 * 
+	 * @param propertyName 属性名
+	 * @param root Query roots always reference entities
+	 * 
+	 * @return {@link Path}
+	 */
+	protected Path<?> getPath(String propertyName,Root<?> root) {
+		
+		Path<?> path = null;
+		
+		if (StringUtils.contains(propertyName, ".")) {
+			String[] propertys = StringUtils.splitByWholeSeparator(propertyName, ".");
+			path = root.get(propertys[0]);
+			for (int i = 1; i < propertys.length; i++) {
+				path = path.get(propertys[i]);
+			}
+		} else {
+			path = root.get(propertyName);
+		}
+		
+		return path;
 	}
 	
 	/**

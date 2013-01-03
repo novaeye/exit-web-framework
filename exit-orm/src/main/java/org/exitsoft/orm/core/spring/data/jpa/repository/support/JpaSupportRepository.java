@@ -1,68 +1,53 @@
 package org.exitsoft.orm.core.spring.data.jpa.repository.support;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Predicate.BooleanOperator;
-import javax.persistence.criteria.Root;
 
-import org.apache.commons.lang3.StringUtils;
-import org.exitsoft.common.utils.CollectionUtils;
 import org.exitsoft.common.utils.ConvertUtils;
 import org.exitsoft.common.utils.ReflectionUtils;
 import org.exitsoft.orm.annotation.StateDelete;
-import org.exitsoft.orm.core.MatchValue;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.spring.data.jpa.JpaRestrictionBuilder;
 import org.exitsoft.orm.core.spring.data.jpa.PropertyFilterSpecification;
+import org.exitsoft.orm.core.spring.data.jpa.RestrictionNameSpecification;
 import org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository;
+import org.exitsoft.orm.core.spring.data.jpa.restriction.support.EqRestriction;
 import org.exitsoft.orm.enumeration.ExecuteMehtod;
 import org.exitsoft.orm.strategy.CodeStrategy;
 import org.exitsoft.orm.strategy.annotation.ConvertCode;
 import org.exitsoft.orm.strategy.annotation.ConvertProperty;
-import org.hibernate.ejb.criteria.CriteriaBuilderImpl;
-import org.hibernate.ejb.criteria.predicate.CompoundPredicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
-import org.springframework.data.jpa.repository.support.JpaEntityInformationSupport;
-import org.springframework.data.jpa.repository.support.LockMetadataProvider;
-import org.springframework.data.jpa.repository.support.PersistenceProvider;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * {@link BasicJpaRepository}接口实现类，并在{@link SimpleJpaRepository}基础上扩展,包含对{@link PropertyFilter}的支持。或其他查询的支持,
+ * 重写了{@link SimpleJpaRepository#save(Object)}和{@link SimpleJpaRepository#delete(Object)}方法，支持@StateDelete注解和@ConvertProperty注解
+ * 
+ * @author vincent
+ *
+ * @param <T> ORM对象
+ * @param <ID> 主键Id类型
+ */
 public class JpaSupportRepository<T, ID extends Serializable>  extends SimpleJpaRepository<T, ID> implements BasicJpaRepository<T, ID>{
 	
-	private final JpaEntityInformation<T, ?> entityInformation;
-	private final EntityManager em;
-	private final PersistenceProvider provider;
-
-	private LockMetadataProvider lockMetadataProvider;
-	private JpaRestrictionBuilder jpaRestrictionBuilder = new JpaRestrictionBuilder();
+	private EntityManager entityManager;
+	private JpaEntityInformation<T, ?> entityInformation;
 	
-	public JpaSupportRepository(Class<T> domainClass, EntityManager em) {
-		super(domainClass, em);
-		this.entityInformation = JpaEntityInformationSupport.getMetadata(domainClass, em);
-		this.em = em;
-		this.provider = PersistenceProvider.fromEntityManager(em);
-		
+	public JpaSupportRepository(Class<T> domainClass, EntityManager entityManager) {
+		super(domainClass, entityManager);
+		this.entityManager = entityManager;
 	}
 	
 	public JpaSupportRepository(JpaEntityInformation<T, ?> entityInformation, EntityManager em) {
 		super(entityInformation, em);
-
 		this.entityInformation = entityInformation;
-		this.em = em;
-		this.provider = PersistenceProvider.fromEntityManager(em);
+		this.entityManager = em;
 	}
-	
-	
 	
 	/**
 	 * 
@@ -71,8 +56,8 @@ public class JpaSupportRepository<T, ID extends Serializable>  extends SimpleJpa
 	 * @param source 要转码的对象
 	 * @param executeMehtods 在什么方法进行转码
 	 */
-	protected void convertObject(Object source,ExecuteMehtod...executeMehtods) {
-		if (executeMehtods == null) {
+	protected void convertObject(Object source,ExecuteMehtod...executeMethods) {
+		if (executeMethods == null) {
 			return ;
 		}
 		
@@ -82,7 +67,7 @@ public class JpaSupportRepository<T, ID extends Serializable>  extends SimpleJpa
 			return ;
 		}
 		
-		for (ExecuteMehtod em:executeMehtods) {
+		for (ExecuteMehtod em:executeMethods) {
 			if (convertCode.executeMehtod().equals(em)) {
 				for (ConvertProperty convertProperty : convertCode.convertPropertys()) {
 					
@@ -101,23 +86,27 @@ public class JpaSupportRepository<T, ID extends Serializable>  extends SimpleJpa
 		
 	}
 	
-	@Override
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.data.jpa.repository.support.SimpleJpaRepository#save(S)
+	 */
 	@Transactional
 	public <S extends T> S save(S entity) {
 		
-		convertObject(entity,ExecuteMehtod.Save);
-		
 		if (entityInformation.isNew(entity)) {
 			convertObject(entity,ExecuteMehtod.Save,ExecuteMehtod.Insert);
-			em.persist(entity);
+			entityManager.persist(entity);
 			return entity;
 		} else {
 			convertObject(entity,ExecuteMehtod.Save,ExecuteMehtod.Update);
-			return em.merge(entity);
+			return entityManager.merge(entity);
 		}
 	}
 	
-	@Override
+	 /*
+	  * (non-Javadoc)
+	  * @see org.springframework.data.jpa.repository.support.SimpleJpaRepository#delete(java.lang.Object)
+	  */
 	@Transactional
 	public void delete(T entity) {
 		StateDelete stateDelete = ReflectionUtils.getAnnotation(entity.getClass(),StateDelete.class);
@@ -130,88 +119,141 @@ public class JpaSupportRepository<T, ID extends Serializable>  extends SimpleJpa
 		}
 	}
 	
-	protected Specification<T> createSpecification(final List<PropertyFilter> filters,String orderBy) {
-		
-		return new PropertyFilterSpecification<T>(filters,orderBy);
-	}
-	
-	@Override
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(java.util.List)
+	 */
 	public List<T> findAll(List<PropertyFilter> filters) {
 		
-		return findAll(new PropertyFilterSpecification<T>(filters));
+		return findAll(filters,(Sort)null);
 	}
 
-	@Override
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(java.util.List, org.springframework.data.domain.Sort)
+	 */
+	public List<T> findAll(List<PropertyFilter> filters, Sort sort) {
+		
+		return findAll(new PropertyFilterSpecification<T>(filters),sort);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(java.lang.String, java.lang.String)
+	 */
 	public List<T> findAll(String expression, String value) {
 		
-		return findAll(new PropertyFilterSpecification<T>(expression,value));
+		return findAll(expression,value,(Sort)null);
 	}
 
-	@Override
-	public List<T> findAll(String expression, String value, String orderBy) {
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(java.lang.String, java.lang.String, org.springframework.data.domain.Sort)
+	 */
+	public List<T> findAll(String expression, String value, Sort sort) {
 		
-		return findAll(new PropertyFilterSpecification<T>(expression,value,orderBy));
+		return findAll(new PropertyFilterSpecification<T>(expression,value),sort);
 	}
 
-	@Override
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(java.lang.String, java.lang.Object)
+	 */
 	public List<T> findAll(String propertyName, Object value) {
-		// TODO Auto-generated method stub
-		return null;
+		return findAll(propertyName,value,(Sort)null);
 	}
 
-	@Override
-	public List<T> findAll(String propertyName, Object value, String orderBy) {
-		// TODO Auto-generated method stub
-		return null;
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(java.lang.String, java.lang.Object, org.springframework.data.domain.Sort)
+	 */
+	public List<T> findAll(String propertyName, Object value, Sort sort) {
+		
+		return findAll(propertyName,value,sort,EqRestriction.RestrictionName);
 	}
 
-	@Override
-	public List<T> findAll(String propertyName, Object value, String orderBy,String restrictionName) {
-		// TODO Auto-generated method stub
-		return null;
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(java.lang.String, java.lang.Object, java.lang.String)
+	 */
+	public List<T> findAll(String propertyName, Object value, String restrictionName) {
+		
+		return findAll(propertyName,value,(Sort)null,restrictionName);
 	}
-
-	@Override
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(java.lang.String, java.lang.Object, org.springframework.data.domain.Sort, java.lang.String)
+	 */
+	public List<T> findAll(String propertyName, Object value, Sort sort,String restrictionName) {
+		
+		return findAll(new RestrictionNameSpecification<T>(propertyName, value, restrictionName),sort);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(java.lang.String[], java.lang.String[])
+	 */
 	public List<T> findAll(String[] expressions, String[] values) {
-		return findAll(new PropertyFilterSpecification<T>(expressions,values));
+		return findAll(expressions,values,(Sort)null);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(java.lang.String[], java.lang.String[], org.springframework.data.domain.Sort)
+	 */
+	public List<T> findAll(String[] expressions, String[] values, Sort sort) {
+		return findAll(new PropertyFilterSpecification<T>(expressions,values),sort);
 	}
 
-	@Override
-	public List<T> findAll(String[] expressions, String[] values, String orderBy) {
-		return findAll(new PropertyFilterSpecification<T>(expressions,values,orderBy));
-	}
-
-	@Override
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(org.springframework.data.domain.Pageable, java.util.List)
+	 */
 	public Page<T> findAll(Pageable pageable, List<PropertyFilter> filters) {
 		return findAll(new PropertyFilterSpecification<T>(filters),pageable);
 	}
-
-	@Override
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findOne(java.util.List)
+	 */
 	public T findOne(List<PropertyFilter> filters) {
 		
-		return findOne(new PropertyFilterSpecification(filters));
+		return findOne(new PropertyFilterSpecification<T>(filters));
 	}
 
-	@Override
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findOne(java.lang.String, java.lang.Object)
+	 */
 	public T findOne(String propertyName, Object value) {
-		// TODO Auto-generated method stub
-		return null;
+		return findOne(propertyName,value,EqRestriction.RestrictionName);
 	}
 
-	@Override
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findOne(java.lang.String, java.lang.Object, java.lang.String)
+	 */
 	public T findOne(String propertyName, Object value, String restrictionName) {
 		
-		return null;
+		return findOne(new RestrictionNameSpecification<T>(propertyName, value, restrictionName));
 	}
 
-	@Override
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findOne(java.lang.String, java.lang.String)
+	 */
 	public T findOne(String expression, String value) {
-		return findOne(new PropertyFilterSpecification(expression,value));
+		return findOne(new PropertyFilterSpecification<T>(expression,value));
 	}
 
-	@Override
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findOne(java.lang.String[], java.lang.String[])
+	 */
 	public T findOne(String[] expressions, String[] values) {
-		return findOne(new PropertyFilterSpecification(expressions,values));
+		return findOne(new PropertyFilterSpecification<T>(expressions,values));
 	}
 	
 }

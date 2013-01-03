@@ -24,8 +24,7 @@ public class RLikeRestriction extends PredicateSingleValueSupport{
 		return RestrictionName;
 	}
 
-
-	@Override
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Predicate build(Path expression, Object value,CriteriaBuilder builder) {
 		
 		return builder.like(expression, value + "%");

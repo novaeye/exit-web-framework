@@ -28,7 +28,7 @@ import org.hibernate.transform.ResultTransformer;
 import org.springframework.util.Assert;
 
 /**
- * Hibernate基础扩展类。包含对{@link PropertyFilter}的支持。或其他查询的支持
+ * {@link BasicHibernateDao}基础扩展类。包含对{@link PropertyFilter}的支持。或其他查询的支持
  * 
  * @author vincent
  *
@@ -321,9 +321,9 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	/**
 	 * 通过表达式和对比值查询全部
 	 * <pre>
-	 * 	如：
-	 * 	findByExpressions(new String[]{"EQS_propertyName1","NEI_propertyName2"},new String[]{"vincent","vincent|admin"})
-	 * 	对比值长度与表达式长度必须相等
+	 * 如：
+	 * findByExpressions(new String[]{"EQS_propertyName1","NEI_propertyName2"},new String[]{"vincent","vincent|admin"})
+	 * 对比值长度与表达式长度必须相等
 	 * </pre>
 	 * 
 	 * @param expressions 表达式
@@ -338,9 +338,9 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	/**
 	 * 通过表达式和对比值查询全部
 	 * <pre>
-	 * 	如：
-	 * 	findByExpressions(new String[]{"EQS_propertyName1","NEI_propertyName2"},new String[]{"vincent","vincent|admin"},"propertyName_asc")
-	 * 	对比值长度与表达式长度必须相等
+	 * 如：
+	 * findByExpressions(new String[]{"EQS_propertyName1","NEI_propertyName2"},new String[]{"vincent","vincent|admin"},"propertyName_asc")
+	 * 对比值长度与表达式长度必须相等
 	 * </pre>
 	 * 
 	 * @param expressions 表达式
@@ -356,9 +356,9 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	/**
 	 * 通过表达式和对比值查询全部
 	 * <pre>
-	 * 	如：
-	 * 	findByExpressions(new String[]{"EQS_propertyName1","NEI_propertyName2"},new String[]{"vincent","vincent|admin"},OtherOrm.class)
-	 * 	对比值长度与表达式长度必须相等
+	 * 如：
+	 * findByExpressions(new String[]{"EQS_propertyName1","NEI_propertyName2"},new String[]{"vincent","vincent|admin"},OtherOrm.class)
+	 * 对比值长度与表达式长度必须相等
 	 * </pre>
 	 * 
 	 * @param expressions 表达式
@@ -374,9 +374,9 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	/**
 	 * 通过表达式和对比值查询全部
 	 * <pre>
-	 * 	如：
-	 * 	findByExpressions(new String[]{"EQS_propertyName1","NEI_propertyName2"},new String[]{"vincent","vincent|admin"},"propertyName_asc",OtherOrm.class)
-	 * 	对比值长度与表达式长度必须相等
+	 * 如：
+	 * findByExpressions(new String[]{"EQS_propertyName1","NEI_propertyName2"},new String[]{"vincent","vincent|admin"},"propertyName_asc",OtherOrm.class)
+	 * 对比值长度与表达式长度必须相等
 	 * </pre>
 	 * 
 	 * @param expressions 表达式
@@ -393,8 +393,8 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	/**
 	 * 通过表达式和对比值查询全部
 	 * <pre>
-	 * 	如：
-	 * 	findByExpression("EQS_propertyName","vincent")
+	 * 如：
+	 * findByExpression("EQS_propertyName","vincent")
 	 * </pre>
 	 * 
 	 * @param expressions 表达式
@@ -411,8 +411,8 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	/**
 	 * 通过表达式和对比值查询全部
 	 * <pre>
-	 * 	如：
-	 * 	findByExpression("EQS_propertyName","vincent","propertyName_asc")
+	 * 如：
+	 * findByExpression("EQS_propertyName","vincent","propertyName_asc")
 	 * </pre>
 	 * 
 	 * @param expressions 表达式
@@ -429,8 +429,8 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * 通过表达式和对比值查询全部
 	 * 
 	 * <pre>
-	 * 	如：
-	 * 	findByExpression("EQS_propertyName","vincent",OtherOrm.class)
+	 * 如：
+	 * findByExpression("EQS_propertyName","vincent",OtherOrm.class)
 	 * </p>
 	 * 
 	 * @param expressions 表达式
@@ -446,8 +446,8 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	/**
 	 * 通过表达式和对比值查询全部
 	 * <pre>
-	 * 	如：
-	 * 	findByExpression("EQS_propertyName","vincent",OtherOrm.class)
+	 * 如：
+	 * findByExpression("EQS_propertyName","vincent",OtherOrm.class)
 	 * </pre>
 	 * 
 	 * @param expressions 表达式
@@ -658,8 +658,8 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	/**
 	 * 通过表达式和对比值查询单个orm实体
 	 * <pre>
-	 * 	如：
-	 * 	findUniqueByExpression("EQS_propertyName","vincent")
+	 * 如：
+	 * findUniqueByExpression("EQS_propertyName","vincent")
 	 * </pre>
 	 * 
 	 * @param expressions 表达式
@@ -674,9 +674,9 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	/**
 	 * 通过表达式和对比值查询单个orm实体
 	 * <pre>
-	 * 	如：
-	 * 	findUniqueByExpressions(new String[]{"EQS_propertyName1","NEI_propertyName2"},new String[]{"vincent","vincent|admin"})
-	 * 	对比值长度与表达式长度必须相等
+	 * 如：
+	 * findUniqueByExpressions(new String[]{"EQS_propertyName1","NEI_propertyName2"},new String[]{"vincent","vincent|admin"})
+	 * 对比值长度与表达式长度必须相等
 	 * </pre>
 	 * 
 	 * @param expressions 表达式
@@ -714,8 +714,8 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	/**
 	 * 通过表达式和对比值查询单个orm实体
 	 * <pre>
-	 * 	如：
-	 * 	findUniqueByExpression("EQS_propertyName","vincent",OtherOrm.class)
+	 * 如：
+	 * findUniqueByExpression("EQS_propertyName","vincent",OtherOrm.class)
 	 * </pre>
 	 * 
 	 * @param expressions 表达式
@@ -731,9 +731,9 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	/**
 	 * 通过表达式和对比值查询单个orm实体
 	 * <pre>
-	 * 	如：
-	 * 	findUniqueByExpressions(new String[]{"EQS_propertyName1","NEI_propertyName2"},new String[]{"vincent","vincent|admin"},OtherOrm.class)
-	 * 	对比值长度与表达式长度必须相等
+	 * 如：
+	 * findUniqueByExpressions(new String[]{"EQS_propertyName1","NEI_propertyName2"},new String[]{"vincent","vincent|admin"},OtherOrm.class)
+	 * 对比值长度与表达式长度必须相等
 	 * </pre>
 	 * 
 	 * @param expressions 表达式
@@ -870,9 +870,9 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	/**
 	 * 通过分页请求参数和表达式与对比值获取分页对象
 	 * 
-	 *  <pre>
-	 * 	如：
-	 * 	findPage(request,"EQS_propertyName","vincent")
+	 * <pre>
+	 * 如：
+	 * findPage(request,"EQS_propertyName","vincent")
 	 * </pre>
 	 * 
 	 * @param request 分页请求参数
@@ -888,9 +888,9 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	
 	/**
 	 * 通过分页请求参数和表达式与对比值获取分页对象
-	 *  <pre>
-	 * 	如：
-	 * 	findPage(request,"EQS_propertyName","vincent",OtherOrm.class)
+	 * <pre>
+	 * 如：
+	 * findPage(request,"EQS_propertyName","vincent",OtherOrm.class)
 	 * </pre>
 	 * 
 	 * @param request 分页请求参数
@@ -909,9 +909,9 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	/**
 	 * 通过表达式和对比值获取分页对象
 	 * <pre>
-	 * 	如：
-	 * 	findPage(new String[]{"EQS_propertyName1","NEI_propertyName2"},new String[]{"vincent","vincent|admin"})
-	 * 	对比值长度与表达式长度必须相等
+	 * 如：
+	 * findPage(new String[]{"EQS_propertyName1","NEI_propertyName2"},new String[]{"vincent","vincent|admin"})
+	 * 对比值长度与表达式长度必须相等
 	 * </pre>
 	 * 
 	 * @param expressions 表达式
@@ -926,9 +926,9 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	/**
 	 * 通过表达式和对比值获取分页对象
 	 * <pre>
-	 * 	如：
-	 * 	findPage(new String[]{"EQS_propertyName1","NEI_propertyName2"},new String[]{"vincent","vincent|admin"},OtherOrm.class)
-	 * 	对比值长度与表达式长度必须相等
+	 * 如：
+	 * findPage(new String[]{"EQS_propertyName1","NEI_propertyName2"},new String[]{"vincent","vincent|admin"},OtherOrm.class)
+	 * 对比值长度与表达式长度必须相等
 	 * </pre>
 	 * 
 	 * @param expressions 表达式

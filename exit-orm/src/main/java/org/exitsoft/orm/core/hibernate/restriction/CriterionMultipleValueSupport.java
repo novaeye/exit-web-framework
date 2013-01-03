@@ -32,7 +32,10 @@ public abstract class CriterionMultipleValueSupport extends CriterionSingleValue
 		return  ConvertUtils.convertToObject(result,type);
 	}
 	
-	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.hibernate.restriction.CriterionSingleValueSupport#build(org.exitsoft.orm.core.PropertyFilter)
+	 */
 	public Criterion build(PropertyFilter filter) {
 		Object value = convertMatchValue(filter.getMatchValue(), filter.getPropertyType());
 		Criterion criterion = null;
@@ -48,10 +51,24 @@ public abstract class CriterionMultipleValueSupport extends CriterionSingleValue
 		return criterion;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.hibernate.CriterionBuilder#build(java.lang.String, java.lang.Object)
+	 */
 	public Criterion build(String propertyName, Object value) {
 		
 		return buildRestriction(propertyName, (Object[])value);
 	}
 	
+	
+	/**
+	 * 
+	 * 获取Hibernate的约束标准
+	 * 
+	 * @param propertyName 属性名
+	 * @param values 值
+	 * 
+	 * @return {@link Criterion}
+	 */
 	public abstract Criterion buildRestriction(String propertyName,Object[] values);
 }

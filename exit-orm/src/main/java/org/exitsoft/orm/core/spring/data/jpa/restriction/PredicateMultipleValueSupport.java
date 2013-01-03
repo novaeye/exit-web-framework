@@ -9,9 +9,6 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.StringUtils;
 import org.exitsoft.common.utils.ConvertUtils;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Disjunction;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.util.Assert;
 
 /**
@@ -31,6 +28,12 @@ import org.springframework.util.Assert;
  */
 public abstract class PredicateMultipleValueSupport extends PredicateSingleValueSupport{
 	
+	/**
+	 * 将所有用逗号","分割的值获取并转型为Object
+	 * @param value
+	 * @param type
+	 * @return
+	 */
 	public Object convertMatchValue(String value, Class<?> type) {
 		Assert.notNull(value,"值不能为空");
 		String[] result = StringUtils.splitByWholeSeparator(value, getAndValueSeparator());
@@ -38,7 +41,10 @@ public abstract class PredicateMultipleValueSupport extends PredicateSingleValue
 		return  ConvertUtils.convertToObject(result,type);
 	}
 	
-	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.restriction.PredicateSingleValueSupport#build(org.exitsoft.orm.core.PropertyFilter, javax.persistence.criteria.Root, javax.persistence.criteria.CriteriaQuery, javax.persistence.criteria.CriteriaBuilder)
+	 */
 	public Predicate build(PropertyFilter filter, Root<?> root,CriteriaQuery<?> query, CriteriaBuilder builder) {
 		Object value = convertMatchValue(filter.getMatchValue(), filter.getPropertyType());
 		Predicate predicate = null;
@@ -46,21 +52,33 @@ public abstract class PredicateMultipleValueSupport extends PredicateSingleValue
 		if (filter.hasMultiplePropertyNames()) {
 			Predicate orDisjunction = builder.disjunction();
 			for (String propertyName:filter.getPropertyNames()) {
-				orDisjunction.getExpressions().add(build(root.get(propertyName),value,builder));
+				orDisjunction.getExpressions().add(build(getPath(propertyName, root),value,builder));
 			}
 			predicate = orDisjunction;
 		} else {
-			predicate = build(root.get(filter.getSinglePropertyName()),value,builder);
+			predicate = build(getPath(filter.getSinglePropertyName(), root),value,builder);
 		}
 		
 		return predicate;
 	}
 	
-	@Override
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.PredicateBuilder#build(javax.persistence.criteria.Path, java.lang.Object, javax.persistence.criteria.CriteriaBuilder)
+	 */
 	public Predicate build(Path<?> expression, Object value,CriteriaBuilder builder) {
 		
 		return buildRestriction(expression,(Object[])value,builder);
 	}
 	
+	/**
+	 * 获取Jpa的约束标准
+	 * 
+	 * @param expression root路径
+	 * @param values 值
+	 * @param builder CriteriaBuilder 
+	 * 
+	 * @return {@link Predicate}
+	 */
 	public abstract Predicate buildRestriction(Path<?> expression,Object[] values,CriteriaBuilder builder);
 }

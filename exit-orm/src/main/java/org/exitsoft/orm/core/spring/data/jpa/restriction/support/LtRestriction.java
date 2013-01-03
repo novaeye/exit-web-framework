@@ -24,8 +24,7 @@ public class LtRestriction extends PredicateSingleValueSupport{
 		return RestrictionName;
 	}
 
-
-	@Override
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Predicate build(Path expression, Object value,CriteriaBuilder builder) {
 		return builder.lessThan(expression, (Comparable)value);
 	}

@@ -926,8 +926,8 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * @param source 要转码的对象
 	 * @param executeMehtods 在什么方法进行转码
 	 */
-	protected void convertObject(Object source,ExecuteMehtod...executeMehtods) {
-		if (executeMehtods == null) {
+	protected void convertObject(Object source,ExecuteMehtod...executeMethods) {
+		if (executeMethods == null) {
 			return ;
 		}
 		
@@ -937,7 +937,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 			return ;
 		}
 		
-		for (ExecuteMehtod em:executeMehtods) {
+		for (ExecuteMehtod em:executeMethods) {
 			if (convertCode.executeMehtod().equals(em)) {
 				for (ConvertProperty convertProperty : convertCode.convertPropertys()) {
 					
