@@ -16,10 +16,10 @@
 		});
 	});
 	
-	function search(pageNo){
+	function search(page){
 		var param = $.form.getParameters("#search_form",true);
-		param["pageSize"] = $("#pageSize").val();
-		param["pageNo"] = pageNo || 1;
+		param["page.size"] = $("#size").val();
+		param["page.page"] = page || 0;
 		$.maskLoad({
 			url:'account/group/view',
 			param:param,
@@ -117,7 +117,7 @@
 		            </tr>
 		        </thead>
 		        <tbody>
-		        	<#list page.result as e>
+		        	<#list page.content as e>
 		            	<tr>
 		            		<td>
 		            			<div style="width:15px;height:15px;margin:0 auto;">
@@ -163,27 +163,22 @@
 	    </a>
 	</div>
 	
-	<#if page.totalItems gt 0>
+	<#if page.totalElements gt 0>
 		<div class="panel_pagging">
 		 	<div class="page_bar">
-		    	每页显示:<input type="text" size="2" id="pageSize" name="pageSize" class="text_input_small" value="${page.pageSize}"/> 共有${page.totalPages}页/${page.totalItems}条记录
+		    	每页显示:<input type="text" size="2" id="size" name="size" class="text_input_small" value="${page.size}"/> 共有${page.totalPages}页/${page.totalElements}条记录
 		    </div>
 		    <div class="page_bar">
-		    	<#if page.hasPrePage()>
-			    	<a href="javascript:search(1)">
+		    	<#if page.hasPreviousPage()>
+			    	<a href="javascript:search(0)">
 			        	首页
 			        </a>
-			        <a href="javascript:search(${page.prePage})">
+			        <a href="javascript:search(${page.number})">
 			        	上一页
 			        </a>
 		        </#if>
-				<#list page.getSlider(page.pageSize) as index>
-					 <a class="number <#if page.pageNo == index>current</#if>" href="javascript:search(${index})">
-					 	${index}
-					</a>
-				</#list>
 		        <#if page.hasNextPage()>
-			        <a href="javascript:search(${page.nextPage})">
+			        <a href="javascript:search(${page.number + 2})">
 			        	下一页
 			        </a>
 			        <a href="javascript:search(${page.totalPages})">

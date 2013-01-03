@@ -31,6 +31,11 @@
 		<context:include-filter type="annotation" expression="org.aspectj.lang.annotation.Aspect" />
 	</context:component-scan>
 
+	<jpa:repositories base-package="org.exitsoft.showcase.dao" 
+							  transaction-manager-ref="transactionManager" 
+							  factory-class="org.exitsoft.orm.core.spring.data.jpa.factory.BasicRepositoryFactoryBean"
+							  entity-manager-factory-ref="entityManagerFactory"  />
+							  
 	<!-- 数据源配置,使用应用内的DBCP数据库连接池 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<!-- 链接信息 -->
@@ -52,7 +57,7 @@
 	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="dataSource" ref="dataSource"/>
 		<property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/>
-		<property name="packagesToScan" value="org.exitsoft.orm.test.entity"/>
+		<property name="packagesToScan" value="org.exitsoft.showcase.entity"/>
 		<property name="jpaProperties">
 			<props>
 				<prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
@@ -70,11 +75,6 @@
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory"/>
 	</bean>
-	
-	<jpa:repositories base-package="org.exitsoft.showcase.dao" 
-							  transaction-manager-ref="transactionManager" 
-							  factory-class="org.exitsoft.orm.core.spring.data.jpa.factory.BasicRepositoryFactoryBean"
-							  entity-manager-factory-ref="entityManagerFactory"  />
 							  
 	<!-- 使用annotation定义事务 -->
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />

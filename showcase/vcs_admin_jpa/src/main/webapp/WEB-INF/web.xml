@@ -27,14 +27,10 @@
 		</init-param>
 	</filter>
 
-	<!-- Hibernate Open Session In View filter -->
+	<!-- Open Entity Manager in View filter -->
 	<filter>
-		<filter-name>hibernateOpenSessionInViewFilter</filter-name>
-		<filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
-		<init-param>
-			<param-name>flushMode</param-name>
-			<param-value>ALWAYS</param-value>
-		</init-param>
+		<filter-name>openEntityManagerInViewFilter</filter-name>
+		<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
 	</filter>
 	
 	<!-- shiro security filter -->
@@ -66,7 +62,7 @@
 	
 	<!-- Hibernate Open Session In View 映射 -->
 	<filter-mapping>
-		<filter-name>hibernateOpenSessionInViewFilter</filter-name>
+		<filter-name>openEntityManagerInViewFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>FORWARD</dispatcher>
