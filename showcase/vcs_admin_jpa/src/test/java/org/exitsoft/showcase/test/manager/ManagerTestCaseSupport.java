@@ -2,7 +2,6 @@ package org.exitsoft.showcase.test.manager;
 
 import java.util.HashMap;
 
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.exitsoft.common.unit.Fixtures;

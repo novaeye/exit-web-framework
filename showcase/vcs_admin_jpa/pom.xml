@@ -10,7 +10,7 @@
 	<groupId>org.exitsoft.showcase</groupId>
 	<artifactId>exitsoft-vcs-admin-jpa</artifactId>
 	<packaging>war</packaging>
-	<name>vcs admin panel</name>
+	<name>vcs admin panel use jpa</name>
 	<url>http://maven.apache.org</url>
 
 	<dependencies>

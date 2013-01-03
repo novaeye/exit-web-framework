@@ -37,7 +37,7 @@
              </bean>
 		</mvc:message-converters>
 		<mvc:argument-resolvers>
-			<bean class="org.springframework.data.web.PageableArgumentResolver" />
+			<bean class="org.exitsoft.orm.core.spring.data.web.PageableArgumentResolver" />
 		</mvc:argument-resolvers>
 	</mvc:annotation-driven>
 	

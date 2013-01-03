@@ -21,7 +21,6 @@ import org.exitsoft.showcase.common.SystemVariableUtils;
 import org.exitsoft.showcase.common.enumeration.SystemDictionaryCode;
 import org.exitsoft.showcase.common.enumeration.entity.ResourceType;
 import org.exitsoft.showcase.entity.UniversallyUniqueIdentifier;
-import org.hibernate.annotations.NamedQuery;
 
 
 /**
@@ -34,10 +33,6 @@ import org.hibernate.annotations.NamedQuery;
 @Table(name="TB_RESOURCE")
 @SuppressWarnings("serial")
 public class Resource extends UniversallyUniqueIdentifier{
-	/**
-	 * 通过用户id和资源类型获取该用户下的所有资源
-	 */
-	public static final String UserResources = "userResources";
 	
 	//名称
 	private String name;

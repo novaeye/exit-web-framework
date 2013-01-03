@@ -159,12 +159,12 @@
 			    	<a href="javascript:search(0)">
 			        	首页
 			        </a>
-			        <a href="javascript:search(${page.number})">
+			        <a href="javascript:search(${page.number - 1})">
 			        	上一页
 			        </a>
 		        </#if>
 		        <#if page.hasNextPage()>
-			        <a href="javascript:search(${page.number + 2})">
+			        <a href="javascript:search(${page.number + 1})">
 			        	下一页
 			        </a>
 			        <a href="javascript:search(${page.totalPages})">
