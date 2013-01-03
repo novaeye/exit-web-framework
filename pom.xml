@@ -16,6 +16,7 @@
 		<module>exit-common</module> 
 		<module>exit-orm</module>
 		<module>showcase/vcs_admin</module>
+		<module>showcase/vcs_admin_jpa</module>
 	</modules>
 
 </project>
