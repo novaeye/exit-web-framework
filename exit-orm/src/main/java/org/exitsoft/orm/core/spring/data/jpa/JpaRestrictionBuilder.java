@@ -2,9 +2,11 @@ package org.exitsoft.orm.core.spring.data.jpa;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.lang3.StringUtils;
 import org.exitsoft.orm.core.PropertyFilter;
 import org.exitsoft.orm.core.PropertyFilterBuilder;
 import org.exitsoft.orm.core.spring.data.jpa.restriction.support.EqRestriction;
@@ -64,6 +66,10 @@ public class JpaRestrictionBuilder extends PropertyFilterBuilder<PredicateBuilde
 		this.builder = builder;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.PropertyFilterBuilder#getRestriction(org.exitsoft.orm.core.PropertyFilter)
+	 */
 	public Predicate getRestriction(PropertyFilter filter) {
 		if (!getRestrictionsMap().containsKey(filter.getRestrictionName())) {
 			throw new IllegalArgumentException("找不到约束名:" + filter.getRestrictionName());
@@ -72,14 +78,43 @@ public class JpaRestrictionBuilder extends PropertyFilterBuilder<PredicateBuilde
 		return predicateBuilder.build(filter,root,query,builder);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.PropertyFilterBuilder#getRestriction(java.lang.String, java.lang.Object, java.lang.String)
+	 */
 	public Predicate getRestriction(String propertyName, Object value,String restrictionName) {
 		if (!getRestrictionsMap().containsKey(restrictionName)) {
 			throw new IllegalArgumentException("找不到约束名:" + restrictionName);
 		}
 		PredicateBuilder predicateBuilder  = getRestrictionsMap().get(restrictionName);
-		return predicateBuilder.build(root.get(propertyName), value, builder);
+		return predicateBuilder.build(getPath(propertyName, root), value, builder);
 	}
-
+	
+	/**
+	 * 获取属性名字路径
+	 * 
+	 * @param propertyName 属性名
+	 * @param root Query roots always reference entities
+	 * 
+	 * @return {@link Path}
+	 */
+	protected Path<?> getPath(String propertyName,Root<?> root) {
+		
+		Path<?> path = null;
+		
+		if (StringUtils.contains(propertyName, ".")) {
+			String[] propertys = StringUtils.splitByWholeSeparator(propertyName, ".");
+			path = root.get(propertys[0]);
+			for (int i = 1; i < propertys.length; i++) {
+				path = path.get(propertys[i]);
+			}
+		} else {
+			path = root.get(propertyName);
+		}
+		
+		return path;
+	}
+	
 	public void setSpecificationProperty(Root<?> root, CriteriaQuery<?> query,CriteriaBuilder builder) {
 		this.root = root;
 		this.builder = builder;

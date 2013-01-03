@@ -60,7 +60,6 @@ public abstract class PredicateSingleValueSupport implements PredicateBuilder{
 		for (Object value : matchValueModel.getValues()) {
 			if (filter.hasMultiplePropertyNames()) {
 				for (String propertyName:filter.getPropertyNames()) {
-					
 					predicate.getExpressions().add(build(getPath(propertyName,root), value, builder));
 				}
 			} else {
