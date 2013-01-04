@@ -1,5 +1,6 @@
 ###框架说明
 
+
 exit-web-framework是对常用的java web开发封装实用功能来提高开发效率的底层框架。exit-web-framework基于Spring 3做核心框架、Hibernate4或spring data jpa做持久化框架,用spring mvc 框架对mvc做管理。使用到的新功能有spring缓存工厂、apeche shiro安全框架、spring mvc 3,spring data jpa等主要流行技术, 该项目分为两个部分做底层的封装，和带两个项目功能演示例子。[相关帮助文档](https://github.com/exitsoft/exit-web-framework/wiki)
 
 #### 初始化工作:
@@ -53,8 +54,7 @@ svn地址:https://github.com/exitsoft/exit-web-framework.git
 
 该两个项目使用了mysql数据库,在vcs-admin或vcs-admin-jpa文件夹中有一个database的文件夹里面有对应该项目使用的数据。导入之后可以通过
 vcs-admin或vcs-admin-jpa项目文件夹中的bin文件夹下的jetty.bat文件运行项目，也可以用eclipse.bat生成项目导入到开发工具中在运行。
-该工程下有一个基于jeety运行的java文件org.exitsoft.showcase.vcsadmin.test.LaunchJetty.你也可以通过该文件运行整个
-项目.
+该工程下有一个基于jeety运行的java文件org.exitsoft.showcase.vcsadmin.test.LaunchJetty.你也可以通过该文件运行整个项目.
 
 ##### archetype基础模板使用说明
 1. 点击根目录的install.bat进行初始化(如果未点击安装时)
