@@ -17,13 +17,19 @@ public class GeRestriction extends CriterionSingleValueSupport{
 	
 	public final static String RestrictionName = "GE";
 	
-	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.hibernate.CriterionBuilder#getRestrictionName()
+	 */
 	public String getRestrictionName() {
 		
 		return RestrictionName;
 	}
 
-	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.hibernate.CriterionBuilder#build(java.lang.String, java.lang.Object)
+	 */
 	public Criterion build(String propertyName, Object value) {
 		
 		return Restrictions.ge(propertyName, value);

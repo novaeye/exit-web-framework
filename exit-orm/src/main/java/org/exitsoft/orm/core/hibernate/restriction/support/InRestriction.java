@@ -17,12 +17,18 @@ public class InRestriction extends CriterionMultipleValueSupport{
 
 	public final static String RestrictionName = "IN";
 	
-	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.hibernate.CriterionBuilder#getRestrictionName()
+	 */
 	public String getRestrictionName() {
 		return RestrictionName;
 	}
 	
-	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.hibernate.restriction.CriterionMultipleValueSupport#buildRestriction(java.lang.String, java.lang.Object[])
+	 */
 	public Criterion buildRestriction(String propertyName, Object[] values) {
 		return Restrictions.in(propertyName,values);
 	}

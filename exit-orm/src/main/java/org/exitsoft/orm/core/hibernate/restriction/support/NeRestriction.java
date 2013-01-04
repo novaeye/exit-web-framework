@@ -16,15 +16,19 @@ public class NeRestriction extends EqRestriction{
 	
 	public final static String RestrictionName = "NE";
 
-
-	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.hibernate.restriction.support.EqRestriction#getRestrictionName()
+	 */
 	public String getRestrictionName() {
 		
 		return RestrictionName;
 	}
 
-
-	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.hibernate.restriction.support.EqRestriction#build(java.lang.String, java.lang.Object)
+	 */
 	public Criterion build(String propertyName, Object value) {
 		
 		return value == null ? Restrictions.isNotNull(propertyName) : Restrictions.ne(propertyName, value);

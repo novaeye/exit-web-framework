@@ -18,12 +18,18 @@ public class LikeRestriction extends CriterionSingleValueSupport{
 
 	public final static String RestrictionName = "LIKE";
 	
-	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.hibernate.CriterionBuilder#getRestrictionName()
+	 */
 	public String getRestrictionName() {
 		return RestrictionName;
 	}
 
-	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.hibernate.CriterionBuilder#build(java.lang.String, java.lang.Object)
+	 */
 	public Criterion build(String propertyName, Object value) {
 		return Restrictions.like(propertyName, value.toString(), MatchMode.ANYWHERE);
 	}

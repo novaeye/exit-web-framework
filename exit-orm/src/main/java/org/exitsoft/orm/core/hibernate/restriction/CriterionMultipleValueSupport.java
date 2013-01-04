@@ -25,6 +25,14 @@ import org.springframework.util.Assert;
  */
 public abstract class CriterionMultipleValueSupport extends CriterionSingleValueSupport{
 	
+	/**
+	 * 将得到值与指定分割符号,分割,得到数组
+	 *  
+	 * @param value 值
+	 * @param type 值类型
+	 * 
+	 * @return Object
+	 */
 	public Object convertMatchValue(String value, Class<?> type) {
 		Assert.notNull(value,"值不能为空");
 		String[] result = StringUtils.splitByWholeSeparator(value, getAndValueSeparator());

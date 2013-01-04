@@ -38,6 +38,7 @@ import org.springframework.util.Assert;
 @SuppressWarnings({"rawtypes","unchecked"})
 public class HibernateSupportDao<T,PK extends Serializable> extends BasicHibernateDao<T, PK>{
 	
+	//Hibernate约束捆绑者
 	private HibernateRestrictionBuilder builder = new HibernateRestrictionBuilder();
 	
 	public HibernateSupportDao(){

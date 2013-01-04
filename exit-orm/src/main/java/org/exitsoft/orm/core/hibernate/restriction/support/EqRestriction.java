@@ -19,12 +19,17 @@ public class EqRestriction extends CriterionSingleValueSupport {
 
 	public final static String RestrictionName = "EQ";
 
-	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.hibernate.CriterionBuilder#getRestrictionName()
+	 */
 	public String getRestrictionName() {
 		return RestrictionName;
 	}
 	
-	
+	/*
+	 * 
+	 */
 	public MatchValue createMatchValueModel(String matchValue,Class<?> type) {
 		
 		MatchValue matchValueModel = super.getMatchValue(matchValue, type);
