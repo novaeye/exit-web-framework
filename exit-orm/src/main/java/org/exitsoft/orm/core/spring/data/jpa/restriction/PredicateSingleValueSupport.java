@@ -2,13 +2,12 @@ package org.exitsoft.orm.core.spring.data.jpa.restriction;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.apache.commons.lang3.StringUtils;
 import org.exitsoft.orm.core.MatchValue;
 import org.exitsoft.orm.core.PropertyFilter;
+import org.exitsoft.orm.core.spring.data.jpa.JpaRestrictionBuilder;
 import org.exitsoft.orm.core.spring.data.jpa.PredicateBuilder;
 
 
@@ -60,39 +59,14 @@ public abstract class PredicateSingleValueSupport implements PredicateBuilder{
 		for (Object value : matchValueModel.getValues()) {
 			if (filter.hasMultiplePropertyNames()) {
 				for (String propertyName:filter.getPropertyNames()) {
-					predicate.getExpressions().add(build(getPath(propertyName,root), value, builder));
+					predicate.getExpressions().add(build(JpaRestrictionBuilder.getPath(propertyName,root), value, builder));
 				}
 			} else {
-				predicate.getExpressions().add(build(getPath(filter.getSinglePropertyName(),root), value, builder));
+				predicate.getExpressions().add(build(JpaRestrictionBuilder.getPath(filter.getSinglePropertyName(),root), value, builder));
 			}
 		}
 		
 		return predicate;
-	}
-	
-	/**
-	 * 获取属性名字路径
-	 * 
-	 * @param propertyName 属性名
-	 * @param root Query roots always reference entities
-	 * 
-	 * @return {@link Path}
-	 */
-	protected Path<?> getPath(String propertyName,Root<?> root) {
-		
-		Path<?> path = null;
-		
-		if (StringUtils.contains(propertyName, ".")) {
-			String[] propertys = StringUtils.splitByWholeSeparator(propertyName, ".");
-			path = root.get(propertys[0]);
-			for (int i = 1; i < propertys.length; i++) {
-				path = path.get(propertys[i]);
-			}
-		} else {
-			path = root.get(propertyName);
-		}
-		
-		return path;
 	}
 	
 	/**

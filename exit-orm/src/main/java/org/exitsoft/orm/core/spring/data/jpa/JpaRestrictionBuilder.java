@@ -98,7 +98,7 @@ public class JpaRestrictionBuilder extends PropertyFilterBuilder<PredicateBuilde
 	 * 
 	 * @return {@link Path}
 	 */
-	protected Path<?> getPath(String propertyName,Root<?> root) {
+	public static Path<?> getPath(String propertyName,Root<?> root) {
 		
 		Path<?> path = null;
 		

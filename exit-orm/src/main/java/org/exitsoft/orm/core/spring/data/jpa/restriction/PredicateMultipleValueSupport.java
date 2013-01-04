@@ -9,6 +9,7 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.StringUtils;
 import org.exitsoft.common.utils.ConvertUtils;
 import org.exitsoft.orm.core.PropertyFilter;
+import org.exitsoft.orm.core.spring.data.jpa.JpaRestrictionBuilder;
 import org.springframework.util.Assert;
 
 /**
@@ -52,11 +53,11 @@ public abstract class PredicateMultipleValueSupport extends PredicateSingleValue
 		if (filter.hasMultiplePropertyNames()) {
 			Predicate orDisjunction = builder.disjunction();
 			for (String propertyName:filter.getPropertyNames()) {
-				orDisjunction.getExpressions().add(build(getPath(propertyName, root),value,builder));
+				orDisjunction.getExpressions().add(build(JpaRestrictionBuilder.getPath(propertyName, root),value,builder));
 			}
 			predicate = orDisjunction;
 		} else {
-			predicate = build(getPath(filter.getSinglePropertyName(), root),value,builder);
+			predicate = build(JpaRestrictionBuilder.getPath(filter.getSinglePropertyName(), root),value,builder);
 		}
 		
 		return predicate;
