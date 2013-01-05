@@ -9,7 +9,6 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.StringUtils;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.PropertyFilterBuilder;
 import org.exitsoft.orm.core.spring.data.jpa.restriction.support.EqRestriction;
 import org.exitsoft.orm.core.spring.data.jpa.restriction.support.GeRestriction;
 import org.exitsoft.orm.core.spring.data.jpa.restriction.support.GtRestriction;
