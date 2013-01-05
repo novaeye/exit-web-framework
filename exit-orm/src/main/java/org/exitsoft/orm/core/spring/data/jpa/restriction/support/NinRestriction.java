@@ -4,6 +4,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 
+import org.exitsoft.orm.core.RestrictionNames;
 import org.exitsoft.orm.core.spring.data.jpa.restriction.PredicateMultipleValueSupport;
 
 /**
@@ -16,15 +17,20 @@ import org.exitsoft.orm.core.spring.data.jpa.restriction.PredicateMultipleValueS
  *
  */
 public class NinRestriction extends PredicateMultipleValueSupport{
-
-	public final static String RestrictionName = "NIN";
 	
-	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.PredicateBuilder#getRestrictionName()
+	 */
 	public String getRestrictionName() {
 		
-		return RestrictionName;
+		return RestrictionNames.NIN;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.restriction.PredicateMultipleValueSupport#buildRestriction(javax.persistence.criteria.Path, java.lang.Object[], javax.persistence.criteria.CriteriaBuilder)
+	 */
 	public Predicate buildRestriction(Path<?> expression, Object[] values,CriteriaBuilder builder) {
 
 		return builder.not(expression.in(values));

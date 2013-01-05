@@ -5,7 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.exitsoft.orm.core.PropertyFilterUtils;
+import org.exitsoft.orm.core.PropertyFilterConstructors;
 import org.exitsoft.orm.core.Page;
 import org.exitsoft.orm.core.PageRequest;
 import org.exitsoft.orm.core.PageRequest.Sort;
@@ -48,7 +48,7 @@ public class UserController {
 	@RequestMapping("view")
 	public Page<User> view(PageRequest pageRequest,HttpServletRequest request) {
 		
-		List<PropertyFilter> filters = PropertyFilterUtils.buildFromHttpRequest(request);
+		List<PropertyFilter> filters = PropertyFilterConstructors.buildFromHttpRequest(request);
 
 		request.setAttribute("states", SystemVariableUtils.getDataDictionariesByCategoryCode(SystemDictionaryCode.State,"3"));
 		

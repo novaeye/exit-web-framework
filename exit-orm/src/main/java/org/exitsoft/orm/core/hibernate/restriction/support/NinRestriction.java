@@ -1,5 +1,6 @@
 package org.exitsoft.orm.core.hibernate.restriction.support;
 
+import org.exitsoft.orm.core.RestrictionNames;
 import org.exitsoft.orm.core.hibernate.restriction.CriterionMultipleValueSupport;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
@@ -14,8 +15,6 @@ import org.hibernate.criterion.Restrictions;
  *
  */
 public class NinRestriction extends CriterionMultipleValueSupport{
-
-	public final static String RestrictionName = "NIN";
 	
 	/*
 	 * (non-Javadoc)
@@ -23,7 +22,7 @@ public class NinRestriction extends CriterionMultipleValueSupport{
 	 */
 	public String getRestrictionName() {
 		
-		return RestrictionName;
+		return RestrictionNames.NIN;
 	}
 
 	/*

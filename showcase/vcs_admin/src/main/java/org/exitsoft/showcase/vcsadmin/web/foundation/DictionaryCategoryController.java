@@ -6,7 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.exitsoft.orm.core.PropertyFilterUtils;
+import org.exitsoft.orm.core.PropertyFilterConstructors;
 import org.exitsoft.orm.core.Page;
 import org.exitsoft.orm.core.PageRequest;
 import org.exitsoft.orm.core.PageRequest.Sort;
@@ -44,7 +44,7 @@ public class DictionaryCategoryController {
 	@RequestMapping("view")
 	public Page<DictionaryCategory> view(PageRequest pageRequest,HttpServletRequest request) {
 		
-		List<PropertyFilter> filters = PropertyFilterUtils.buildFromHttpRequest(request);
+		List<PropertyFilter> filters = PropertyFilterConstructors.buildFromHttpRequest(request);
 		
 		if (!pageRequest.isOrderBySetted()) {
 			pageRequest.setOrderBy("id");
@@ -95,7 +95,7 @@ public class DictionaryCategoryController {
 		String id = request.getParameter("id");
 		
 		if (StringUtils.isNotEmpty(id)) {
-			filters.add(PropertyFilterUtils.createPropertyFilter("NE_S_id", id));
+			filters.add(PropertyFilterConstructors.createPropertyFilter("NE_S_id", id));
 		}
 		//展示父类下来框时，不要连自己也在下拉框里
 		request.setAttribute("categoriesList", systemDictionaryManager.getAllDictionaryCategories(filters));

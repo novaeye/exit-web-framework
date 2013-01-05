@@ -1,5 +1,6 @@
 package org.exitsoft.orm.core.hibernate.restriction.support;
 
+import org.exitsoft.orm.core.RestrictionNames;
 import org.exitsoft.orm.core.hibernate.restriction.CriterionSingleValueSupport;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
@@ -14,15 +15,13 @@ import org.hibernate.criterion.Restrictions;
  *
  */
 public class LtRestriction extends CriterionSingleValueSupport{
-
-	public final static String RestrictionName = "LT";
 	
 	/*
 	 * (non-Javadoc)
 	 * @see org.exitsoft.orm.core.hibernate.CriterionBuilder#getRestrictionName()
 	 */
 	public String getRestrictionName() {
-		return RestrictionName;
+		return RestrictionNames.LT;
 	}
 
 	/*

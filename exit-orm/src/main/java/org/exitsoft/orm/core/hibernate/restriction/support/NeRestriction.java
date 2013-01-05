@@ -1,5 +1,6 @@
 package org.exitsoft.orm.core.hibernate.restriction.support;
 
+import org.exitsoft.orm.core.RestrictionNames;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
@@ -13,8 +14,6 @@ import org.hibernate.criterion.Restrictions;
  *
  */
 public class NeRestriction extends EqRestriction{
-	
-	public final static String RestrictionName = "NE";
 
 	/*
 	 * (non-Javadoc)
@@ -22,7 +21,7 @@ public class NeRestriction extends EqRestriction{
 	 */
 	public String getRestrictionName() {
 		
-		return RestrictionName;
+		return RestrictionNames.NE;
 	}
 
 	/*

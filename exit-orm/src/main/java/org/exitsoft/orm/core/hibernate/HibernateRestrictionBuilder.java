@@ -1,7 +1,9 @@
 package org.exitsoft.orm.core.hibernate;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.PropertyFilterBuilder;
 import org.exitsoft.orm.core.hibernate.restriction.support.EqRestriction;
 import org.exitsoft.orm.core.hibernate.restriction.support.GeRestriction;
 import org.exitsoft.orm.core.hibernate.restriction.support.GtRestriction;
@@ -21,9 +23,11 @@ import org.hibernate.criterion.Criterion;
  * @author vincent
  *
  */
-public class HibernateRestrictionBuilder extends PropertyFilterBuilder<CriterionBuilder,Criterion>{
+public class HibernateRestrictionBuilder {
 	
-	public HibernateRestrictionBuilder() {
+	private static Map<String, CriterionBuilder> criterionBuilders = new HashMap<String, CriterionBuilder>();
+	
+	static {
 		
 		CriterionBuilder eqRestriction = new EqRestriction();
 		CriterionBuilder neRestriction = new NeRestriction();
@@ -37,46 +41,37 @@ public class HibernateRestrictionBuilder extends PropertyFilterBuilder<Criterion
 		CriterionBuilder notInRestriction = new NinRestriction();
 		CriterionBuilder rLikeRestriction = new RLikeRestriction();
 		
-		getRestrictionsMap().put(eqRestriction.getRestrictionName(), eqRestriction);
-		getRestrictionsMap().put(neRestriction.getRestrictionName(), neRestriction);
-		getRestrictionsMap().put(geRestriction.getRestrictionName(), geRestriction);
-		getRestrictionsMap().put(inRestriction.getRestrictionName(), inRestriction);
-		getRestrictionsMap().put(gtRestriction.getRestrictionName(), gtRestriction);
-		getRestrictionsMap().put(lLikeRestriction.getRestrictionName(), lLikeRestriction);
-		getRestrictionsMap().put(leRestriction.getRestrictionName(), leRestriction);
-		getRestrictionsMap().put(likeRestriction.getRestrictionName(), likeRestriction);
-		getRestrictionsMap().put(ltRestriction.getRestrictionName(), ltRestriction);
-		getRestrictionsMap().put(rLikeRestriction.getRestrictionName(), rLikeRestriction);
-		getRestrictionsMap().put(notInRestriction.getRestrictionName(), notInRestriction);
+		criterionBuilders.put(eqRestriction.getRestrictionName(), eqRestriction);
+		criterionBuilders.put(neRestriction.getRestrictionName(), neRestriction);
+		criterionBuilders.put(geRestriction.getRestrictionName(), geRestriction);
+		criterionBuilders.put(inRestriction.getRestrictionName(), inRestriction);
+		criterionBuilders.put(gtRestriction.getRestrictionName(), gtRestriction);
+		criterionBuilders.put(lLikeRestriction.getRestrictionName(), lLikeRestriction);
+		criterionBuilders.put(leRestriction.getRestrictionName(), leRestriction);
+		criterionBuilders.put(likeRestriction.getRestrictionName(), likeRestriction);
+		criterionBuilders.put(ltRestriction.getRestrictionName(), ltRestriction);
+		criterionBuilders.put(rLikeRestriction.getRestrictionName(), rLikeRestriction);
+		criterionBuilders.put(notInRestriction.getRestrictionName(), notInRestriction);
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.exitsoft.orm.core.PropertyFilterBuilder#getRestriction(org.exitsoft.orm.core.PropertyFilter)
-	 */
-	@Override
-	public Criterion getRestriction(PropertyFilter filter) {
+	public static Criterion getRestriction(PropertyFilter filter) {
 		
-		if (!getRestrictionsMap().containsKey(filter.getRestrictionName())) {
+		if (!criterionBuilders.containsKey(filter.getRestrictionName())) {
 			throw new IllegalArgumentException("找不到约束名:" + filter.getRestrictionName());
 		}
 		
-		CriterionBuilder criterionBuilder = getRestrictionsMap().get(filter.getRestrictionName());
+		CriterionBuilder criterionBuilder = criterionBuilders.get(filter.getRestrictionName());
 		return criterionBuilder.build(filter);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.exitsoft.orm.core.PropertyFilterBuilder#getRestriction(java.lang.String, java.lang.Object, java.lang.String)
-	 */
-	@Override
-	public Criterion getRestriction(String propertyName, Object value,String restrictionName) {
+	
+	public static Criterion getRestriction(String propertyName, Object value,String restrictionName) {
 		
-		if (!getRestrictionsMap().containsKey(restrictionName)) {
+		if (!criterionBuilders.containsKey(restrictionName)) {
 			throw new IllegalArgumentException("找不到约束名:" + restrictionName);
 		}
 		
-		CriterionBuilder restriction = getRestrictionsMap().get(restrictionName);
+		CriterionBuilder restriction = criterionBuilders.get(restrictionName);
 		return restriction.build(propertyName, value);
 	}
 	

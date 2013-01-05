@@ -2,6 +2,7 @@ package org.exitsoft.orm.core.hibernate.restriction.support;
 
 import org.apache.commons.lang3.StringUtils;
 import org.exitsoft.orm.core.MatchValue;
+import org.exitsoft.orm.core.RestrictionNames;
 import org.exitsoft.orm.core.hibernate.restriction.CriterionSingleValueSupport;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
@@ -16,23 +17,21 @@ import org.hibernate.criterion.Restrictions;
  *
  */
 public class EqRestriction extends CriterionSingleValueSupport {
-
-	public final static String RestrictionName = "EQ";
-
 	/*
 	 * (non-Javadoc)
 	 * @see org.exitsoft.orm.core.hibernate.CriterionBuilder#getRestrictionName()
 	 */
 	public String getRestrictionName() {
-		return RestrictionName;
+		return RestrictionNames.EQ;
 	}
 	
 	/*
-	 * 
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.hibernate.restriction.CriterionSingleValueSupport#getMatchValue(java.lang.String, java.lang.Class)
 	 */
-	public MatchValue createMatchValueModel(String matchValue,Class<?> type) {
+	public MatchValue getMatchValue(String matchValue, Class<?> propertyType) {
 		
-		MatchValue matchValueModel = super.getMatchValue(matchValue, type);
+		MatchValue matchValueModel = super.getMatchValue(matchValue, propertyType);
 		for (int i = 0; i < matchValueModel.getValues().size(); i++) {
 			Object value = matchValueModel.getValues().get(i);
 			if (value instanceof String && StringUtils.equals(value.toString(),"null")) {
@@ -42,7 +41,6 @@ public class EqRestriction extends CriterionSingleValueSupport {
 		}
 		return matchValueModel;
 	}
-	
 	
 	public Criterion build(String propertyName, Object value) {
 		

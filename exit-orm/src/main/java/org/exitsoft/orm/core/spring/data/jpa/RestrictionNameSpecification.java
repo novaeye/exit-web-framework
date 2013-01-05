@@ -16,7 +16,6 @@ import org.springframework.data.jpa.domain.Specification;
  */
 public class RestrictionNameSpecification<T> implements Specification<T>{
 	
-	private JpaRestrictionBuilder restrictionBuilder = new JpaRestrictionBuilder();
 	//属性名称
 	private String propertyName;
 	//值
@@ -46,11 +45,9 @@ public class RestrictionNameSpecification<T> implements Specification<T>{
 	 */
 	public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,CriteriaBuilder builder) {
 		
-		restrictionBuilder.setSpecificationProperty(root,query,builder);
 		
-		Predicate predicate = builder.and(restrictionBuilder.getRestriction(propertyName, value, restrictionName));
+		Predicate predicate = builder.and(JpaRestrictionBuilder.getRestriction(propertyName, value, restrictionName, new JpaBuilderModel(root, query, builder)));
 		
-		restrictionBuilder.clearSpecificationProperty();
 		
 		return predicate;
 	}

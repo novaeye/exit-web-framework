@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.PropertyFilterUtils;
+import org.exitsoft.orm.core.PropertyFilterConstructors;
 import org.exitsoft.showcase.common.enumeration.entity.State;
 import org.exitsoft.showcase.entity.account.User;
 import org.exitsoft.showcase.service.ServiceException;
@@ -66,7 +66,7 @@ public class TestUserManager extends ManagerTestCaseSupport{
 	public void testSearchUserPage() {
 		Pageable request = new PageRequest(1,1);
 		List<PropertyFilter> filters = new ArrayList<PropertyFilter>();
-		filters.add(PropertyFilterUtils.createPropertyFilter("EQI_state", "1"));
+		filters.add(PropertyFilterConstructors.createPropertyFilter("EQI_state", "1"));
 		Page<User> page = accountManager.searchUserPage(request, filters);
 		assertEquals(page.getContent().size(), 1);
 		assertEquals(page.getTotalElements(), 2);

@@ -1,10 +1,7 @@
 package org.exitsoft.orm.core.spring.data.jpa;
 
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import org.exitsoft.orm.core.PropertyFilter;
 
@@ -21,14 +18,12 @@ public interface PredicateBuilder {
 	 * 获取Jpa的约束标准
 	 * 
 	 * @param filter 属性过滤器
-	 * @param root Query roots 
-	 * @param query Query 
-	 * @param builder CriteriaBuilder
+	 * @param model jpa绑定模型
 	 * 
 	 * @return {@link Predicate}
 	 * 
 	 */
-	public Predicate build(PropertyFilter filter,Root<?> root, CriteriaQuery<?> query,CriteriaBuilder builder);
+	public Predicate build(PropertyFilter filter,JpaBuilderModel model);
 	
 	/**
 	 * 获取Predicate标准的约束名称
@@ -40,12 +35,12 @@ public interface PredicateBuilder {
 	/**
 	 * 获取Jpa的约束标准
 	 * 
-	 * @param expression root路径
+	 * @param propertyName 属性名
 	 * @param value 值
 	 * @param builder CriteriaBuilder
 	 * 
 	 * @return {@link Predicate}
 	 * 
 	 */
-	public Predicate build(Path<?> expression, Object value,CriteriaBuilder builder);
+	public Predicate build(String propertyName, Object value,JpaBuilderModel model);
 }

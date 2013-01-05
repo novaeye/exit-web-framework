@@ -1,5 +1,6 @@
 package org.exitsoft.orm.core.hibernate.restriction.support;
 
+import org.exitsoft.orm.core.RestrictionNames;
 import org.exitsoft.orm.core.hibernate.restriction.CriterionSingleValueSupport;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
@@ -16,14 +17,12 @@ import org.hibernate.criterion.Restrictions;
  */
 public class RLikeRestriction extends CriterionSingleValueSupport{
 	
-	public final static String RestrictionName = "RLIKE";
-	
 	/*
 	 * (non-Javadoc)
 	 * @see org.exitsoft.orm.core.hibernate.CriterionBuilder#getRestrictionName()
 	 */
 	public String getRestrictionName() {
-		return RestrictionName;
+		return RestrictionNames.RLIKE;
 	}
 
 	/*

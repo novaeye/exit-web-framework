@@ -12,10 +12,10 @@ import org.exitsoft.orm.core.Page;
 import org.exitsoft.orm.core.PageRequest;
 import org.exitsoft.orm.core.PageRequest.Sort;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.PropertyFilterUtils;
+import org.exitsoft.orm.core.PropertyFilterConstructors;
+import org.exitsoft.orm.core.RestrictionNames;
 import org.exitsoft.orm.core.hibernate.CriterionBuilder;
 import org.exitsoft.orm.core.hibernate.HibernateRestrictionBuilder;
-import org.exitsoft.orm.core.hibernate.restriction.support.EqRestriction;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.CriteriaSpecification;
@@ -37,9 +37,6 @@ import org.springframework.util.Assert;
  */
 @SuppressWarnings({"rawtypes","unchecked"})
 public class HibernateSupportDao<T,PK extends Serializable> extends BasicHibernateDao<T, PK>{
-	
-	//Hibernate约束捆绑者
-	private HibernateRestrictionBuilder builder = new HibernateRestrictionBuilder();
 	
 	public HibernateSupportDao(){
 		
@@ -163,7 +160,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * @return {@link Criteria}
 	 */
 	protected Criteria createCriteria(String[] expressions,String[] matchValues,String orderBy,Class<?> persistentClass) {
-		List<PropertyFilter> filters = PropertyFilterUtils.createPropertyFilters(expressions, matchValues);
+		List<PropertyFilter> filters = PropertyFilterConstructors.createPropertyFilters(expressions, matchValues);
 		return createCriteria(filters,orderBy,persistentClass);
 	}
 	
@@ -242,7 +239,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * @return {@link Criterion}
 	 */
 	protected Criterion createCriterion(String expression,String matchValue) {
-		PropertyFilter filter = PropertyFilterUtils.createPropertyFilter(expression, matchValue);
+		PropertyFilter filter = PropertyFilterConstructors.createPropertyFilter(expression, matchValue);
 		return createCriterion(filter);
 	}
 	
@@ -257,7 +254,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		if (filter == null) {
 			return null;
 		}
-		return builder.getRestriction(filter);
+		return HibernateRestrictionBuilder.getRestriction(filter);
 	}
 	
 	/**
@@ -520,7 +517,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * @return List
 	 */
 	public List<T> findByProperty(String propertyName,Object value) {
-		return findByProperty(propertyName, value, EqRestriction.RestrictionName);
+		return findByProperty(propertyName, value, RestrictionNames.EQ);
 	}
 	
 	/**
@@ -546,7 +543,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * @return List
 	 */
 	public List<T> findByPropertyWithOrderBy(String propertyName,Object value,String orderBy) {
-		return findByPropertyWithOrderBy(propertyName, value, orderBy, EqRestriction.RestrictionName);
+		return findByPropertyWithOrderBy(propertyName, value, orderBy, RestrictionNames.EQ);
 	}
 	
 	/**
@@ -573,7 +570,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * @return List
 	 */
 	public <X> List<X> findByProperty(String propertyName,Object value,Class<?> persistentClass) {
-		return findByProperty(propertyName, value, EqRestriction.RestrictionName,persistentClass);
+		return findByProperty(propertyName, value, RestrictionNames.EQ, persistentClass);
 	}
 	
 	/**
@@ -587,7 +584,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * @return List
 	 */
 	public <X> List<X> findByPropertyWithOrderBy(String propertyName,Object value,Class<?> persistentClass,String orderBy) {
-		return findByProperty(propertyName, value, EqRestriction.RestrictionName,persistentClass,orderBy);
+		return findByProperty(propertyName, value, RestrictionNames.EQ, persistentClass,orderBy);
 	}
 	
 	/**
@@ -616,7 +613,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * @return List
 	 */
 	public <X> List<X> findByProperty(String propertyName,Object value,String restrictionName,Class<?> persistentClass,String orderBy) {
-		Criterion criterion = builder.getRestriction(propertyName, value, restrictionName);
+		Criterion criterion = HibernateRestrictionBuilder.getRestriction(propertyName, value, restrictionName);
 		return createCriteria(persistentClass, orderBy, criterion).list();
 	}
 	
@@ -756,7 +753,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * @return Object
 	 */
 	public T findUniqueByProperty(String propertyName,Object value) {
-		return (T)findUniqueByProperty(propertyName,value,EqRestriction.RestrictionName);
+		return (T)findUniqueByProperty(propertyName,value,RestrictionNames.EQ);
 	}
 	
 	/**
@@ -783,7 +780,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * @return Object
 	 */
 	public <X> X findUniqueByProperty(String propertyName,Object value,Class<?> persistentClass) {
-		return (X)findUniqueByProperty(propertyName,value,EqRestriction.RestrictionName,persistentClass);
+		return (X)findUniqueByProperty(propertyName,value,RestrictionNames.EQ, persistentClass);
 	}
 	
 	/**
@@ -797,7 +794,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * @return Object
 	 */
 	public <X> X findUniqueByProperty(String propertyName,Object value,String restrictionName,Class<?> persistentClass) {
-		Criterion criterion = builder.getRestriction(propertyName, value, restrictionName);
+		Criterion criterion = HibernateRestrictionBuilder.getRestriction(propertyName, value, restrictionName);
 		return (X) createCriteria(persistentClass, criterion).uniqueResult();
 	}
 	

@@ -9,10 +9,10 @@ import org.exitsoft.common.utils.ConvertUtils;
 import org.exitsoft.common.utils.ReflectionUtils;
 import org.exitsoft.orm.annotation.StateDelete;
 import org.exitsoft.orm.core.PropertyFilter;
+import org.exitsoft.orm.core.RestrictionNames;
 import org.exitsoft.orm.core.spring.data.jpa.PropertyFilterSpecification;
 import org.exitsoft.orm.core.spring.data.jpa.RestrictionNameSpecification;
 import org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository;
-import org.exitsoft.orm.core.spring.data.jpa.restriction.support.EqRestriction;
 import org.exitsoft.orm.enumeration.ExecuteMehtod;
 import org.exitsoft.orm.strategy.CodeStrategy;
 import org.exitsoft.orm.strategy.annotation.ConvertCode;
@@ -169,7 +169,7 @@ public class JpaSupportRepository<T, ID extends Serializable>  extends SimpleJpa
 	 */
 	public List<T> findAll(String propertyName, Object value, Sort sort) {
 		
-		return findAll(propertyName,value,sort,EqRestriction.RestrictionName);
+		return findAll(propertyName,value,sort,RestrictionNames.EQ);
 	}
 
 	/*
@@ -228,7 +228,7 @@ public class JpaSupportRepository<T, ID extends Serializable>  extends SimpleJpa
 	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findOne(java.lang.String, java.lang.Object)
 	 */
 	public T findOne(String propertyName, Object value) {
-		return findOne(propertyName,value,EqRestriction.RestrictionName);
+		return findOne(propertyName,value,RestrictionNames.EQ);
 	}
 
 	/*

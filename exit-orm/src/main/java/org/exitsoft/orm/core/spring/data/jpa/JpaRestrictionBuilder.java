@@ -1,7 +1,8 @@
 package org.exitsoft.orm.core.spring.data.jpa;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -27,13 +28,11 @@ import org.exitsoft.orm.core.spring.data.jpa.restriction.support.RLikeRestrictio
  * @author vincent
  *
  */
-public class JpaRestrictionBuilder extends PropertyFilterBuilder<PredicateBuilder, Predicate>{
+public class JpaRestrictionBuilder{
 	
-	private Root<?> root;
-	private CriteriaQuery<?> query;
-	private CriteriaBuilder builder;
+	private static Map<String, PredicateBuilder> predicateBuilders = new HashMap<String, PredicateBuilder>();
 	
-	public JpaRestrictionBuilder() {
+	static {
 		PredicateBuilder eqRestriction = new EqRestriction();
 		PredicateBuilder neRestriction = new NeRestriction();
 		PredicateBuilder geRestriction = new GeRestriction();
@@ -46,48 +45,33 @@ public class JpaRestrictionBuilder extends PropertyFilterBuilder<PredicateBuilde
 		PredicateBuilder notInRestriction = new NinRestriction();
 		PredicateBuilder rLikeRestriction = new RLikeRestriction();
 		
-		getRestrictionsMap().put(eqRestriction.getRestrictionName(), eqRestriction);
-		getRestrictionsMap().put(neRestriction.getRestrictionName(), neRestriction);
-		getRestrictionsMap().put(geRestriction.getRestrictionName(), geRestriction);
-		getRestrictionsMap().put(inRestriction.getRestrictionName(), inRestriction);
-		getRestrictionsMap().put(gtRestriction.getRestrictionName(), gtRestriction);
-		getRestrictionsMap().put(lLikeRestriction.getRestrictionName(), lLikeRestriction);
-		getRestrictionsMap().put(leRestriction.getRestrictionName(), leRestriction);
-		getRestrictionsMap().put(likeRestriction.getRestrictionName(), likeRestriction);
-		getRestrictionsMap().put(ltRestriction.getRestrictionName(), ltRestriction);
-		getRestrictionsMap().put(rLikeRestriction.getRestrictionName(), rLikeRestriction);
-		getRestrictionsMap().put(notInRestriction.getRestrictionName(), notInRestriction);
+		predicateBuilders.put(eqRestriction.getRestrictionName(), eqRestriction);
+		predicateBuilders.put(neRestriction.getRestrictionName(), neRestriction);
+		predicateBuilders.put(geRestriction.getRestrictionName(), geRestriction);
+		predicateBuilders.put(inRestriction.getRestrictionName(), inRestriction);
+		predicateBuilders.put(gtRestriction.getRestrictionName(), gtRestriction);
+		predicateBuilders.put(lLikeRestriction.getRestrictionName(), lLikeRestriction);
+		predicateBuilders.put(leRestriction.getRestrictionName(), leRestriction);
+		predicateBuilders.put(likeRestriction.getRestrictionName(), likeRestriction);
+		predicateBuilders.put(ltRestriction.getRestrictionName(), ltRestriction);
+		predicateBuilders.put(rLikeRestriction.getRestrictionName(), rLikeRestriction);
+		predicateBuilders.put(notInRestriction.getRestrictionName(), notInRestriction);
 	}
 	
-	public JpaRestrictionBuilder(Root<?> root, CriteriaQuery<?> query,CriteriaBuilder builder) {
-		this();
-		this.root = root;
-		this.query = query;
-		this.builder = builder;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.exitsoft.orm.core.PropertyFilterBuilder#getRestriction(org.exitsoft.orm.core.PropertyFilter)
-	 */
-	public Predicate getRestriction(PropertyFilter filter) {
-		if (!getRestrictionsMap().containsKey(filter.getRestrictionName())) {
+	public static Predicate getRestriction(PropertyFilter filter,JpaBuilderModel restrictionModel) {
+		if (!predicateBuilders.containsKey(filter.getRestrictionName())) {
 			throw new IllegalArgumentException("找不到约束名:" + filter.getRestrictionName());
 		}
-		PredicateBuilder predicateBuilder  = getRestrictionsMap().get(filter.getRestrictionName());
-		return predicateBuilder.build(filter,root,query,builder);
+		PredicateBuilder predicateBuilder  = predicateBuilders.get(filter.getRestrictionName());
+		return predicateBuilder.build(filter,restrictionModel);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.exitsoft.orm.core.PropertyFilterBuilder#getRestriction(java.lang.String, java.lang.Object, java.lang.String)
-	 */
-	public Predicate getRestriction(String propertyName, Object value,String restrictionName) {
-		if (!getRestrictionsMap().containsKey(restrictionName)) {
+	public static Predicate getRestriction(String propertyName, Object value,String restrictionName,JpaBuilderModel model) {
+		if (!predicateBuilders.containsKey(restrictionName)) {
 			throw new IllegalArgumentException("找不到约束名:" + restrictionName);
 		}
-		PredicateBuilder predicateBuilder  = getRestrictionsMap().get(restrictionName);
-		return predicateBuilder.build(getPath(propertyName, root), value, builder);
+		PredicateBuilder predicateBuilder  = predicateBuilders.get(restrictionName);
+		return predicateBuilder.build(propertyName, value, model);
 	}
 	
 	/**
@@ -113,18 +97,6 @@ public class JpaRestrictionBuilder extends PropertyFilterBuilder<PredicateBuilde
 		}
 		
 		return path;
-	}
-	
-	public void setSpecificationProperty(Root<?> root, CriteriaQuery<?> query,CriteriaBuilder builder) {
-		this.root = root;
-		this.builder = builder;
-		this.query = query;
-	}
-
-	public void clearSpecificationProperty() {
-		this.root = null;
-		this.builder = null;
-		this.query = null;
 	}
 	
 }

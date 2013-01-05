@@ -4,6 +4,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 
+import org.exitsoft.orm.core.RestrictionNames;
 import org.exitsoft.orm.core.spring.data.jpa.restriction.PredicateSingleValueSupport;
 
 /**
@@ -16,15 +17,20 @@ import org.exitsoft.orm.core.spring.data.jpa.restriction.PredicateSingleValueSup
  *
  */
 public class GtRestriction extends PredicateSingleValueSupport{
-
-	public final static String RestrictionName = "GT";
 	
-	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.PredicateBuilder#getRestrictionName()
+	 */
 	public String getRestrictionName() {
 		
-		return RestrictionName;
+		return RestrictionNames.GT;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.PredicateBuilder#build(javax.persistence.criteria.Path, java.lang.Object, javax.persistence.criteria.CriteriaBuilder)
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Predicate build(Path expression, Object value,CriteriaBuilder builder) {
 		

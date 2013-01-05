@@ -9,7 +9,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.PropertyFilterUtils;
+import org.exitsoft.orm.core.PropertyFilterConstructors;
 import org.springframework.data.jpa.domain.Specification;
 
 /**
@@ -22,8 +22,6 @@ import org.springframework.data.jpa.domain.Specification;
 public class PropertyFilterSpecification<T> implements Specification<T> {
 	
 	private List<PropertyFilter> filters = new ArrayList<PropertyFilter>();
-	
-	private JpaRestrictionBuilder restrictionBuilder = new JpaRestrictionBuilder();
 	
 	public PropertyFilterSpecification() {
 		
@@ -55,7 +53,7 @@ public class PropertyFilterSpecification<T> implements Specification<T> {
 	 * 
 	 */
 	public PropertyFilterSpecification(String expression,String matchValue) {
-		this(PropertyFilterUtils.createPropertyFilter(expression, matchValue));
+		this(PropertyFilterConstructors.createPropertyFilter(expression, matchValue));
 	}
 	
 	/**
@@ -65,7 +63,7 @@ public class PropertyFilterSpecification<T> implements Specification<T> {
 	 * @param matchValues 值数组
 	 */
 	public PropertyFilterSpecification(String[] expressions, String[] matchValues) {
-		this(PropertyFilterUtils.createPropertyFilters(expressions, matchValues));
+		this(PropertyFilterConstructors.createPropertyFilters(expressions, matchValues));
 	}
 	
 	/*
@@ -74,15 +72,12 @@ public class PropertyFilterSpecification<T> implements Specification<T> {
 	 */
 	public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,CriteriaBuilder builder) {
 		
-		restrictionBuilder.setSpecificationProperty(root,query,builder);
 		
 		List<Predicate> list = new ArrayList<Predicate>();
 		
 		for (PropertyFilter filter : filters) {
-			list.add(restrictionBuilder.getRestriction(filter));
+			list.add(JpaRestrictionBuilder.getRestriction(filter,new JpaBuilderModel(root, query, builder)));
 		}
-		
-		restrictionBuilder.clearSpecificationProperty();
 		
 		return list.size() > 0 ? builder.and(list.toArray(new Predicate[list.size()])) : null;
 		

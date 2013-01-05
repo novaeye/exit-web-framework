@@ -1,12 +1,12 @@
 package org.exitsoft.orm.core.spring.data.jpa.restriction;
 
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import org.exitsoft.orm.core.MatchValue;
 import org.exitsoft.orm.core.PropertyFilter;
+import org.exitsoft.orm.core.spring.data.jpa.JpaBuilderModel;
 import org.exitsoft.orm.core.spring.data.jpa.JpaRestrictionBuilder;
 import org.exitsoft.orm.core.spring.data.jpa.PredicateBuilder;
 
@@ -41,7 +41,7 @@ public abstract class PredicateSingleValueSupport implements PredicateBuilder{
 	 * (non-Javadoc)
 	 * @see org.exitsoft.orm.core.spring.data.jpa.PredicateBuilder#build(org.exitsoft.orm.core.PropertyFilter, javax.persistence.criteria.Root, javax.persistence.criteria.CriteriaQuery, javax.persistence.criteria.CriteriaBuilder)
 	 */
-	public Predicate build(PropertyFilter filter, Root<?> root,CriteriaQuery<?> query, CriteriaBuilder builder) {
+	public Predicate build(PropertyFilter filter,JpaBuilderModel model) {
 
 		String matchValue = filter.getMatchValue();
 		Class<?> propertyType = filter.getPropertyType();
@@ -51,23 +51,44 @@ public abstract class PredicateSingleValueSupport implements PredicateBuilder{
 		Predicate predicate = null;
 		
 		if (matchValueModel.hasOrOperate()) {
-			predicate = builder.disjunction();
+			predicate = model.getBuilder().disjunction();
 		} else {
-			predicate = builder.conjunction();
+			predicate = model.getBuilder().conjunction();
 		}
 		
 		for (Object value : matchValueModel.getValues()) {
 			if (filter.hasMultiplePropertyNames()) {
 				for (String propertyName:filter.getPropertyNames()) {
-					predicate.getExpressions().add(build(JpaRestrictionBuilder.getPath(propertyName,root), value, builder));
+					predicate.getExpressions().add(build(propertyName, value, model));
 				}
 			} else {
-				predicate.getExpressions().add(build(JpaRestrictionBuilder.getPath(filter.getSinglePropertyName(),root), value, builder));
+				predicate.getExpressions().add(build(filter.getSinglePropertyName(), value, model));
 			}
 		}
 		
 		return predicate;
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.PredicateBuilder#build(java.lang.String, java.lang.Object, org.exitsoft.orm.core.spring.data.jpa.JpaBuilderModel)
+	 */
+	public Predicate build(String propertyName, Object value,JpaBuilderModel model) {
+		
+		return build(JpaRestrictionBuilder.getPath(propertyName, model.getRoot()),value,model.getBuilder());
+	}
+	
+	/**
+	 * 
+	 * 获取Jpa的约束标准
+	 * 
+	 * @param expression 属性路径表达式
+	 * @param value 值
+	 * @param builder CriteriaBuilder
+	 * 
+	 * @return {@link Predicate}
+	 */
+	public abstract Predicate build(Path<?> expression,Object value,CriteriaBuilder builder);
 	
 	/**
 	 * 获取值对比模型

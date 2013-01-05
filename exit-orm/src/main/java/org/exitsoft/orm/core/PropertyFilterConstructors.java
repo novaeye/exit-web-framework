@@ -18,7 +18,7 @@ import org.springframework.util.Assert;
  * @author vincent
  *
  */
-public abstract class PropertyFilterUtils {
+public class PropertyFilterConstructors {
 	
 	/**
 	 * 通过表达式和对比值创建属性过滤器集合,要求表达式与值必须相等
@@ -233,4 +233,5 @@ public abstract class PropertyFilterUtils {
 		}
 		return filterList;
 	}
+	
 }

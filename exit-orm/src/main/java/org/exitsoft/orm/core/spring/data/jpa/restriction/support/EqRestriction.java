@@ -6,6 +6,7 @@ import javax.persistence.criteria.Predicate;
 
 import org.apache.commons.lang3.StringUtils;
 import org.exitsoft.orm.core.MatchValue;
+import org.exitsoft.orm.core.RestrictionNames;
 import org.exitsoft.orm.core.spring.data.jpa.restriction.PredicateSingleValueSupport;
 
 /**
@@ -19,11 +20,12 @@ import org.exitsoft.orm.core.spring.data.jpa.restriction.PredicateSingleValueSup
  */
 public class EqRestriction extends PredicateSingleValueSupport{
 	
-	public final static String RestrictionName = "EQ";
-	
-	public MatchValue createMatchValueModel(String matchValue,Class<?> type) {
-		
-		MatchValue matchValueModel = super.getMatchValue(matchValue, type);
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.restriction.PredicateSingleValueSupport#getMatchValue(java.lang.String, java.lang.Class)
+	 */
+	public MatchValue getMatchValue(String matchValue, Class<?> propertyType) {
+		MatchValue matchValueModel = super.getMatchValue(matchValue, propertyType);
 		for (int i = 0; i < matchValueModel.getValues().size(); i++) {
 			Object value = matchValueModel.getValues().get(i);
 			if (value instanceof String && StringUtils.equals(value.toString(),"null")) {
@@ -33,15 +35,26 @@ public class EqRestriction extends PredicateSingleValueSupport{
 		}
 		return matchValueModel;
 	}
-
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.PredicateBuilder#getRestrictionName()
+	 */
 	public String getRestrictionName() {
-		return RestrictionName;
+		return RestrictionNames.EQ;
 	}
 
-	@SuppressWarnings({ "rawtypes"})
-	public Predicate build(Path expression, Object value,CriteriaBuilder builder) {
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.restriction.PredicateSingleValueSupport#build(javax.persistence.criteria.Path, java.lang.Object, javax.persistence.criteria.CriteriaBuilder)
+	 */
+	public Predicate build(Path<?> expression, Object value,CriteriaBuilder builder) {
+		
 		return value == null ? builder.isNull(expression) : builder.equal(expression, value);
 	}
+
+
+	
 
 	
 }

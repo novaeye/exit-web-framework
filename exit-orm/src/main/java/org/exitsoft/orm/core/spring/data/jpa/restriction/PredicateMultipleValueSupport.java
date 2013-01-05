@@ -1,15 +1,13 @@
 package org.exitsoft.orm.core.spring.data.jpa.restriction;
 
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.StringUtils;
 import org.exitsoft.common.utils.ConvertUtils;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.spring.data.jpa.JpaRestrictionBuilder;
+import org.exitsoft.orm.core.spring.data.jpa.JpaBuilderModel;
 import org.springframework.util.Assert;
 
 /**
@@ -46,20 +44,20 @@ public abstract class PredicateMultipleValueSupport extends PredicateSingleValue
 	
 	/*
 	 * (non-Javadoc)
-	 * @see org.exitsoft.orm.core.spring.data.jpa.restriction.PredicateSingleValueSupport#build(org.exitsoft.orm.core.PropertyFilter, javax.persistence.criteria.Root, javax.persistence.criteria.CriteriaQuery, javax.persistence.criteria.CriteriaBuilder)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.restriction.PredicateSingleValueSupport#build(org.exitsoft.orm.core.PropertyFilter, org.exitsoft.orm.core.spring.data.jpa.JpaBuilderModel)
 	 */
-	public Predicate build(PropertyFilter filter, Root<?> root,CriteriaQuery<?> query, CriteriaBuilder builder) {
+	public Predicate build(PropertyFilter filter, JpaBuilderModel model) {
 		Object value = convertMatchValue(filter.getMatchValue(), filter.getPropertyType());
 		Predicate predicate = null;
 		
 		if (filter.hasMultiplePropertyNames()) {
-			Predicate orDisjunction = builder.disjunction();
+			Predicate orDisjunction = model.getBuilder().disjunction();
 			for (String propertyName:filter.getPropertyNames()) {
-				orDisjunction.getExpressions().add(build(JpaRestrictionBuilder.getPath(propertyName, root),value,builder));
+				orDisjunction.getExpressions().add(build(propertyName,value,model));
 			}
 			predicate = orDisjunction;
 		} else {
-			predicate = build(JpaRestrictionBuilder.getPath(filter.getSinglePropertyName(), root),value,builder);
+			predicate = build(filter.getSinglePropertyName(),value,model);
 		}
 		
 		return predicate;
@@ -67,10 +65,9 @@ public abstract class PredicateMultipleValueSupport extends PredicateSingleValue
 	
 	/*
 	 * (non-Javadoc)
-	 * @see org.exitsoft.orm.core.spring.data.jpa.PredicateBuilder#build(javax.persistence.criteria.Path, java.lang.Object, javax.persistence.criteria.CriteriaBuilder)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.restriction.PredicateSingleValueSupport#build(javax.persistence.criteria.Path, java.lang.Object, javax.persistence.criteria.CriteriaBuilder)
 	 */
 	public Predicate build(Path<?> expression, Object value,CriteriaBuilder builder) {
-		
 		return buildRestriction(expression,(Object[])value,builder);
 	}
 	
@@ -79,7 +76,7 @@ public abstract class PredicateMultipleValueSupport extends PredicateSingleValue
 	 * 
 	 * @param expression root路径
 	 * @param values 值
-	 * @param builder CriteriaBuilder 
+	 * @param builder CriteriaBuilder
 	 * 
 	 * @return {@link Predicate}
 	 */
