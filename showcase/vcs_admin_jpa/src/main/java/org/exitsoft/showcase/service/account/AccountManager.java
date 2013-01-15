@@ -132,7 +132,7 @@ public class AccountManager {
 	 * @return boolean
 	 */
 	public boolean isUsernameUnique(String username) {
-		return userDao.findOne("username", (Object)username) == null;
+		return getUserByUsername(username) == null;
 	}
 	
 	/**
@@ -272,11 +272,10 @@ public class AccountManager {
 	public List<Resource> mergeResourcesToParent(List<Resource> list,ResourceType resourceType) {
 		List<Resource> result = new ArrayList<Resource>();
 		
-		for (Iterator<Resource> it = list.iterator(); it.hasNext();) {
-			Resource resource = it.next();
-			if (resource.getParent() == null && !StringUtils.equals(resourceType.getValue(),resource.getType())) {
-				mergeResourcesToParent(list,resource,resourceType);
-				result.add(resource);
+		for (Resource r : list) {
+			if (r.getParent() == null && !StringUtils.equals(resourceType.getValue(),r.getType())) {
+				mergeResourcesToParent(list,r,resourceType);
+				result.add(r);
 			}
 		}
 		
@@ -295,14 +294,12 @@ public class AccountManager {
 		
 		parent.setChildren(new ArrayList<Resource>());
 		
-		for (Iterator<Resource> iterator = list.iterator(); iterator.hasNext();) {
+		for (Resource r: list) {
 			
-			Resource entity = iterator.next();
-			
-			if (!StringUtils.equals(entity.getType(), resourceType.getValue()) && StringUtils.equals(entity.getParentId(),parent.getId()) ) {
-				entity.setChildren(null);
-				mergeResourcesToParent(list,entity,resourceType);
-				parent.getChildren().add(entity);
+			if (!StringUtils.equals(r.getType(), resourceType.getValue()) && StringUtils.equals(r.getParentId(),parent.getId()) ) {
+				r.setChildren(null);
+				mergeResourcesToParent(list,r,resourceType);
+				parent.getChildren().add(r);
 			}
 			
 		}
@@ -340,7 +337,7 @@ public class AccountManager {
 	 * @return List
 	 */
 	public List<Group> getGroups(GroupType type) {
-		return groupDao.findAll("type", (Object)type.getValue());
+		return groupDao.findAll("EQS)type", type.getValue());
 	}
 	
 	/**
