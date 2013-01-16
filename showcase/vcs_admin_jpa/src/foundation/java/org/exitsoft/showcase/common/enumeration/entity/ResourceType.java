@@ -13,7 +13,7 @@ public enum ResourceType {
 	 */
 	Menu("01","菜单类型"),
 	/**
-	 * 安全类型，该类型为Spring Security拦截的并且用户不可见的
+	 * 安全类型，该类型为shiro拦截的并且用户不可见的
 	 */
 	Security("02","安全类型");
 	
