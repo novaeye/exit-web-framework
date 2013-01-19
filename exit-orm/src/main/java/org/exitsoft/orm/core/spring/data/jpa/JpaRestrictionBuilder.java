@@ -22,7 +22,8 @@ import org.exitsoft.orm.core.spring.data.jpa.restriction.support.NinRestriction;
 import org.exitsoft.orm.core.spring.data.jpa.restriction.support.RLikeRestriction;
 
 /**
- * jpa约束捆绑者，，将所有的{@link PredicateBuilder}实现类添加到{@link PropertyFilterBuilder#getRestrictionsMap()}中，让
+ * jpa约束捆绑者，将所有的{@link PredicateBuilder}实现类添加到{@link PropertyFilterBuilder#getRestrictionsMap()}中，
+ * 辅佐PropertyFilterSpecification和RestrictionNameSpecification做创建Predicate操作。
  * 
  * @author vincent
  *
@@ -57,14 +58,32 @@ public class JpaRestrictionBuilder{
 		predicateBuilders.put(notInRestriction.getRestrictionName(), notInRestriction);
 	}
 	
-	public static Predicate getRestriction(PropertyFilter filter,JpaBuilderModel restrictionModel) {
+	/**
+	 * 通过属性过滤器创建Predicate
+	 * 
+	 * @param filter 属性过滤器
+	 * @param restrictionModel jpa查询绑定载体
+	 * 
+	 * @return {@link Predicate}
+	 */
+	public static Predicate getRestriction(PropertyFilter filter,JpaBuilderModel model) {
 		if (!predicateBuilders.containsKey(filter.getRestrictionName())) {
 			throw new IllegalArgumentException("找不到约束名:" + filter.getRestrictionName());
 		}
 		PredicateBuilder predicateBuilder  = predicateBuilders.get(filter.getRestrictionName());
-		return predicateBuilder.build(filter,restrictionModel);
+		return predicateBuilder.build(filter,model);
 	}
 
+	/**
+	 * 通过属性名称，值，约束条件创建Predicate
+	 * 
+	 * @param propertyName 属性名称
+	 * @param value 值
+	 * @param restrictionName 约束条件
+	 * @param model jpa查询绑定载体
+	 * 
+	 * @return {@link Predicate}
+	 */
 	public static Predicate getRestriction(String propertyName, Object value,String restrictionName,JpaBuilderModel model) {
 		if (!predicateBuilders.containsKey(restrictionName)) {
 			throw new IllegalArgumentException("找不到约束名:" + restrictionName);
@@ -97,5 +116,24 @@ public class JpaRestrictionBuilder{
 		
 		return path;
 	}
+
+	/**
+	 * 获取所有的条件约束
+	 * 
+	 * @return Map
+	 */
+	public static Map<String, PredicateBuilder> getPredicateBuilders() {
+		return predicateBuilders;
+	}
+
+	/**
+	 * 设置所有的条件约束
+	 * 
+	 * @param 条件约束
+	 */
+	public static void setPredicateBuilders(Map<String, PredicateBuilder> predicateBuilders) {
+		JpaRestrictionBuilder.predicateBuilders = predicateBuilders;
+	}
+	
 	
 }

@@ -5,7 +5,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 /**
- * jpa查询邦等载体，辅助属性过滤器查询时需要的jpa属性
+ * jpa查询绑定载体，辅助属性过滤器查询时需要的jpa属性
  * 
  * @author vincent
  *

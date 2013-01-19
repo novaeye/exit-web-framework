@@ -54,6 +54,13 @@ public class HibernateRestrictionBuilder {
 		criterionBuilders.put(notInRestriction.getRestrictionName(), notInRestriction);
 	}
 	
+	/**
+	 * 通过属性过滤器人获取Hibernate Criterion
+	 * 
+	 * @param filter 属性过滤器
+	 * 
+	 * @return {@link Criterion}
+	 */
 	public static Criterion getRestriction(PropertyFilter filter) {
 		
 		if (!criterionBuilders.containsKey(filter.getRestrictionName())) {
@@ -64,7 +71,15 @@ public class HibernateRestrictionBuilder {
 		return criterionBuilder.build(filter);
 	}
 
-	
+	/**
+	 * 通过属性名称，值，约束条件。获取Hibernate Criterion
+	 * 
+	 * @param propertyName 属性名称
+	 * @param value 值
+	 * @param restrictionName 约束条件
+	 * 
+	 * @return {@link Criterion}
+	 */
 	public static Criterion getRestriction(String propertyName, Object value,String restrictionName) {
 		
 		if (!criterionBuilders.containsKey(restrictionName)) {
@@ -73,6 +88,24 @@ public class HibernateRestrictionBuilder {
 		
 		CriterionBuilder restriction = criterionBuilders.get(restrictionName);
 		return restriction.build(propertyName, value);
+	}
+
+	/**
+	 * 获取所有的条件约束
+	 * 
+	 * @return Map
+	 */
+	public static Map<String, CriterionBuilder> getCriterionBuilders() {
+		return criterionBuilders;
+	}
+
+	/**
+	 * 设置所有的条件约束
+	 * 
+	 * @param criterionBuilders 条件约束
+	 */
+	public static void setCriterionBuilders(Map<String, CriterionBuilder> criterionBuilders) {
+		HibernateRestrictionBuilder.criterionBuilders = criterionBuilders;
 	}
 	
 	
