@@ -1,13 +1,12 @@
 package org.exitsoft.showcase.service.account;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
-import org.exitsoft.orm.core.PropertyFilterConstructors;
 import org.exitsoft.orm.core.PropertyFilter;
+import org.exitsoft.orm.core.PropertyFilterConstructors;
 import org.exitsoft.showcase.common.SystemVariableUtils;
 import org.exitsoft.showcase.common.enumeration.entity.GroupType;
 import org.exitsoft.showcase.common.enumeration.entity.ResourceType;
@@ -337,7 +336,7 @@ public class AccountManager {
 	 * @return List
 	 */
 	public List<Group> getGroups(GroupType type) {
-		return groupDao.findAll("EQS)type", type.getValue());
+		return groupDao.findAll("EQS_type", type.getValue());
 	}
 	
 	/**

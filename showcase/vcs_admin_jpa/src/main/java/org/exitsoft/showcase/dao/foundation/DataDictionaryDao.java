@@ -13,7 +13,7 @@ import org.exitsoft.showcase.entity.foundation.DataDictionary;
  */
 public interface DataDictionaryDao extends BasicJpaRepository<DataDictionary, String>{
 
-	List<DataDictionary> findByCategoryCode(String code);
+	List<DataDictionary> findAllByCategoryCode(String code);
 
 	List<DataDictionary> findByCategoryCodeAndValueNot(String code,String ignoreValue);
 

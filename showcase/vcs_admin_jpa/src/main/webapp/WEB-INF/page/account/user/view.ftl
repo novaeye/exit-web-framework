@@ -182,7 +182,7 @@
 			        <a href="javascript:search(${page.number + 1})">
 			        	下一页
 			        </a>
-			        <a href="javascript:search(${page.totalPages})">
+			        <a href="javascript:search(${page.totalPages - 1})">
 			        	尾页
 			        </a>
 		        </#if>

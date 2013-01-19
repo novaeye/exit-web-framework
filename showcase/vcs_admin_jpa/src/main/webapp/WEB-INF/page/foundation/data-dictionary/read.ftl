@@ -17,7 +17,7 @@
 	    </div>
 	    <div class="column">
 	    	<label for="type">
-				值类型:
+				值类型${valueTypes?size}:
 	        </label>
 	        <div class="field">
 	           <select class="selection" name="type" id="type" size="25">

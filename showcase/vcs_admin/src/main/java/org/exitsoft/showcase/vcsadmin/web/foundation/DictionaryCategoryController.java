@@ -95,7 +95,7 @@ public class DictionaryCategoryController {
 		String id = request.getParameter("id");
 		
 		if (StringUtils.isNotEmpty(id)) {
-			filters.add(PropertyFilterConstructors.createPropertyFilter("NE_S_id", id));
+			filters.add(PropertyFilterConstructors.createPropertyFilter("NES_id", id));
 		}
 		//展示父类下来框时，不要连自己也在下拉框里
 		request.setAttribute("categoriesList", systemDictionaryManager.getAllDictionaryCategories(filters));

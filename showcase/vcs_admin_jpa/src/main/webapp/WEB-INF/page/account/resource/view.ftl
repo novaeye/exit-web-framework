@@ -58,13 +58,13 @@
 					拦截值:
 		        </label>
 		        <div class="field">
-		          <input type="text" id="filter_RLIKES_value" name="filter_RLIKES_value" class="text_input_big" size="25" value="${RequestParameters.filter_RLIKES_value!""}"/>
+		          <input type="text" id="filter_LIKES_value" name="filter_RLIKES_value" class="text_input_big" size="25" value="${RequestParameters.filter_RLIKES_value!""}"/>
 		        </div>
 		        <label for="filter_RLIKES_permission">
 					角色访问:
 		        </label>
 		        <div class="field">
-		           <input type="text" id="filter_RLIKES_permission" name="filter_RLIKES_permission" class="text_input_big" size="25" value="${RequestParameters.filter_RLIKES_permission!""}"/>
+		           <input type="text" id="filter_LIKES_permission" name="filter_RLIKES_permission" class="text_input_big" size="25" value="${RequestParameters.filter_RLIKES_permission!""}"/>
 		         </div>
 		    </div>
 		    <div class="column">
@@ -205,7 +205,7 @@
 			        <a href="javascript:search(${page.number + 1})">
 			        	下一页
 			        </a>
-			        <a href="javascript:search(${page.totalPages})">
+			        <a href="javascript:search(${page.totalPages - 1})">
 			        	尾页
 			        </a>
 		        </#if>

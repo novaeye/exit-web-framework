@@ -93,7 +93,7 @@ public class DataDictionaryController {
 	 * 
 	 */
 	@RequestMapping("read")
-	public String read(@RequestParam(value = "id", required = false)String id,Model model) {
+	public String read(Model model) {
 		
 		model.addAttribute("valueTypes", SystemVariableUtils.getDataDictionariesByCategoryCode(SystemDictionaryCode.ValueType));
 		model.addAttribute("categoriesList", systemDictionaryManager.getAllDictionaryCategories());
