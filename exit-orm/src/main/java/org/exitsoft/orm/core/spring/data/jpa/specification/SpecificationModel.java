@@ -1,4 +1,4 @@
-package org.exitsoft.orm.core.spring.data.jpa;
+package org.exitsoft.orm.core.spring.data.jpa.specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -10,18 +10,17 @@ import javax.persistence.criteria.Root;
  * @author vincent
  *
  */
-public class JpaBuilderModel {
+public class SpecificationModel {
 
 	private Root<?> root;
 	private CriteriaQuery<?> query;
 	private CriteriaBuilder builder;
 	
-	public JpaBuilderModel() {
+	public SpecificationModel() {
 		
 	}
 
-	public JpaBuilderModel(Root<?> root, CriteriaQuery<?> query,
-			CriteriaBuilder builder) {
+	public SpecificationModel(Root<?> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 		super();
 		this.root = root;
 		this.query = query;

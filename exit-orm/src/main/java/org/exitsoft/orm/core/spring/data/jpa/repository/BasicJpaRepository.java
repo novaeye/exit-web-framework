@@ -68,50 +68,6 @@ public interface BasicJpaRepository<T, ID extends Serializable> extends JpaRepos
 	public List<T> findAll(String expression,String value,Sort sort);
 	
 	/**
-	 * 通过对象属性名查询全部对象
-	 * 
-	 * @param propertyName 对象属性名
-	 * @param value 值
-	 * 
-	 * @return List
-	 */
-	public List<T> findAll(String propertyName,Object value);
-	
-	/**
-	 * 通过对象属性名查询全部对象
-	 * 
-	 * @param propertyName 对象属性名
-	 * @param value 值
-	 * @param sort 排序形式
-	 * 
-	 * @return List
-	 */
-	public List<T> findAll(String propertyName,Object value, Sort sort);
-	
-	/**
-	 * 通过对象属性名查询全部对象
-	 * 
-	 * @param propertyName 对象属性名
-	 * @param value 值
-	 * @param restrictionName 约束名称
-	 * 
-	 * @return List
-	 */
-	public List<T> findAll(String propertyName,Object value, String restrictionName);
-	
-	/**
-	 * 通过对象属性名查询全部对象
-	 * 
-	 * @param propertyName 对象属性名
-	 * @param value 值
-	 * @param sort 排序形式
-	 * @param restrictionName 约束名称
-	 * 
-	 * @return List
-	 */
-	public List<T> findAll(String propertyName,Object value, Sort sort,String restrictionName);
-	
-	/**
 	 * 通过表达式和对比值查询全部对象
 	 * <pre>
 	 * 如：
@@ -158,27 +114,6 @@ public interface BasicJpaRepository<T, ID extends Serializable> extends JpaRepos
 	 * @return Object
 	 */
 	public T findOne(List<PropertyFilter> filters);
-	
-	/**
-	 * 通过属性名称查询单个对象
-	 * 
-	 * @param propertyName 属性名称
-	 * @param value 值
-	 * 
-	 * @return Object
-	 */
-	public T findOne(String propertyName,Object value);
-	
-	/**
-	 * 通过属性名称查询单个对象
-	 * 
-	 * @param propertyName 属性名称
-	 * @param value 值
-	 * @param restrictionName 约束名称
-	 * 
-	 * @return Object
-	 */
-	public T findOne(String propertyName,Object value,String restrictionName);
 	
 	/**
 	 * 通过表达式查询单个对象

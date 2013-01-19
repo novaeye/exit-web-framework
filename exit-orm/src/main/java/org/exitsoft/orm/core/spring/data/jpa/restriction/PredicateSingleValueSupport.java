@@ -6,9 +6,9 @@ import javax.persistence.criteria.Predicate;
 
 import org.exitsoft.orm.core.MatchValue;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.spring.data.jpa.JpaBuilderModel;
 import org.exitsoft.orm.core.spring.data.jpa.JpaRestrictionBuilder;
 import org.exitsoft.orm.core.spring.data.jpa.PredicateBuilder;
+import org.exitsoft.orm.core.spring.data.jpa.specification.SpecificationModel;
 
 
 /**
@@ -41,7 +41,7 @@ public abstract class PredicateSingleValueSupport implements PredicateBuilder{
 	 * (non-Javadoc)
 	 * @see org.exitsoft.orm.core.spring.data.jpa.PredicateBuilder#build(org.exitsoft.orm.core.PropertyFilter, javax.persistence.criteria.Root, javax.persistence.criteria.CriteriaQuery, javax.persistence.criteria.CriteriaBuilder)
 	 */
-	public Predicate build(PropertyFilter filter,JpaBuilderModel model) {
+	public Predicate build(PropertyFilter filter,SpecificationModel model) {
 
 		String matchValue = filter.getMatchValue();
 		Class<?> propertyType = filter.getPropertyType();
@@ -73,7 +73,7 @@ public abstract class PredicateSingleValueSupport implements PredicateBuilder{
 	 * (non-Javadoc)
 	 * @see org.exitsoft.orm.core.spring.data.jpa.PredicateBuilder#build(java.lang.String, java.lang.Object, org.exitsoft.orm.core.spring.data.jpa.JpaBuilderModel)
 	 */
-	public Predicate build(String propertyName, Object value,JpaBuilderModel model) {
+	public Predicate build(String propertyName, Object value,SpecificationModel model) {
 		
 		return build(JpaRestrictionBuilder.getPath(propertyName, model.getRoot()),value,model.getBuilder());
 	}

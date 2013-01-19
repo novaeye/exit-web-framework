@@ -10,6 +10,7 @@ import org.exitsoft.common.unit.Fixtures;
 import org.exitsoft.orm.core.PropertyFilter;
 import org.exitsoft.orm.core.PropertyFilterConstructors;
 import org.exitsoft.orm.core.spring.data.jpa.repository.support.JpaSupportRepository;
+import org.exitsoft.orm.core.spring.data.jpa.specification.support.PropertyNameSpecification;
 import org.exitsoft.orm.test.entity.User;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -202,7 +203,7 @@ public class TestJpaSupportRepository {
 		user = dao.findOne(filters);
 		Assert.assertEquals(user.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0002");
 		
-		user = dao.findOne("loginName", (Object)"admin");
+		user = dao.findOne(new PropertyNameSpecification<User>("loginName", "admin"));
 		Assert.assertEquals(user.getId(),"SJDK3849CKMS3849DJCK2039ZMSK0002");
 	}
 }

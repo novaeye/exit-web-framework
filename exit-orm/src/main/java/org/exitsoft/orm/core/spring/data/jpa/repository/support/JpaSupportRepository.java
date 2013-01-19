@@ -9,10 +9,9 @@ import org.exitsoft.common.utils.ConvertUtils;
 import org.exitsoft.common.utils.ReflectionUtils;
 import org.exitsoft.orm.annotation.StateDelete;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.RestrictionNames;
-import org.exitsoft.orm.core.spring.data.jpa.PropertyFilterSpecification;
-import org.exitsoft.orm.core.spring.data.jpa.RestrictionNameSpecification;
+import org.exitsoft.orm.core.PropertyFilterConstructors;
 import org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository;
+import org.exitsoft.orm.core.spring.data.jpa.specification.support.PropertyFilterSpecification;
 import org.exitsoft.orm.enumeration.ExecuteMehtod;
 import org.exitsoft.orm.strategy.CodeStrategy;
 import org.exitsoft.orm.strategy.annotation.ConvertCode;
@@ -152,44 +151,9 @@ public class JpaSupportRepository<T, ID extends Serializable>  extends SimpleJpa
 	 */
 	public List<T> findAll(String expression, String value, Sort sort) {
 		
-		return findAll(new PropertyFilterSpecification<T>(expression,value),sort);
+		return findAll(new PropertyFilterSpecification<T>(expression, value),sort);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(java.lang.String, java.lang.Object)
-	 */
-	public List<T> findAll(String propertyName, Object value) {
-		return findAll(propertyName,value,(Sort)null);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(java.lang.String, java.lang.Object, org.springframework.data.domain.Sort)
-	 */
-	public List<T> findAll(String propertyName, Object value, Sort sort) {
-		
-		return findAll(propertyName,value,sort,RestrictionNames.EQ);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(java.lang.String, java.lang.Object, java.lang.String)
-	 */
-	public List<T> findAll(String propertyName, Object value, String restrictionName) {
-		
-		return findAll(propertyName,value,(Sort)null,restrictionName);
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(java.lang.String, java.lang.Object, org.springframework.data.domain.Sort, java.lang.String)
-	 */
-	public List<T> findAll(String propertyName, Object value, Sort sort,String restrictionName) {
-		
-		return findAll(new RestrictionNameSpecification<T>(propertyName, value, restrictionName),sort);
-	}
-	
 	/*
 	 * (non-Javadoc)
 	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(java.lang.String[], java.lang.String[])
@@ -203,7 +167,7 @@ public class JpaSupportRepository<T, ID extends Serializable>  extends SimpleJpa
 	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(java.lang.String[], java.lang.String[], org.springframework.data.domain.Sort)
 	 */
 	public List<T> findAll(String[] expressions, String[] values, Sort sort) {
-		return findAll(new PropertyFilterSpecification<T>(expressions,values),sort);
+		return findAll(new PropertyFilterSpecification<T>(expressions, values),sort);
 	}
 
 	/*
@@ -225,27 +189,11 @@ public class JpaSupportRepository<T, ID extends Serializable>  extends SimpleJpa
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findOne(java.lang.String, java.lang.Object)
-	 */
-	public T findOne(String propertyName, Object value) {
-		return findOne(propertyName,value,RestrictionNames.EQ);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findOne(java.lang.String, java.lang.Object, java.lang.String)
-	 */
-	public T findOne(String propertyName, Object value, String restrictionName) {
-		
-		return findOne(new RestrictionNameSpecification<T>(propertyName, value, restrictionName));
-	}
-
-	/*
-	 * (non-Javadoc)
 	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findOne(java.lang.String, java.lang.String)
 	 */
 	public T findOne(String expression, String value) {
-		return findOne(new PropertyFilterSpecification<T>(expression,value));
+		
+		return findOne(new PropertyFilterSpecification<T>(expression, value));
 	}
 
 	/*
@@ -253,7 +201,8 @@ public class JpaSupportRepository<T, ID extends Serializable>  extends SimpleJpa
 	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findOne(java.lang.String[], java.lang.String[])
 	 */
 	public T findOne(String[] expressions, String[] values) {
-		return findOne(new PropertyFilterSpecification<T>(expressions,values));
+		List<PropertyFilter> filters = PropertyFilterConstructors.createPropertyFilters(expressions, values);
+		return findOne(filters);
 	}
 	
 }

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.exitsoft.orm.core.PropertyFilter;
 import org.exitsoft.orm.core.PropertyFilterConstructors;
+import org.exitsoft.orm.core.spring.data.jpa.specification.support.PropertyNameSpecification;
 import org.exitsoft.showcase.common.SystemVariableUtils;
 import org.exitsoft.showcase.common.enumeration.entity.GroupType;
 import org.exitsoft.showcase.common.enumeration.entity.ResourceType;
@@ -224,7 +225,11 @@ public class AccountManager {
 	 * @return List
 	 */
 	public List<Resource> getAllParentResources() {
-		return resourceDao.findAll("parent.id", (Object)null);
+		
+		PropertyNameSpecification<Resource> specification = null;
+		specification = new PropertyNameSpecification<Resource>("parent.id", null);
+		
+		return resourceDao.findAll(specification);
 	}
 	
 	/**

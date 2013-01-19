@@ -4,6 +4,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 
 import org.exitsoft.orm.core.PropertyFilter;
+import org.exitsoft.orm.core.spring.data.jpa.specification.SpecificationModel;
 
 /**
  * 
@@ -23,7 +24,7 @@ public interface PredicateBuilder {
 	 * @return {@link Predicate}
 	 * 
 	 */
-	public Predicate build(PropertyFilter filter,JpaBuilderModel model);
+	public Predicate build(PropertyFilter filter,SpecificationModel model);
 	
 	/**
 	 * 获取Predicate标准的约束名称
@@ -42,5 +43,5 @@ public interface PredicateBuilder {
 	 * @return {@link Predicate}
 	 * 
 	 */
-	public Predicate build(String propertyName, Object value,JpaBuilderModel model);
+	public Predicate build(String propertyName, Object value,SpecificationModel model);
 }
