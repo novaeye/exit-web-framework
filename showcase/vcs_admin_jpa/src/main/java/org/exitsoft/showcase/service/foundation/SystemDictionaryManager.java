@@ -3,6 +3,7 @@ package org.exitsoft.showcase.service.foundation;
 import java.util.List;
 
 import org.exitsoft.orm.core.PropertyFilter;
+import org.exitsoft.orm.core.spring.data.jpa.specification.support.PropertySpecification;
 import org.exitsoft.showcase.common.enumeration.SystemDictionaryCode;
 import org.exitsoft.showcase.dao.foundation.DataDictionaryDao;
 import org.exitsoft.showcase.dao.foundation.DictionaryCategoryDao;
@@ -137,7 +138,11 @@ public class SystemDictionaryManager {
 	 * @return List
 	 */
 	public List<DictionaryCategory> getAllParentDictionaryCategories() {
-		return dictionaryCategoryDao.findAll("parent.id", (Object)null);
+		
+		PropertySpecification<DictionaryCategory> specification = null;
+		specification = new PropertySpecification<DictionaryCategory>("parent.id", null);
+		
+		return dictionaryCategoryDao.findAll(specification);
 	}
 	
 	/**

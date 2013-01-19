@@ -1,4 +1,4 @@
-package org.exitsoft.orm.core.spring.data.jpa;
+package org.exitsoft.orm.core.spring.data.jpa.specification.support;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,8 @@ import javax.persistence.criteria.Root;
 
 import org.exitsoft.orm.core.PropertyFilter;
 import org.exitsoft.orm.core.PropertyFilterConstructors;
+import org.exitsoft.orm.core.spring.data.jpa.JpaRestrictionBuilder;
+import org.exitsoft.orm.core.spring.data.jpa.specification.SpecificationModel;
 import org.springframework.data.jpa.domain.Specification;
 
 /**
@@ -76,7 +78,7 @@ public class PropertyFilterSpecification<T> implements Specification<T> {
 		List<Predicate> list = new ArrayList<Predicate>();
 		
 		for (PropertyFilter filter : filters) {
-			list.add(JpaRestrictionBuilder.getRestriction(filter,new JpaBuilderModel(root, query, builder)));
+			list.add(JpaRestrictionBuilder.getRestriction(filter,new SpecificationModel(root, query, builder)));
 		}
 		
 		return list.size() > 0 ? builder.and(list.toArray(new Predicate[list.size()])) : null;

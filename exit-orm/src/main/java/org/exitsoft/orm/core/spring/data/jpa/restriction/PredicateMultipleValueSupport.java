@@ -7,7 +7,7 @@ import javax.persistence.criteria.Predicate;
 import org.apache.commons.lang3.StringUtils;
 import org.exitsoft.common.utils.ConvertUtils;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.spring.data.jpa.JpaBuilderModel;
+import org.exitsoft.orm.core.spring.data.jpa.specification.SpecificationModel;
 import org.springframework.util.Assert;
 
 /**
@@ -46,7 +46,7 @@ public abstract class PredicateMultipleValueSupport extends PredicateSingleValue
 	 * (non-Javadoc)
 	 * @see org.exitsoft.orm.core.spring.data.jpa.restriction.PredicateSingleValueSupport#build(org.exitsoft.orm.core.PropertyFilter, org.exitsoft.orm.core.spring.data.jpa.JpaBuilderModel)
 	 */
-	public Predicate build(PropertyFilter filter, JpaBuilderModel model) {
+	public Predicate build(PropertyFilter filter, SpecificationModel model) {
 		Object value = convertMatchValue(filter.getMatchValue(), filter.getPropertyType());
 		Predicate predicate = null;
 		

@@ -20,6 +20,7 @@ import org.exitsoft.orm.core.spring.data.jpa.restriction.support.LtRestriction;
 import org.exitsoft.orm.core.spring.data.jpa.restriction.support.NeRestriction;
 import org.exitsoft.orm.core.spring.data.jpa.restriction.support.NinRestriction;
 import org.exitsoft.orm.core.spring.data.jpa.restriction.support.RLikeRestriction;
+import org.exitsoft.orm.core.spring.data.jpa.specification.SpecificationModel;
 
 /**
  * jpa约束捆绑者，将所有的{@link PredicateBuilder}实现类添加到{@link PropertyFilterBuilder#getRestrictionsMap()}中，
@@ -66,7 +67,7 @@ public class JpaRestrictionBuilder{
 	 * 
 	 * @return {@link Predicate}
 	 */
-	public static Predicate getRestriction(PropertyFilter filter,JpaBuilderModel model) {
+	public static Predicate getRestriction(PropertyFilter filter,SpecificationModel model) {
 		if (!predicateBuilders.containsKey(filter.getRestrictionName())) {
 			throw new IllegalArgumentException("找不到约束名:" + filter.getRestrictionName());
 		}
@@ -84,7 +85,7 @@ public class JpaRestrictionBuilder{
 	 * 
 	 * @return {@link Predicate}
 	 */
-	public static Predicate getRestriction(String propertyName, Object value,String restrictionName,JpaBuilderModel model) {
+	public static Predicate getRestriction(String propertyName, Object value,String restrictionName,SpecificationModel model) {
 		if (!predicateBuilders.containsKey(restrictionName)) {
 			throw new IllegalArgumentException("找不到约束名:" + restrictionName);
 		}

@@ -1,10 +1,13 @@
-package org.exitsoft.orm.core.spring.data.jpa;
+package org.exitsoft.orm.core.spring.data.jpa.specification.support;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.exitsoft.orm.core.RestrictionNames;
+import org.exitsoft.orm.core.spring.data.jpa.JpaRestrictionBuilder;
+import org.exitsoft.orm.core.spring.data.jpa.specification.SpecificationModel;
 import org.springframework.data.jpa.domain.Specification;
 
 /**
@@ -14,7 +17,7 @@ import org.springframework.data.jpa.domain.Specification;
  *
  * @param <T> orm 对象
  */
-public class RestrictionNameSpecification<T> implements Specification<T>{
+public class PropertySpecification<T> implements Specification<T>{
 	
 	//属性名称
 	private String propertyName;
@@ -23,9 +26,22 @@ public class RestrictionNameSpecification<T> implements Specification<T>{
 	//约束名称
 	private String restrictionName;
 	
-	public RestrictionNameSpecification() {
+	public PropertySpecification() {
 		
 	}
+
+	/**
+	 * 构造属性名查询Specification
+	 * 
+	 * @param propertyName 对象属性名
+	 * @param value 值
+	 */
+	public PropertySpecification(String propertyName, Object value) {
+		this.propertyName = propertyName;
+		this.value = value;
+		this.restrictionName = RestrictionNames.EQ;
+	}
+	
 	/**
 	 * 构造属性名查询Specification
 	 * 
@@ -33,7 +49,7 @@ public class RestrictionNameSpecification<T> implements Specification<T>{
 	 * @param value 值
 	 * @param restrictionName 约束名称
 	 */
-	public RestrictionNameSpecification(String propertyName, Object value,String restrictionName) {
+	public PropertySpecification(String propertyName, Object value,String restrictionName) {
 		this.propertyName = propertyName;
 		this.value = value;
 		this.restrictionName = restrictionName;
@@ -46,7 +62,7 @@ public class RestrictionNameSpecification<T> implements Specification<T>{
 	public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,CriteriaBuilder builder) {
 		
 		
-		Predicate predicate = builder.and(JpaRestrictionBuilder.getRestriction(propertyName, value, restrictionName, new JpaBuilderModel(root, query, builder)));
+		Predicate predicate = builder.and(JpaRestrictionBuilder.getRestriction(propertyName, value, restrictionName, new SpecificationModel(root, query, builder)));
 		
 		
 		return predicate;
