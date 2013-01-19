@@ -34,7 +34,7 @@ public abstract class AuthorizationRealm extends AuthorizingRealm{
 	private List<String> defaultRoles;
 	
 	/**
-	 * 默认permission，如果有多个用逗号分割
+	 * 默认permission
 	 * 
 	 * @param defaultPermissions permission
 	 */
@@ -43,7 +43,7 @@ public abstract class AuthorizationRealm extends AuthorizingRealm{
 	}
 	
 	/**
-	 * 默认role，如果有多个用逗号分割
+	 * 默认role
 	 * 
 	 * @param defaultRoles role
 	 */
