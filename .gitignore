@@ -7,15 +7,17 @@
 */.settings/
 */.project
 */.classpath
+*/.springBeans
+
+
+/showcase/*/logs/*
+/showcase/*/target/*
+/showcase/*/.settings/
+/showcase/*/.project
+/showcase/*/.classpath
+/showcase/*/.springBeans
 
 generated-sources/
-
-showcase/*/logs/
-showcase/*/target/
-showcase/*/.settings/
-showcase/*/.project
-showcase/*/.classpath
-showcase/*/.springBeans
 
 *.class
 *.jar
