@@ -138,7 +138,6 @@ public class SystemDictionaryManager {
 	 * @return List
 	 */
 	public List<DictionaryCategory> getAllParentDictionaryCategories() {
-		
 		PropertySpecification<DictionaryCategory> specification = null;
 		specification = new PropertySpecification<DictionaryCategory>("parent.id", null);
 		

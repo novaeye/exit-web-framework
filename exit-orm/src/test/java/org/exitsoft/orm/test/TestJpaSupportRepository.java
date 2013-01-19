@@ -203,7 +203,9 @@ public class TestJpaSupportRepository {
 		user = dao.findOne(filters);
 		Assert.assertEquals(user.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0002");
 		
+
 		user = dao.findOne(new PropertySpecification<User>("loginName", "admin"));
+
 		Assert.assertEquals(user.getId(),"SJDK3849CKMS3849DJCK2039ZMSK0002");
 	}
 }
