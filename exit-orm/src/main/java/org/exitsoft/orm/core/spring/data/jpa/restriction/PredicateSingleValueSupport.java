@@ -6,9 +6,9 @@ import javax.persistence.criteria.Predicate;
 
 import org.exitsoft.orm.core.MatchValue;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.spring.data.jpa.JpaRestrictionBuilder;
 import org.exitsoft.orm.core.spring.data.jpa.PredicateBuilder;
 import org.exitsoft.orm.core.spring.data.jpa.specification.SpecificationModel;
+import org.exitsoft.orm.core.spring.data.jpa.specification.Specifications;
 
 
 /**
@@ -46,7 +46,7 @@ public abstract class PredicateSingleValueSupport implements PredicateBuilder{
 		String matchValue = filter.getMatchValue();
 		Class<?> propertyType = filter.getPropertyType();
 		
-		MatchValue matchValueModel = MatchValue.createMatchValueModel(matchValue, propertyType,andValueSeparator,orValueSeparator);
+		MatchValue matchValueModel = getMatchValue(matchValue, propertyType);
 		
 		Predicate predicate = null;
 		
@@ -75,7 +75,7 @@ public abstract class PredicateSingleValueSupport implements PredicateBuilder{
 	 */
 	public Predicate build(String propertyName, Object value,SpecificationModel model) {
 		
-		return build(JpaRestrictionBuilder.getPath(propertyName, model.getRoot()),value,model.getBuilder());
+		return build(Specifications.getPath(propertyName, model.getRoot()),value,model.getBuilder());
 	}
 	
 	/**

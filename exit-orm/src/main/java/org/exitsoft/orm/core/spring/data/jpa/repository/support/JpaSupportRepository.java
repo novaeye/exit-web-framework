@@ -11,6 +11,7 @@ import org.exitsoft.orm.annotation.StateDelete;
 import org.exitsoft.orm.core.PropertyFilter;
 import org.exitsoft.orm.core.PropertyFilterConstructors;
 import org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository;
+import org.exitsoft.orm.core.spring.data.jpa.specification.Specifications;
 import org.exitsoft.orm.core.spring.data.jpa.specification.support.PropertyFilterSpecification;
 import org.exitsoft.orm.enumeration.ExecuteMehtod;
 import org.exitsoft.orm.strategy.CodeStrategy;
@@ -32,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @param <T> ORM对象
  * @param <ID> 主键Id类型
  */
+@SuppressWarnings("unchecked")
 public class JpaSupportRepository<T, ID extends Serializable>  extends SimpleJpaRepository<T, ID> implements BasicJpaRepository<T, ID>{
 	
 	private EntityManager entityManager;
@@ -167,7 +169,7 @@ public class JpaSupportRepository<T, ID extends Serializable>  extends SimpleJpa
 	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(java.lang.String[], java.lang.String[], org.springframework.data.domain.Sort)
 	 */
 	public List<T> findAll(String[] expressions, String[] values, Sort sort) {
-		return findAll(new PropertyFilterSpecification<T>(expressions, values),sort);
+		return findAll(Specifications.getByExpression(expressions, values),sort);
 	}
 
 	/*
@@ -175,7 +177,7 @@ public class JpaSupportRepository<T, ID extends Serializable>  extends SimpleJpa
 	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(org.springframework.data.domain.Pageable, java.util.List)
 	 */
 	public Page<T> findAll(Pageable pageable, List<PropertyFilter> filters) {
-		return findAll(new PropertyFilterSpecification<T>(filters),pageable);
+		return findAll(Specifications.getByPropertyFilter(filters),pageable);
 	}
 	
 	/*
@@ -184,7 +186,7 @@ public class JpaSupportRepository<T, ID extends Serializable>  extends SimpleJpa
 	 */
 	public T findOne(List<PropertyFilter> filters) {
 		
-		return findOne(new PropertyFilterSpecification<T>(filters));
+		return findOne(Specifications.getByPropertyFilter(filters));
 	}
 
 	/*
@@ -193,7 +195,7 @@ public class JpaSupportRepository<T, ID extends Serializable>  extends SimpleJpa
 	 */
 	public T findOne(String expression, String value) {
 		
-		return findOne(new PropertyFilterSpecification<T>(expression, value));
+		return findOne(Specifications.getByExpression(expression, value));
 	}
 
 	/*

@@ -3,11 +3,8 @@ package org.exitsoft.orm.core.spring.data.jpa;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
-import org.apache.commons.lang3.StringUtils;
 import org.exitsoft.orm.core.PropertyFilter;
 import org.exitsoft.orm.core.spring.data.jpa.restriction.support.EqRestriction;
 import org.exitsoft.orm.core.spring.data.jpa.restriction.support.GeRestriction;
@@ -91,31 +88,6 @@ public class JpaRestrictionBuilder{
 		}
 		PredicateBuilder predicateBuilder  = predicateBuilders.get(restrictionName);
 		return predicateBuilder.build(propertyName, value, model);
-	}
-	
-	/**
-	 * 获取属性名字路径
-	 * 
-	 * @param propertyName 属性名
-	 * @param root Query roots always reference entities
-	 * 
-	 * @return {@link Path}
-	 */
-	public static Path<?> getPath(String propertyName,Root<?> root) {
-		
-		Path<?> path = null;
-		
-		if (StringUtils.contains(propertyName, ".")) {
-			String[] propertys = StringUtils.splitByWholeSeparator(propertyName, ".");
-			path = root.get(propertys[0]);
-			for (int i = 1; i < propertys.length; i++) {
-				path = path.get(propertys[i]);
-			}
-		} else {
-			path = root.get(propertyName);
-		}
-		
-		return path;
 	}
 
 	/**

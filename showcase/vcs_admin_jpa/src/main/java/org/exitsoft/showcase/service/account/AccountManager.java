@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.exitsoft.orm.core.PropertyFilter;
 import org.exitsoft.orm.core.PropertyFilterConstructors;
-import org.exitsoft.orm.core.spring.data.jpa.specification.support.PropertySpecification;
+import org.exitsoft.orm.core.spring.data.jpa.specification.Specifications;
 import org.exitsoft.showcase.common.SystemVariableUtils;
 import org.exitsoft.showcase.common.enumeration.entity.GroupType;
 import org.exitsoft.showcase.common.enumeration.entity.ResourceType;
@@ -224,12 +224,10 @@ public class AccountManager {
 	 * 
 	 * @return List
 	 */
+	@SuppressWarnings("unchecked")
 	public List<Resource> getAllParentResources() {
 		
-		PropertySpecification<Resource> specification = null;
-		specification = new PropertySpecification<Resource>("parent.id", null);
-		
-		return resourceDao.findAll(specification);
+		return resourceDao.findAll(Specifications.getByProperty("parent.id", null));
 	}
 	
 	/**
