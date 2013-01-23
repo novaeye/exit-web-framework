@@ -44,7 +44,7 @@ public abstract class CriterionSingleValueSupport implements CriterionBuilder{
 		String matchValue = filter.getMatchValue();
 		Class<?> propertyType = filter.getPropertyType();
 		
-		MatchValue matchValueModel = MatchValue.createMatchValueModel(matchValue, propertyType,andValueSeparator,orValueSeparator);
+		MatchValue matchValueModel = getMatchValue(matchValue, propertyType);
 		
 		Junction criterion = null;
 		
