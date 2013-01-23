@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.exitsoft.common.utils.ServletUtils;
-import org.exitsoft.orm.core.PropertyFilterBuilders;
+import org.exitsoft.orm.core.PropertyFilterBuilder;
 import org.exitsoft.orm.core.Page;
 import org.exitsoft.orm.core.PageRequest;
 import org.exitsoft.orm.core.PageRequest.Sort;
@@ -48,7 +48,7 @@ public class GroupController {
 	@RequestMapping("view")
 	public Page<Group> view(PageRequest pageRequest,HttpServletRequest request) {
 		
-		List<PropertyFilter> filters = PropertyFilterBuilders.build(request);
+		List<PropertyFilter> filters = PropertyFilterBuilder.build(request);
 		
 		request.setAttribute("states", SystemVariableUtils.getDataDictionariesByCategoryCode(SystemDictionaryCode.State,"3"));
 		request.setAttribute("groupsList", accountManager.getAllGroup(GroupType.RoleGorup));
@@ -58,7 +58,7 @@ public class GroupController {
 			pageRequest.setOrderDir(Sort.DESC);
 		}
 		
-		filters.add(PropertyFilterBuilders.build("EQS_type", GroupType.RoleGorup.getValue()));
+		filters.add(PropertyFilterBuilder.build("EQS_type", GroupType.RoleGorup.getValue()));
 		
 		return accountManager.searchGroupPage(pageRequest, filters);
 	}

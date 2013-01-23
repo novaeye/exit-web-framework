@@ -18,7 +18,7 @@ import org.springframework.util.Assert;
  * @author vincent
  *
  */
-public class PropertyFilterBuilders {
+public class PropertyFilterBuilder {
 	
 	/**
 	 * 通过表达式和对比值创建属性过滤器集合,要求表达式与值必须相等
@@ -26,7 +26,7 @@ public class PropertyFilterBuilders {
 	 * 	如：
 	 * </p>
 	 * <code>
-	 * 	PropertyFilerRestriction.createrPropertyFilter(new String[]{"EQS_propertyName1","NEI_propertyName2"},new String[]{"vincent","vincent_OR_admin"})
+	 * 	PropertyFilerRestriction.build(new String[]{"EQS_propertyName1","NEI_propertyName2"},new String[]{"vincent","vincent_OR_admin"})
 	 * </code>
 	 * <p>
 	 * 	对比值长度与表达式长度必须相等
@@ -61,7 +61,7 @@ public class PropertyFilterBuilders {
 	 * 	如：
 	 * </p>
 	 * <code>
-	 * 	PropertyFilerRestriction.createrPropertyFilter("EQS_propertyName","vincent")
+	 * 	PropertyFilerRestriction.build("EQS_propertyName","vincent")
 	 * </code>
 	 * 
 	 * @param expressions 表达式
@@ -130,11 +130,11 @@ public class PropertyFilterBuilders {
 	 * 
 	 * <pre>
 	 * 当页面提交的参数为:{filter_EQS_property1:value,filter_EQS_property2:''}
-	 * List filters =buildPropertyFilter(request,"filter",false);
+	 * List filters =build(request,"filter",false);
 	 * 当前filters:EQS_proerpty1="value",EQS_proerpty1=""
 	 * 
 	 * 当页面提交的参数为:{filter_EQS_property1:value,filter_EQS_property2:''}
-	 * List filters =buildPropertyFilter(request,"filter",true);
+	 * List filters =build(request,"filter",true);
 	 * 当前filters:EQS_proerpty1="value"
 	 * </pre>
 	 * 
@@ -152,11 +152,11 @@ public class PropertyFilterBuilders {
 	 * 
 	 * <pre>
 	 * 当页面提交的参数为:{filter_EQS_property1:value,filter_EQS_property2:''}
-	 * List filters =buildPropertyFilter(request,"filter",false);
+	 * List filters =build(request,"filter",false);
 	 * 当前filters:EQS_proerpty1="value",EQS_proerpty1=""
 	 * 
 	 * 当页面提交的参数为:{filter_EQS_property1:value,filter_EQS_property2:''}
-	 * List filters =buildPropertyFilter(request,"filter",true);
+	 * List filters =build(request,"filter",true);
 	 * 当前filters:EQS_proerpty1="value"
 	 * </pre>
 	 * 
@@ -181,7 +181,7 @@ public class PropertyFilterBuilders {
      * Map o = new HashMap();
 	 * o.put("EQS_property1","value");
 	 * o.put("EQS_property2","");
-	 * List filters = buildPropertyFilter(o);
+	 * List filters = build(o);
 	 * 当前filters:EQS_proerpty1="value",EQS_proerpty1=""
      * </pre>
 	 * 
@@ -201,13 +201,13 @@ public class PropertyFilterBuilders {
      * Map o = new HashMap();
 	 * o.put("EQS_property1","value");
 	 * o.put("EQS_property2","");
-	 * List filters = buildPropertyFilter(o,false);
+	 * List filters = build(o,false);
 	 * 当前filters:EQS_proerpty1="value",EQS_proerpty1=""
 	 * 
 	 * Map o = new HashMap();
 	 * o.put("EQS_property1","value");
 	 * o.put("EQS_property2","");
-	 * List filters = buildPropertyFilter(o,true);
+	 * List filters = build(o,true);
 	 * 当前filters:EQS_proerpty1="value"
      * </pre>
 	 * 

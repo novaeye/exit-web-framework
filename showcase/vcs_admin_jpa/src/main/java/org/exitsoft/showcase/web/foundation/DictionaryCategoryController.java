@@ -6,7 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.exitsoft.orm.core.PropertyFilterBuilders;
+import org.exitsoft.orm.core.PropertyFilterBuilder;
 import org.exitsoft.orm.core.PropertyFilter;
 import org.exitsoft.showcase.entity.foundation.DictionaryCategory;
 import org.exitsoft.showcase.service.foundation.SystemDictionaryManager;
@@ -47,7 +47,7 @@ public class DictionaryCategoryController {
 			@PageableDefaults(sort = { "id" }, sortDir = Direction.DESC) Pageable pageable,
 			HttpServletRequest request) {
 		
-		List<PropertyFilter> filters = PropertyFilterBuilders.build(request);
+		List<PropertyFilter> filters = PropertyFilterBuilder.build(request);
 		
 		request.setAttribute("categoriesList", systemDictionaryManager.getAllDictionaryCategories());
 		
@@ -93,7 +93,7 @@ public class DictionaryCategoryController {
 		String id = request.getParameter("id");
 		
 		if (StringUtils.isNotEmpty(id)) {
-			filters.add(PropertyFilterBuilders.build("NES_id", id));
+			filters.add(PropertyFilterBuilder.build("NES_id", id));
 		}
 		//展示父类下来框时，不要连自己也在下拉框里
 		request.setAttribute("categoriesList", systemDictionaryManager.getAllDictionaryCategories(filters));

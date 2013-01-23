@@ -9,7 +9,6 @@ import org.exitsoft.common.utils.ConvertUtils;
 import org.exitsoft.common.utils.ReflectionUtils;
 import org.exitsoft.orm.annotation.StateDelete;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.PropertyFilterBuilders;
 import org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository;
 import org.exitsoft.orm.core.spring.data.jpa.specification.Specifications;
 import org.exitsoft.orm.core.spring.data.jpa.specification.support.PropertyFilterSpecification;
@@ -203,8 +202,7 @@ public class JpaSupportRepository<T, ID extends Serializable>  extends SimpleJpa
 	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findOne(java.lang.String[], java.lang.String[])
 	 */
 	public T findOne(String[] expressions, String[] values) {
-		List<PropertyFilter> filters = PropertyFilterBuilders.build(expressions, values);
-		return findOne(filters);
+		return findOne(Specifications.getByExpression(expressions, values));
 	}
 	
 }

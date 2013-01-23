@@ -5,7 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.exitsoft.orm.core.PropertyFilterBuilders;
+import org.exitsoft.orm.core.PropertyFilterBuilder;
 import org.exitsoft.orm.core.PropertyFilter;
 import org.exitsoft.showcase.common.SystemVariableUtils;
 import org.exitsoft.showcase.common.enumeration.SystemDictionaryCode;
@@ -49,7 +49,7 @@ public class ResourceController {
 			@PageableDefaults(sort = {"id"},sortDir=Direction.DESC)Pageable pageable,
 			HttpServletRequest request) {
 		
-		List<PropertyFilter> filters = PropertyFilterBuilders.build(request);
+		List<PropertyFilter> filters = PropertyFilterBuilder.build(request);
 		
 		request.setAttribute("resourceType", SystemVariableUtils.getDataDictionariesByCategoryCode(SystemDictionaryCode.ResourceType));
 		request.setAttribute("resourcesList", accountManager.getAllResources());

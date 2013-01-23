@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.exitsoft.orm.core.PropertyFilterBuilders;
+import org.exitsoft.orm.core.PropertyFilterBuilder;
 import org.exitsoft.orm.core.Page;
 import org.exitsoft.orm.core.PageRequest;
 import org.exitsoft.orm.core.PropertyFilter;
@@ -84,7 +84,7 @@ public class TestUserManager extends ManagerTestCaseSupport{
 	public void testSearchUserPage() {
 		PageRequest request = new PageRequest(1,1);
 		List<PropertyFilter> filters = new ArrayList<PropertyFilter>();
-		filters.add(PropertyFilterBuilders.build("EQI_state", "1"));
+		filters.add(PropertyFilterBuilder.build("EQI_state", "1"));
 		Page<User> page = accountManager.searchUserPage(request, filters);
 		assertEquals(page.getResult().size(), 1);
 		assertEquals(page.getTotalItems(), 2);
