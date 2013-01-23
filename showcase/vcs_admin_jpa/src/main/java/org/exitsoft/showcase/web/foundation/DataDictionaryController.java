@@ -5,7 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.exitsoft.orm.core.PropertyFilterConstructors;
+import org.exitsoft.orm.core.PropertyFilterBuilders;
 import org.exitsoft.orm.core.PropertyFilter;
 import org.exitsoft.showcase.common.SystemVariableUtils;
 import org.exitsoft.showcase.common.enumeration.SystemDictionaryCode;
@@ -49,7 +49,7 @@ public class DataDictionaryController {
 			@PageableDefaults(sort = { "id" }, sortDir = Direction.DESC) Pageable pageable,
 			HttpServletRequest request) {
 		
-		List<PropertyFilter> filters = PropertyFilterConstructors.buildFromHttpRequest(request);
+		List<PropertyFilter> filters = PropertyFilterBuilders.build(request);
 		
 		request.setAttribute("valueTypes", SystemVariableUtils.getDataDictionariesByCategoryCode(SystemDictionaryCode.ValueType));
 		request.setAttribute("categoriesList", systemDictionaryManager.getAllDictionaryCategories());

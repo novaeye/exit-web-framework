@@ -18,7 +18,7 @@ import org.springframework.util.Assert;
  * @author vincent
  *
  */
-public class PropertyFilterConstructors {
+public class PropertyFilterBuilders {
 	
 	/**
 	 * 通过表达式和对比值创建属性过滤器集合,要求表达式与值必须相等
@@ -37,7 +37,7 @@ public class PropertyFilterConstructors {
 	 * 
 	 * @return List
 	 */
-	public static List<PropertyFilter> createPropertyFilters(String[] expressions,String[] matchValues) {
+	public static List<PropertyFilter> build(String[] expressions,String[] matchValues) {
 		if (ArrayUtils.isEmpty(expressions) && ArrayUtils.isEmpty(matchValues)) {
 			return Collections.emptyList();
 		}
@@ -49,7 +49,7 @@ public class PropertyFilterConstructors {
 		List<PropertyFilter> filters = new ArrayList<PropertyFilter>();
 		
 		for (int i = 0; i < expressions.length; i++) {
-			filters.add(createPropertyFilter(expressions[i], matchValues[i]));
+			filters.add(build(expressions[i], matchValues[i]));
 		}
 		
 		return filters;
@@ -69,7 +69,7 @@ public class PropertyFilterConstructors {
 	 * 
 	 * @return {@link PropertyFilter}
 	 */
-	public static PropertyFilter createPropertyFilter(String expression,String matchValue) {
+	public static PropertyFilter build(String expression,String matchValue) {
 		
 		Assert.hasText(expression, "表达式不能为空");
 		
@@ -101,32 +101,32 @@ public class PropertyFilterConstructors {
 	/**
 	 * 从HttpRequest参数中创建PropertyFilter列表, 默认Filter属性名前缀为filter.
 	 * 当参数存在{filter_EQS_property1:value,filter_EQS_property2:''}该形式的时候，将不会创建filter_EQS_property2等于""值的实例
-	 * 参考{@link PropertyFilterBuilder#buildPropertyFilter(HttpServletRequest, String, boolean)}
+	 * 参考{@link PropertyFilterBuilder#build(HttpServletRequest, String, boolean)}
 	 * 
 	 * @param request HttpServletRequest
 	 */
-	public static List<PropertyFilter> buildFromHttpRequest(HttpServletRequest request) {
-		return buildFromHttpRequest(request, "filter");
+	public static List<PropertyFilter> build(HttpServletRequest request) {
+		return build(request, "filter");
 	}
 	
 	/**
 	 * 从HttpRequest参数中创建PropertyFilter列表,当参数存在{filter_EQS_property1:value,filter_EQS_property2:''}
 	 * 该形式的时候，将不会创建filter_EQS_property2等于""值的实例
-	 * 参考{@link PropertyFilterBuilder#buildPropertyFilter(HttpServletRequest, String, boolean)}
+	 * 参考{@link PropertyFilterBuilder#build(HttpServletRequest, String, boolean)}
 	 * 
 	 * @param request HttpServletRequest
 	 * @param filterPrefix 用于识别是propertyfilter参数的前准
 	 * 
 	 * @return List
 	 */
-	public static List<PropertyFilter> buildFromHttpRequest(HttpServletRequest request,String filterPrefix) {
-		return buildPropertyFilter(request, "filter",false);
+	public static List<PropertyFilter> build(HttpServletRequest request,String filterPrefix) {
+		return build(request, "filter",false);
 	}
 	
 	/**
 	 * 从HttpRequest参数中创建PropertyFilter列表,当参数存在{filter_EQS_property1:value,filter_EQS_property2:''}
 	 * 该形式的时候，将不会创建filter_EQS_property2等于""值的实例
-	 * 参考{@link PropertyFilterBuilder#buildPropertyFilter(HttpServletRequest, String, boolean)}
+	 * 参考{@link PropertyFilterBuilder#build(HttpServletRequest, String, boolean)}
 	 * 
 	 * <pre>
 	 * 当页面提交的参数为:{filter_EQS_property1:value,filter_EQS_property2:''}
@@ -143,8 +143,8 @@ public class PropertyFilterConstructors {
 	 * 
 	 * @return List
 	 */
-	public static List<PropertyFilter> buildFromHttpRequest(HttpServletRequest request,boolean ignoreEmptyValue) {
-		return buildPropertyFilter(request, "filter",ignoreEmptyValue);
+	public static List<PropertyFilter> build(HttpServletRequest request,boolean ignoreEmptyValue) {
+		return build(request, "filter",ignoreEmptyValue);
 	}
 
 	/**
@@ -166,12 +166,12 @@ public class PropertyFilterConstructors {
 	 * 
 	 * @return List
 	 */
-	public static List<PropertyFilter> buildPropertyFilter(HttpServletRequest request,String filterPrefix,boolean ignoreEmptyValue) {
+	public static List<PropertyFilter> build(HttpServletRequest request,String filterPrefix,boolean ignoreEmptyValue) {
 
 		// 从request中获取含属性前缀名的参数,构造去除前缀名后的参数Map.
 		Map<String, Object> filterParamMap = ServletUtils.getParametersStartingWith(request, filterPrefix + "_");
 
-		return buildPropertyFilter(filterParamMap,ignoreEmptyValue);
+		return build(filterParamMap,ignoreEmptyValue);
 	}
 	
 	/**
@@ -189,9 +189,9 @@ public class PropertyFilterConstructors {
 	 * @param filters 过滤器信息
 	 * 
 	 */
-	public static List<PropertyFilter> buildPropertyFilter(Map<String, Object> filters) {
+	public static List<PropertyFilter> build(Map<String, Object> filters) {
 		
-		return buildPropertyFilter(filters,false);
+		return build(filters,false);
 	}
 	
 	/**
@@ -216,7 +216,7 @@ public class PropertyFilterConstructors {
 	 * @param ignoreEmptyValue true表示当存在 null或者""值时忽略该PropertyFilter
 	 * 
 	 */
-	public static List<PropertyFilter> buildPropertyFilter(Map<String, Object> filters,boolean ignoreEmptyValue) {
+	public static List<PropertyFilter> build(Map<String, Object> filters,boolean ignoreEmptyValue) {
 		List<PropertyFilter> filterList = new ArrayList<PropertyFilter>();
 		// 分析参数Map,构造PropertyFilter列表
 		for (Map.Entry<String, Object> entry : filters.entrySet()) {
@@ -227,7 +227,7 @@ public class PropertyFilterConstructors {
 				continue;
 			}
 			//如果ignoreEmptyValue为true忽略null或""的值
-			PropertyFilter filter = createPropertyFilter(expression, value.toString());
+			PropertyFilter filter = build(expression, value.toString());
 			filterList.add(filter);
 			
 		}

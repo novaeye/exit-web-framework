@@ -12,7 +12,7 @@ import org.exitsoft.orm.core.Page;
 import org.exitsoft.orm.core.PageRequest;
 import org.exitsoft.orm.core.PageRequest.Sort;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.PropertyFilterConstructors;
+import org.exitsoft.orm.core.PropertyFilterBuilders;
 import org.exitsoft.orm.core.RestrictionNames;
 import org.exitsoft.orm.core.hibernate.CriterionBuilder;
 import org.exitsoft.orm.core.hibernate.HibernateRestrictionBuilder;
@@ -160,7 +160,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * @return {@link Criteria}
 	 */
 	protected Criteria createCriteria(String[] expressions,String[] matchValues,String orderBy,Class<?> persistentClass) {
-		List<PropertyFilter> filters = PropertyFilterConstructors.createPropertyFilters(expressions, matchValues);
+		List<PropertyFilter> filters = PropertyFilterBuilders.build(expressions, matchValues);
 		return createCriteria(filters,orderBy,persistentClass);
 	}
 	
@@ -239,7 +239,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * @return {@link Criterion}
 	 */
 	protected Criterion createCriterion(String expression,String matchValue) {
-		PropertyFilter filter = PropertyFilterConstructors.createPropertyFilter(expression, matchValue);
+		PropertyFilter filter = PropertyFilterBuilders.build(expression, matchValue);
 		return createCriterion(filter);
 	}
 	

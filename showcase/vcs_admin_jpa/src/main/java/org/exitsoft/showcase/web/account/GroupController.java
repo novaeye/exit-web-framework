@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.exitsoft.common.utils.ServletUtils;
-import org.exitsoft.orm.core.PropertyFilterConstructors;
+import org.exitsoft.orm.core.PropertyFilterBuilders;
 import org.exitsoft.orm.core.PropertyFilter;
 import org.exitsoft.showcase.common.SystemVariableUtils;
 import org.exitsoft.showcase.common.enumeration.SystemDictionaryCode;
@@ -51,12 +51,12 @@ public class GroupController {
 			@PageableDefaults(sort = { "id" }, sortDir = Direction.DESC) Pageable pageable,
 			HttpServletRequest request) {
 		
-		List<PropertyFilter> filters = PropertyFilterConstructors.buildFromHttpRequest(request);
+		List<PropertyFilter> filters = PropertyFilterBuilders.build(request);
 		
 		request.setAttribute("states", SystemVariableUtils.getDataDictionariesByCategoryCode(SystemDictionaryCode.State,"3"));
 		request.setAttribute("groupsList", accountManager.getAllGroup(GroupType.RoleGorup));
 		
-		filters.add(PropertyFilterConstructors.createPropertyFilter("EQS_type", GroupType.RoleGorup.getValue()));
+		filters.add(PropertyFilterBuilders.build("EQS_type", GroupType.RoleGorup.getValue()));
 		
 		return accountManager.searchGroupPage(pageable, filters);
 	}

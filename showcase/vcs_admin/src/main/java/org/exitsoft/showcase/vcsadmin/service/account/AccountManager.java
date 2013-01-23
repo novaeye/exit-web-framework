@@ -8,7 +8,7 @@ import org.apache.shiro.crypto.hash.SimpleHash;
 import org.exitsoft.orm.core.Page;
 import org.exitsoft.orm.core.PageRequest;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.PropertyFilterConstructors;
+import org.exitsoft.orm.core.PropertyFilterBuilders;
 import org.exitsoft.showcase.vcsadmin.common.SystemVariableUtils;
 import org.exitsoft.showcase.vcsadmin.common.enumeration.entity.GroupType;
 import org.exitsoft.showcase.vcsadmin.common.enumeration.entity.ResourceType;
@@ -395,10 +395,10 @@ public class AccountManager {
 		List<PropertyFilter> filters = new ArrayList<PropertyFilter>();
 		
 		if (StringUtils.isNotEmpty(ignoreIdValue)) {
-			filters.add(PropertyFilterConstructors.createPropertyFilter("NES_id", ignoreIdValue));
+			filters.add(PropertyFilterBuilders.build("NES_id", ignoreIdValue));
 		}
 		
-		filters.add(PropertyFilterConstructors.createPropertyFilter("EQS_type", groupType.getValue()));
+		filters.add(PropertyFilterBuilders.build("EQS_type", groupType.getValue()));
 		
 		return groupDao.findByPropertyFilters(filters);
 	}
