@@ -556,7 +556,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 */
 	public List<T> getAll(String orderByProperty, boolean isAsc) {
 		Criteria c = createCriteria();
-		setOrderToCriteria(c, isAsc ? Sort.ASC : Sort.DESC);
+		setOrderToCriteria(c, orderByProperty + "_" + (isAsc ? Sort.ASC : Sort.DESC));
 		return c.list();
 	}
 	
