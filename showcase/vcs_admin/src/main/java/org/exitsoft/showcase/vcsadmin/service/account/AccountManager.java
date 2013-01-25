@@ -2,13 +2,15 @@ package org.exitsoft.showcase.vcsadmin.service.account;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.exitsoft.orm.core.Page;
 import org.exitsoft.orm.core.PageRequest;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.PropertyFilterBuilder;
+import org.exitsoft.orm.core.PropertyFilters;
+import org.exitsoft.orm.core.RestrictionNames;
 import org.exitsoft.showcase.vcsadmin.common.SystemVariableUtils;
 import org.exitsoft.showcase.vcsadmin.common.enumeration.entity.GroupType;
 import org.exitsoft.showcase.vcsadmin.common.enumeration.entity.ResourceType;
@@ -23,6 +25,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 
 /**
  * 账户管理业务逻辑
@@ -215,7 +220,12 @@ public class AccountManager {
 	 * @return List
 	 */
 	public List<Resource> getAllParentMenuResources() {
-		return resourceDao.findByExpressions(new String[]{"EQS_parent.id","EQS_type"}, new String[]{null,ResourceType.Menu.getValue()});
+		List<PropertyFilter> filters = Lists.newArrayList(
+				PropertyFilters.build("EQS_parent.id", null),
+				PropertyFilters.build("EQS_type", ResourceType.Menu.getValue())
+		);
+
+		return resourceDao.findByPropertyFilter(filters);
 	}
 	
 	/**
@@ -246,7 +256,7 @@ public class AccountManager {
 	public List<Resource> getAllResources(String ignoreIdValue) {
 		
 		if(StringUtils.isNotEmpty(ignoreIdValue)) {
-			return resourceDao.findByExpression("NES_id", ignoreIdValue);
+			return resourceDao.findByProperty("id", ignoreIdValue,RestrictionNames.NE);
 		}
 		
 		return resourceDao.getAll();
@@ -395,12 +405,12 @@ public class AccountManager {
 		List<PropertyFilter> filters = new ArrayList<PropertyFilter>();
 		
 		if (StringUtils.isNotEmpty(ignoreIdValue)) {
-			filters.add(PropertyFilterBuilder.build("NES_id", ignoreIdValue));
+			filters.add(PropertyFilters.build("NES_id", ignoreIdValue));
 		}
 		
-		filters.add(PropertyFilterBuilder.build("EQS_type", groupType.getValue()));
+		filters.add(PropertyFilters.build("EQS_type", groupType.getValue()));
 		
-		return groupDao.findByPropertyFilters(filters);
+		return groupDao.findByPropertyFilter(filters);
 	}
 
 	/**

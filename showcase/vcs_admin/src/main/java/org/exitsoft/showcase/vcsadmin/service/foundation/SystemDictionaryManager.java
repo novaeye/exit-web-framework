@@ -169,7 +169,7 @@ public class SystemDictionaryManager {
 	 * @return List
 	 */
 	public List<DictionaryCategory> getAllDictionaryCategories(List<PropertyFilter> filters) {
-		return dictionaryCategoryDao.findByPropertyFilters(filters);
+		return dictionaryCategoryDao.findByPropertyFilter(filters);
 	}
 
 }

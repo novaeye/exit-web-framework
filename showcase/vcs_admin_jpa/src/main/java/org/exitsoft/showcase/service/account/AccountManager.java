@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.PropertyFilterBuilder;
+import org.exitsoft.orm.core.PropertyFilters;
 import org.exitsoft.orm.core.spring.data.jpa.specification.Specifications;
 import org.exitsoft.showcase.common.SystemVariableUtils;
 import org.exitsoft.showcase.common.enumeration.entity.GroupType;
@@ -398,10 +398,10 @@ public class AccountManager {
 		List<PropertyFilter> filters = new ArrayList<PropertyFilter>();
 		
 		if (StringUtils.isNotEmpty(ignoreIdValue)) {
-			filters.add(PropertyFilterBuilder.build("NES_id", ignoreIdValue));
+			filters.add(PropertyFilters.build("NES_id", ignoreIdValue));
 		}
 		
-		filters.add(PropertyFilterBuilder.build("EQS_type", groupType.getValue()));
+		filters.add(PropertyFilters.build("EQS_type", groupType.getValue()));
 		
 		return groupDao.findAll(filters);
 	}
