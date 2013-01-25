@@ -10,12 +10,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.exitsoft.common.utils.CollectionUtils;
 import org.exitsoft.common.utils.ConvertUtils;
 import org.exitsoft.common.utils.ReflectionUtils;
 import org.exitsoft.orm.annotation.StateDelete;
-import org.exitsoft.orm.core.PageRequest.Sort;
 import org.exitsoft.orm.enumeration.ExecuteMehtod;
 import org.exitsoft.orm.strategy.CodeStrategy;
 import org.exitsoft.orm.strategy.annotation.ConvertCode;
@@ -35,7 +33,6 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.AbstractQueryImpl;
-import org.hibernate.internal.CriteriaImpl;
 import org.hibernate.jdbc.Work;
 import org.hibernate.metadata.ClassMetadata;
 import org.slf4j.Logger;
@@ -62,6 +59,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	protected final String DEFAULT_ALIAS = "X";
 	
 	private static Logger logger = LoggerFactory.getLogger(BasicHibernateDao.class); 
+	
 	/**
 	 * 构造方法
 	 */
@@ -358,10 +356,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 	
 	/**
-	 * 通过HQL查询全部。参数形式为命名参数形式
-	 * <pre>
-	 * from Object o where o.property1 = :property1 and o.property2 = :proerty2
-	 * </pre>
+	 * 通过HQL查询全部
 	 * 
 	 * @param queryString hql语句
 	 * @param values 与属性名方式的hql值
@@ -373,11 +368,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 
 	/**
-	 * 通过HQL查询全部.参数形式为jdbc参数形式:
-	 * <pre>
-	 * //使用是jdbc参数风格(问号后面没有带顺序值)
-	 * from object o where o.property = ? and o.property = ?
-	 * </pre>
+	 * 通过HQL查询全部
 	 * 
 	 * @param queryString hql语句
 	 * @param values 可变长度的hql值
@@ -389,10 +380,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 	
 	/**
-	 * 通过namedQuery查询全部。参数形式为命名参数形式
-	 * <pre>
-	 * from Object o where o.property1 = :property1 and o.property2 = :proerty2
-	 * </pre>
+	 * 通过namedQuery查询全部
 	 * 
 	 * @param namedQuery namedQuery
 	 * @param values 属性名参数规则
@@ -404,11 +392,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 
 	/**
-	 * 通过namedQuery查询全部,参数形式为jdbc参数形式:
-	 * <pre>
-	 * //使用是jdbc参数风格(问号后面没有带顺序值)
-	 * from object o where o.property = ? and o.property = ?
-	 * </pre>
+	 * 通过namedQuery查询全部
 	 * 
 	 * @param namedQuery namedQuery
 	 * @param values 值
@@ -420,10 +404,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 	
 	/**
-	 * 通过hql查询单个orm实体，参数形式为命名参数形式
-	 * <pre>
-	 * from Object o where o.property1 = :property1 and o.property2 = :proerty2
-	 * </pre>
+	 * 通过hql查询单个orm实体
 	 * 
 	 * @param queryString hql
 	 * @param values 以属性名的hql值
@@ -435,11 +416,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 
 	/**
-	 * 通过hql查询单个orm实体,参数形式为jdbc参数形式:
-	 * <pre>
-	 * //使用是jdbc参数风格(问号后面没有带顺序值)
-	 * from object o where o.property = ? and o.property = ?
-	 * </pre>
+	 * 通过hql查询单个orm实体
 	 * 
 	 * @param queryString hql
 	 * @param values 可变长度的hql值
@@ -451,12 +428,9 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 
 	/**
-	 * 通过QueryName查询单个orm实体,参数形式为命名参数形式
-	 * <pre>
-	 * from Object o where o.property1 = :property1 and o.property2 = :proerty2
-	 * </pre>
+	 * 通过namedQuery查询单个orm实体
 	 * 
-	 * @param queryName queryName
+	 * @param namedQuery namedQuery
 	 * @param values 属性名参数规则
 	 * 
 	 * @return Object
@@ -466,13 +440,9 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 
 	/**
-	 * 通过QueryName查询单个orm实体,参数形式为jdbc参数形式:
-	 * <pre>
-	 * //使用是jdbc参数风格(问号后面没有带顺序值)
-	 * from object o where o.property = ? and o.property = ?
-	 * </pre>
+	 * 通过namedQuery查询单个orm实体
 	 * 
-	 * @param queryName queryName
+	 * @param namedQuery namedQuery
 	 * @param values 值
 	 * 
 	 * @return Object
@@ -484,14 +454,14 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	/**
 	 * 获取全部对象
 	 * 
-	 * @param orderByProperty 要排序的字段名称
+	 * @param ordersProperty 要排序的字段名称
 	 * @param isAsc 是否顺序排序 true表示顺序排序，false表示倒序
 	 * 
 	 * @return List
 	 */
-	public List<T> getAll(String orderByProperty, boolean isAsc) {
+	public List<T> getAll(Order ...orders) {
 		Criteria c = createCriteria();
-		setOrderToCriteria(c, orderByProperty + "_" + (isAsc ? Sort.ASC : Sort.DESC));
+		setOrderToCriteria(c, orders);
 		return c.list();
 	}
 	
@@ -503,123 +473,28 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	public int entityCount() {
 		return countHqlResult("from " + getEntityName() + " " + DEFAULT_ALIAS).intValue();
 	}
-	
-	/**
-	 * 根据Criterion可变数组创建Criteria对象
-	 * 
-	 * @param criterions 可变长度的Criterion数组
-	 * 
-	 * @return {@link Criteria}
-	 */
-	protected Criteria createCriteria(Criterion... criterions) {
-		return createCriteria(this.entityClass,criterions);
-	}
-	
-	/**
-	 * 根据Criterion可变数组创建Criteria对象
-	 * 
-	 * @param criterions 可变长度的Criterion数组
-	 * @param orderBy 排序表达式，规则为:属性名称_排序规则,如:property_asc或property_desc,可以支持多个属性排序，用逗号分割,如:"property1_asc,proerty2_desc",也可以"property"不加排序规则时默认是desc
-	 * 
-	 * @return {@link Criteria}
-	 */
-	protected Criteria createCriteria(String orderBy,Criterion... criterions) {
-		return createCriteria(this.entityClass, orderBy,criterions);
-	}
-	
-	/**
-	 * 根据Criterion可变数组创建Criteria对象
-	 * 
-	 * @param persistentClass orm实体class
-	 * @param criterions 可变长度的Criterion数组
-	 * 
-	 * @return {@link Criteria}
-	 */
-	protected Criteria createCriteria(Class<?> persistentClass,Criterion... criterions) {
-		return createCriteria(persistentClass,StringUtils.EMPTY,criterions);
-	}
 
 	/**
 	 * 根据Criterion可变数组创建Criteria对象
 	 * 
-	 * @param persistentClass orm实体class
-	 * @param orderBy 排序表达式，规则为:属性名称_排序规则,如:property_asc或property_desc,可以支持多个属性排序，用逗号分割,如:"property1_asc,proerty2_desc",也可以"property"不加排序规则时默认是desc
 	 * @param criterions 可变长度的Criterion数组 
 	 * 
 	 * @return @return {@link Criteria}
 	 */
-	protected Criteria createCriteria(Class<?> persistentClass,String orderBy,Criterion... criterions) {
+	protected Criteria createCriteria(Criterion... criterions) {
 		
-		Criteria criteria = getSession().createCriteria(persistentClass);
+		Criteria criteria = getSession().createCriteria(this.entityClass);
 		
 		for (Criterion criterion :criterions) {
 			
 			criteria.add(criterion);
 		}
-		setOrderToCriteria(criteria,orderBy);
 		return criteria;
 	}
 	
-	/**
-	 * 根据DetachedCriteria创建Criteria对象
-	 * 
-	 * @param detachedCriteria Hibernate DetachedCriteria
-	 * 
-	 * @return @return {@link Criteria}
-	 */
-	protected Criteria createCriteria(DetachedCriteria detachedCriteria) {
-		return detachedCriteria.getExecutableCriteria(getSession());
-	}
 	
 	/**
-	 * 根据Criterion可变数组创建DetachedCriteria对象
-	 * 
-	 * @param criterions 可变长度的Criterion数组 
-	 * 
-	 * @return @return {@link DetachedCriteria}
-	 */
-	protected DetachedCriteria createDetachedCriteria(Criterion... criterions) {
-		return createDetachedCriteria(this.entityClass,null,criterions);
-	}
-	
-	/**
-	 * 根据Criterion可变数组创建DetachedCriteria对象
-	 * 
-	 * @param orderBy 排序表达式，规则为:属性名称_排序规则,如:property_asc或property_desc,可以支持多个属性排序，用逗号分割,如:"property1_asc,proerty2_desc",也可以"property"不加排序规则时默认是desc
-	 * @param criterions 可变长度的Criterion数组 
-	 * 
-	 * @return @return {@link DetachedCriteria}
-	 */
-	protected DetachedCriteria createDetachedCriteria(String orderBy,Criterion... criterions) {
-		return createDetachedCriteria(this.entityClass,orderBy,criterions);
-	}
-	
-	/**
-	 * 根据Criterion可变数组创建DetachedCriteria对象
-	 * 
-	 * @param persistentClass orm实体class
-	 * @param orderBy 排序表达式，规则为:属性名称_排序规则,如:property_asc或property_desc,可以支持多个属性排序，用逗号分割,如:"property1_asc,proerty2_desc",也可以"property"不加排序规则时默认是desc
-	 * @param criterions 可变长度的Criterion数组 
-	 * 
-	 * @return @return {@link DetachedCriteria}
-	 */
-	protected DetachedCriteria createDetachedCriteria(Class<?> persistentClass,String orderBy,Criterion... criterions) {
-		DetachedCriteria criteria = DetachedCriteria.forClass(persistentClass);
-		for (Criterion criterion :criterions) {
-			
-			criteria.add(criterion);
-		};
-		CriteriaImpl criteriaImpl = ReflectionUtils.getFieldValue(criteria, "impl");
-		setOrderToCriteria(criteriaImpl,orderBy);
-		return criteria;
-	}
-	
-	/**
-	 * 根据查询HQL与参数列表创建Query对象,参数形式为命名参数形式:
-	 * <pre>
-	 * //使用的是命名参数风格
-	 * from object o where o.condition = :condition
-	 * </pre>
+	 * 根据查询HQL与参数列表创建Query对象
 	 * 
 	 * @param values
 	 *            命名参数,按名称绑定.
@@ -637,11 +512,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 	
 	/**
-	 * 根据hql创建Hibernate Query对象，参数形式为jdbc参数形式:
-	 * <pre>
-	 * //使用是jdbc参数风格(问号后面没有带顺序值)
-	 * from object o where o.property = ? and o.property = ?
-	 * </pre>
+	 * 根据hql创建Hibernate Query对象
 	 * 
 	 * @param queryString hql
 	 * @param values
@@ -657,11 +528,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 	
 	/**
-	 * 通过namedQuery 创建Query,参数形式为命名参数形式:
-	 * <pre>
-	 * //使用的是命名参数风格
-	 * from object o where o.condition = :condition
-	 * </pre>
+	 * 通过namedQuery 创建Query
 	 * 
 	 * @param namedQuery namedQuery
 	 * @param values 属性名参数规则
@@ -677,11 +544,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 
 	/**
-	 * 通过namedQuery创建Query。参数形式为jdbc参数形式:
-	 * <pre>
-	 * //使用是jdbc参数风格(问号后面没有带顺序值)
-	 * from object o where o.property = ? and o.property = ?
-	 * </pre>
+	 * 通过namedQuery创建Query
 	 * 
 	 * @param namedQuery namedQuery
 	 * @param values 值
@@ -696,11 +559,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 	
 	/**
-	 * 根据查询HQL与参数列表创建Query对象，数形式为命名参数形式:
-	 * <pre>
-	 * //使用的是命名参数风格
-	 * from object o where o.condition = :condition
-	 * </pre>
+	 * 根据查询HQL与参数列表创建Query对象
 	 * 
 	 * @param values
 	 *            命名参数,按名称绑定.
@@ -718,11 +577,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 
 	/**
-	 * 根据查询SQL与参数列表创建SQLQuery对象，参数形式为jdbc参数形式:
-	 * <pre>
-	 * //使用是jdbc参数风格(问号后面没有带顺序值)
-	 * from object o where o.property = ? and o.property = ?
-	 * </pre>
+	 * 根据查询SQL与参数列表创建SQLQuery对象
 	 * 
 	 * @param values
 	 *            数量可变的参数,按顺序绑定.
@@ -737,22 +592,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 	
 	/**
-	 * 通过orm实体属性名称和排序值向Criteria设置排序方式
-	 * 
-	 * @param criteria Criteria设置排序方式,
-	 * @param property orm实体属性名称
-	 * @param dir 排序方法，"asc"或"desc"
-	 */
-	protected void setOrderToCriteria(Criteria criteria,String property,String dir) {
-		if(StringUtils.equals(dir.toLowerCase(), Sort.ASC)) {
-			criteria.addOrder(Order.asc(property));
-		} else {
-			criteria.addOrder(Order.desc(property));
-		}
-	}
-	
-	/**
-	 * 设置参数值到query的hql中,该参数是属于jdbc风格的参数
+	 * 设置参数值到query的hql中
 	 *
 	 * @param query Hibernate Query
 	 * @param values 参数值可变数组
@@ -766,7 +606,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 		
 		int methodParameterPosition = 0;
 		
-		if (impl.getNamedParameters().length > 0) {
+		if (impl.hasNamedParameters()) {
 			for (String p : params) {
 				query.setParameter(p, values[methodParameterPosition++]);
 			}
@@ -830,33 +670,14 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	/**
 	 * 通过排序表达式向Criteria设置排序方式,
 	 * @param criteria Criteria
-	 * @param orderBy 排序表达式，规则为:属性名称_排序规则,如:property_asc或property_desc,可以支持多个属性排序，用逗号分割,如:"property1_asc,proerty2_desc",也可以"property"不加排序规则时默认是desc
+	 * @param orders 排序表达式，规则为:属性名称_排序规则,如:property_asc或property_desc,可以支持多个属性排序，用逗号分割,如:"property1_asc,proerty2_desc",也可以"property"不加排序规则时默认是desc
 	 */
-	protected void setOrderToCriteria(Criteria criteria, String orderBy) {
-		if (StringUtils.isEmpty(orderBy)) {
+	protected void setOrderToCriteria(Criteria criteria, Order ...orders) {
+		if (ArrayUtils.isEmpty(orders)) {
 			return ;
 		}
-		
-		String[] orderBys = null;
-		if (StringUtils.contains(orderBy,",")) {
-			orderBys = StringUtils.splitByWholeSeparator(orderBy, ",");
-		} else {
-			orderBys = new String[]{orderBy};
-		}
-		
-		for (String ob: orderBys) {
-		
-			if (StringUtils.contains(ob, "_")) {
-				String[] temp = StringUtils.splitByWholeSeparator(ob, "_");
-				String property = temp[0];
-				String dir = temp[1];
-				if (!StringUtils.equals(dir.toLowerCase(), Sort.ASC) && !StringUtils.equals(dir.toLowerCase(), Sort.DESC)) {
-					throw new IllegalAccessError("orderBy规则错误，当前为:" + dir + " 应该为:ASC或者:DESC");
-				}
-				setOrderToCriteria(criteria,property,dir);
-			} else {
-				setOrderToCriteria(criteria,ob,Sort.DESC);
-			}
+		for (Order o : orders) {
+			criteria.addOrder(o);
 		}
 	}
 	
@@ -931,7 +752,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 	
 	/**
-	 * 删除hql中的 orderBy的字段,返回删除后的新字符串
+	 * 删除hql中的 order by的字段,返回删除后的新字符串
 	 * 
 	 * @param hql
 	 * 
@@ -1172,11 +993,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 	
 	/**
-	 * 执行HQL进行批量修改/删除操作.成功后返回更新记录数,参数形式为命名参数形式:
-	 * <pre>
-	 * //使用的是命名参数风格
-	 * update object o set o.property = :property where o.condition = :condition
-	 * </pre>
+	 * 执行HQL进行批量修改/删除操作.成功后返回更新记录数
 	 * 
 	 * @param values 命名参数,按名称绑定.
 	 *            
@@ -1187,11 +1004,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 
 	/**
-	 * 执行HQL进行批量修改/删除操作.成功后更新记录数,参数形式为jdbc参数形式:
-	 * <pre>
-	 * //使用是jdbc参数风格(问号后面没有带顺序值)
-	 * update object o set o.property=? where o.condition = ?
-	 * </pre>
+	 * 执行HQL进行批量修改/删除操作.成功后更新记录数
 	 * 
 	 * @param values 参数值
 	 *            
@@ -1202,11 +1015,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 
 	/**
-	 * 通过namedQuery执行HQL进行批量修改/删除操作.成功后返回更新记录数,参数形式为命名参数形式:
-	 * <pre>
-	 * //使用的是命名参数风格
-	 * update object o set o.property = :property where o.condition = :condition
-	 * </pre>
+	 * 通过namedQuery执行HQL进行批量修改/删除操作.成功后返回更新记录数
 	 * 
 	 * @param values 命名参数,按名称绑定.
 	 *            
@@ -1217,11 +1026,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 
 	/**
-	 * 通过namedQuery执行HQL进行批量修改/删除操作.成功后返回更新记录数,参数形式为jdbc参数形式:
-	 * <pre>
-	 * //使用是jdbc参数风格(问号后面没有带顺序值)
-	 * update object o set o.property=? where o.condition = ?
-	 * </pre>
+	 * 通过namedQuery执行HQL进行批量修改/删除操作.成功后返回更新记录数
 	 * 
 	 * @param values 参数值
 	 *            

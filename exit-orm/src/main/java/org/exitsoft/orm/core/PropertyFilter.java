@@ -4,7 +4,7 @@ package org.exitsoft.orm.core;
 import java.io.Serializable;
 
 /**
- * orm属性过滤器，可以通过{@link PropertyFilterBuilder#build(String, String)}创建，使用他创建可以直接
+ * orm属性过滤器，可以通过{@link PropertyFilters#build(String, String)}创建，使用他创建可以直接
  * 写入表达式即可，相关表达式样式查看{@link CriterionBuilder}的实现类,如果直接创建查看{@link CriterionBuilder}
  * 实现类的实际restrictionName值和{@link PropertyType}枚举值,如果一个属性对比多个值可以使用逗号(,)分割
  * <p>
@@ -22,8 +22,8 @@ import java.io.Serializable;
  * <p>当使用以上filter到{@link HibernateDao#findByPropertyFilters(java.util.List)}是会产生以下sql</p>
  * <p>sql:selete * from table where (propertyName1 = 'a' or propertyName1 = 'b') and (propertyName2 = 'a' or propertyName2 = 'b')</p>
  * 
- * @see PropertyFilterBuilder#build(String, String)
- * @see PropertyFilterBuilder#build(String[], String[])
+ * @see PropertyFilters#build(String, String)
+ * @see PropertyFilters#build(String[], String[])
  * @see CriterionBuilder
  * 
  * @author vincent
@@ -48,7 +48,7 @@ public class PropertyFilter implements Serializable{
 	}
 	
 	/**
-	 * 构造方法，可以通过{@link PropertyFilterBuilder#build(String, String)}创建，使用他创建可以直接
+	 * 构造方法，可以通过{@link PropertyFilters#build(String, String)}创建，使用他创建可以直接
 	 * 写入表达式即可，相关表达式样式查看{@link CriterionBuilder}的实现类,如果直接创建查看{@link CriterionBuilder}
 	 * 实现类的实际restrictionName值和{@link PropertyType}枚举值,如果一个属性对比多个值可以使用逗号(,)分割
 	 * 

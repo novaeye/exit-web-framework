@@ -18,7 +18,7 @@ import org.springframework.util.Assert;
  * @author vincent
  *
  */
-public class PropertyFilterBuilder {
+public class PropertyFilters {
 	
 	/**
 	 * 通过表达式和对比值创建属性过滤器集合,要求表达式与值必须相等
@@ -101,7 +101,7 @@ public class PropertyFilterBuilder {
 	/**
 	 * 从HttpRequest参数中创建PropertyFilter列表, 默认Filter属性名前缀为filter.
 	 * 当参数存在{filter_EQS_property1:value,filter_EQS_property2:''}该形式的时候，将不会创建filter_EQS_property2等于""值的实例
-	 * 参考{@link PropertyFilterBuilder#build(HttpServletRequest, String, boolean)}
+	 * 参考{@link PropertyFilters#build(HttpServletRequest, String, boolean)}
 	 * 
 	 * @param request HttpServletRequest
 	 */
@@ -112,7 +112,7 @@ public class PropertyFilterBuilder {
 	/**
 	 * 从HttpRequest参数中创建PropertyFilter列表,当参数存在{filter_EQS_property1:value,filter_EQS_property2:''}
 	 * 该形式的时候，将不会创建filter_EQS_property2等于""值的实例
-	 * 参考{@link PropertyFilterBuilder#build(HttpServletRequest, String, boolean)}
+	 * 参考{@link PropertyFilters#build(HttpServletRequest, String, boolean)}
 	 * 
 	 * @param request HttpServletRequest
 	 * @param filterPrefix 用于识别是propertyfilter参数的前准
@@ -126,7 +126,7 @@ public class PropertyFilterBuilder {
 	/**
 	 * 从HttpRequest参数中创建PropertyFilter列表,当参数存在{filter_EQS_property1:value,filter_EQS_property2:''}
 	 * 该形式的时候，将不会创建filter_EQS_property2等于""值的实例
-	 * 参考{@link PropertyFilterBuilder#build(HttpServletRequest, String, boolean)}
+	 * 参考{@link PropertyFilters#build(HttpServletRequest, String, boolean)}
 	 * 
 	 * <pre>
 	 * 当页面提交的参数为:{filter_EQS_property1:value,filter_EQS_property2:''}

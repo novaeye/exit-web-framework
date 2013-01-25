@@ -8,7 +8,7 @@ import javax.sql.DataSource;
 
 import org.exitsoft.common.unit.Fixtures;
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.PropertyFilterBuilder;
+import org.exitsoft.orm.core.PropertyFilters;
 import org.exitsoft.orm.core.spring.data.jpa.repository.support.JpaSupportRepository;
 import org.exitsoft.orm.core.spring.data.jpa.specification.support.PropertySpecification;
 import org.exitsoft.orm.test.entity.User;
@@ -165,7 +165,7 @@ public class TestJpaSupportRepository {
 		//---------------------------------------------PropertyFiter test--------------------------------------------------//
 		
 		List<PropertyFilter> filters = new ArrayList<PropertyFilter>();
-		filters = PropertyFilterBuilder.build(new String[]{"LIKES_loginName","EQI_state"}, new String[]{"m","1"});
+		filters = PropertyFilters.build(new String[]{"LIKES_loginName","EQI_state"}, new String[]{"m","1"});
 		
 		userList = dao.findAll(filters);
 		Assert.assertEquals(userList.size(), 4);
@@ -180,7 +180,7 @@ public class TestJpaSupportRepository {
 		Assert.assertEquals(userList.size(), 4);
 		
 		Pageable pageable = new PageRequest(1, 2);
-		filters = PropertyFilterBuilder.build(new String[]{"EQI_state"}, new String[]{"1"});
+		filters = PropertyFilters.build(new String[]{"EQI_state"}, new String[]{"1"});
 		Page<User> page = dao.findAll(pageable, filters);
 		Assert.assertEquals(page.getContent().size(), 2);
 		Assert.assertEquals(page.getTotalPages(), 4);
@@ -198,7 +198,7 @@ public class TestJpaSupportRepository {
 		Assert.assertEquals(user.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0002");
 		
 		List<PropertyFilter> filters = new ArrayList<PropertyFilter>();
-		filters = PropertyFilterBuilder.build(new String[]{"EQS_loginName"}, new String[]{"admin"});
+		filters = PropertyFilters.build(new String[]{"EQS_loginName"}, new String[]{"admin"});
 		
 		user = dao.findOne(filters);
 		Assert.assertEquals(user.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0002");
