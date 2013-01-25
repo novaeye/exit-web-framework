@@ -59,4 +59,9 @@ public class TestGroupManager extends ManagerTestCaseSupport{
 		assertEquals(afterRow, beforeRow + 1);
 	}
 	
+	@Test
+	public void testGetUserGroupsByUserId() {
+		List<Group> groups = accountManager.getUserGroupsByUserId("SJDK3849CKMS3849DJCK2039ZMSK0001");
+		assertEquals(groups.size(),4);
+	}
 }

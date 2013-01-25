@@ -174,7 +174,7 @@ public class TestHibernateSupportDao {
 		roleList = dao.findByPropertyFilters(filters,"name", Role.class);
 		Assert.assertEquals(roleList.size(), 3);
 		
-		userList = dao.findByNamedQueryUseJpaStyle("QueryUserResourceJpa", "admin");
+		userList = dao.findByNamedQuery("QueryUserResourceJpa", "admin");
 		Assert.assertEquals(userList.size(), 1);
 		
 		userList = dao.findByNamedQuery("QueryUserResource", "admin");
@@ -183,7 +183,7 @@ public class TestHibernateSupportDao {
 		userList = dao.findByQuery("from User u where u.loginName=?", "admin");
 		Assert.assertEquals(userList.size(), 1);
 		
-		userList = dao.findByQueryUseJpaStyle("from User u where u.loginName=?1", "admin");
+		userList = dao.findByQuery("from User u where u.loginName=?1", "admin");
 		Assert.assertEquals(userList.size(), 1);
 		
 		Map<String, Object> values = new HashMap<String, Object>();
@@ -258,7 +258,7 @@ public class TestHibernateSupportDao {
 		role = dao.findUniqueByPropertyFilters(filters, Role.class);
 		Assert.assertEquals(role.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0010");
 		
-		user = dao.findUniqueByNamedQueryUseJapStyle("QueryUserResourceJpa", "admin");
+		user = dao.findUniqueByNamedQuery("QueryUserResourceJpa", "admin");
 		Assert.assertEquals(user.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0002");
 		
 		user = dao.findUniqueByNamedQuery("QueryUserResource", "admin");
@@ -267,7 +267,7 @@ public class TestHibernateSupportDao {
 		user = dao.findUniqueByQuery("from User u where u.loginName=?", "admin");
 		Assert.assertEquals(user.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0002");
 		
-		user = dao.findUniqueByQueryUseJpaStyle("from User u where u.loginName=?1", "admin");
+		user = dao.findUniqueByQuery("from User u where u.loginName=?1", "admin");
 		Assert.assertEquals(user.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0002");
 		
 		Map<String, Object> values = new HashMap<String, Object>();
@@ -358,7 +358,7 @@ public class TestHibernateSupportDao {
 		Assert.assertEquals(user.getTotalPages(), 1);
 		Assert.assertEquals(user.getTotalItems(), 1);
 		
-		user = dao.findPageByNamedQueryUseJpaStyle(request, "QueryUserResourceJpa", "vincent");
+		user = dao.findPageByNamedQuery(request, "QueryUserResourceJpa", "vincent");
 		Assert.assertEquals(user.getResult().size(), 1);
 		Assert.assertEquals(user.getTotalPages(), 1);
 		Assert.assertEquals(user.getTotalItems(), 1);

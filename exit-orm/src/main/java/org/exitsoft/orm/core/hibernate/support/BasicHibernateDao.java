@@ -34,6 +34,7 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.internal.AbstractQueryImpl;
 import org.hibernate.internal.CriteriaImpl;
 import org.hibernate.jdbc.Work;
 import org.hibernate.metadata.ClassMetadata;
@@ -388,22 +389,6 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 	
 	/**
-	 * 通过HQL查询全部.参数形式为jpa风格形式:
-	 * <pre>
-	 * //使用是jpa参数风格(问号后面带顺序值"?1")
-	 * from object o where o.property = ?1 and o.property = ?2
-	 * </pre>
-	 * 
-	 * @param queryString hql语句
-	 * @param values 可变长度的hql值
-	 * 
-	 * @return List
-	 */
-	public <X> List<X> findByQueryUseJpaStyle(String queryString,Object... values) {
-		return createQueryUseJpaStyle(queryString, values).list();
-	}
-	
-	/**
 	 * 通过namedQuery查询全部。参数形式为命名参数形式
 	 * <pre>
 	 * from Object o where o.property1 = :property1 and o.property2 = :proerty2
@@ -432,22 +417,6 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 */
 	public <X> List<X> findByNamedQuery(String namedQuery,Object... values) {
 		return createQueryByNamedQuery(namedQuery, values).list();
-	}
-	
-	/**
-	 * 通过namedQuery查询全部,参数形式为jpa风格形式:
-	 * <pre>
-	 * //使用是jpa参数风格(问号后面带顺序值"?1")
-	 * from object o where o.property = ?1 and o.property = ?2
-	 * </pre>
-	 * 
-	 * @param namedQuery namedQuery
-	 * @param values 值
-	 * 
-	 * @return List
-	 */
-	public <X> List<X> findByNamedQueryUseJpaStyle(String namedQuery,Object... values) {
-		return createQueryByNamedQueryUseJpaStyle(namedQuery, values).list();
 	}
 	
 	/**
@@ -480,23 +449,6 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	public <X> X findUniqueByQuery(String queryString,Object... values){
 		return (X)createQuery(queryString, values).uniqueResult();
 	}
-	
-	/**
-	 * 通过hql查询单个orm实体,参数形式为jpa风格形式:
-	 * 
-	 * <pre>
-	 * //使用是jpa参数风格(问号后面带顺序值"?1")
-	 * from object o where o.property = ?1 and o.property = ?2
-	 * </pre>
-	 * 
-	 * @param queryString hql
-	 * @param values 以属性名的hql值
-	 * 
-	 * @return Object
-	 */
-	public <X> X findUniqueByQueryUseJpaStyle(String queryString,Object... values){
-		return (X)createQueryUseJpaStyle(queryString, values).uniqueResult();
-	}
 
 	/**
 	 * 通过QueryName查询单个orm实体,参数形式为命名参数形式
@@ -527,23 +479,6 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 */
 	public <X> X findUniqueByNamedQuery(String namedQuery,Object... values) {
 		return (X) createQueryByNamedQuery(namedQuery, values).uniqueResult();
-	}
-	
-	/**
-	 * 通过QueryName查询单个orm实体,该QueryName参数形式为jpa风格形式:
-	 * 
-	 * <pre>
-	 * //该QueryName使用是jpa参数风格(问号后面带顺序值"?1")
-	 * rom object o where o.property = ?1 and o.property = ?2
-	 * </pre>
-	 * 
-	 * @param queryName queryName
-	 * @param values 值
-	 * 
-	 * @return Object
-	 */
-	public <X> X findUniqueByNamedQueryUseJapStyle(String namedQuery,Object... values) {
-		return (X) createQueryByNamedQueryUseJpaStyle(namedQuery, values).uniqueResult();
 	}
 	
 	/**
@@ -722,25 +657,6 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 	
 	/**
-	 * 根据hql创建Hibernate Query对象，参数形式为jpa风格形式:
-	 * <pre>
-	 * //使用是jpa参数风格(问号后面带顺序值"?1")
-	 * from object o where o.property = ?1 and o.property = ?2
-	 * </pre>
-	 * 
-	 * @param namedQuery namedQuery
-	 * @param values 值
-	 * 
-	 * @return {@link Query}
-	 */
-	protected Query createQueryUseJpaStyle(String queryString,Object... values) {
-		Assert.hasText(queryString, "queryString不能为空");
-		Query query = getSession().createQuery(queryString);
-		setQueryValuesByJpaStley(query, values);
-		return query;
-	}
-	
-	/**
 	 * 通过namedQuery 创建Query,参数形式为命名参数形式:
 	 * <pre>
 	 * //使用的是命名参数风格
@@ -776,24 +692,6 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 		Assert.hasText(namedQuery, "namedQuery不能为空");
 		Query query = getSession().getNamedQuery(namedQuery);
 		setQueryValues(query, values);
-		return query;
-	}
-	
-	/**
-	 * 根据namedQuery创建Hibernate Query对象，参数形式为jpa风格形式:
-	 * <pre>
-	 * //使用是jpa参数风格(问号后面带顺序值"?1")
-	 * from object o where o.property = ?1 and o.property = ?2
-	 * </pre>
-	 * 
-	 * @param namedQuery namedQuery
-	 * @param values 值
-	 * 
-	 * @return {@link Query}
-	 */
-	protected Query createQueryByNamedQueryUseJpaStyle(String namedQuery,Object... values) {
-		Query query = getSession().getNamedQuery(namedQuery);
-		setQueryValuesByJpaStley(query, values);
 		return query;
 	}
 	
@@ -839,25 +737,6 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 	
 	/**
-	 * 根据查询SQL与参数列表创建SQLQuery对象，参数形式为jpa风格形式:
-	 * <pre>
-	 * //使用是jpa参数风格(问号后面带顺序值"?1")
-	 * from object o where o.property = ?1 and o.property = ?2
-	 * </pre>
-	 * 
-	 * @param values
-	 *            数量可变的参数,按顺序绑定.
-	 *            
-	 * @return {@link SQLQuery}
-	 */
-	protected SQLQuery createSQLQueryUseJpaStyle( String queryString,  Object... values) {
-		Assert.hasText(queryString, "queryString不能为空");
-		SQLQuery query = getSession().createSQLQuery(queryString);
-		setQueryValuesByJpaStley(query, values);
-		return query.addEntity(entityClass);
-	}
-	
-	/**
 	 * 通过orm实体属性名称和排序值向Criteria设置排序方式
 	 * 
 	 * @param criteria Criteria设置排序方式,
@@ -873,24 +752,6 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 	
 	/**
-	 * 设置参数值到query的hql中,该参数是属于jpa风格的参数
-	 *
-	 * @param query Hibernate Query
-	 * @param values 参数值可变数组
-	 */
-	protected void setQueryValuesByJpaStley(Query query ,Object... values) {
-		
-		if (ArrayUtils.isEmpty(values)) {
-			return ;
-		}
-		
-		for (Integer i = 1; i <= values.length; i++) {
-			query.setParameter(i.toString(), values[i - 1]);
-		}
-	
-	}
-	
-	/**
 	 * 设置参数值到query的hql中,该参数是属于jdbc风格的参数
 	 *
 	 * @param query Hibernate Query
@@ -900,9 +761,19 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 		if (ArrayUtils.isEmpty(values)) {
 			return ;
 		}
+		AbstractQueryImpl impl = (AbstractQueryImpl) query;
+		String[] params = impl.getNamedParameters();
 		
-		for (Integer i = 0; i < values.length; i++) {
-			query.setParameter(i, values[i]);
+		int methodParameterPosition = 0;
+		
+		if (impl.getNamedParameters().length > 0) {
+			for (String p : params) {
+				query.setParameter(p, values[methodParameterPosition++]);
+			}
+		} else {
+			for (Integer i = 0; i < values.length; i++) {
+				query.setParameter(i, values[i]);
+			}
 		}
 	}
 	
@@ -1032,30 +903,6 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 
 		try {
 			return (Long)createQuery(countHql, values).uniqueResult();
-		} catch (Exception e) {
-			throw new RuntimeException("hql不能自动计算总数:"+ countHql, e);
-		}
-	}
-	
-	/**
-	 * 执行count查询获得本次Hql查询所能获得的对象总数.(使用jpa风格参数)
-	 * 
-	 * <pre>
-	 * 	from object o where o.property = ?1 and o.property = ?2
-	 * </pre>
-	 * 
-	 * 本函数只能自动处理简单的hql语句,复杂的hql查询请另行编写count语句查询.
-	 * 
-	 * @param queryString HQL
-	 * @param values 值
-	 * 
-	 * @return long
-	 */
-	protected Long countHqlResultUseJpaStyle( String queryString,  Object... values) {
-		String countHql = prepareCountHql(queryString);
-
-		try {
-			return (Long)createQueryUseJpaStyle(countHql, values).uniqueResult();
 		} catch (Exception e) {
 			throw new RuntimeException("hql不能自动计算总数:"+ countHql, e);
 		}
@@ -1353,21 +1200,6 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	public int executeUpdate(String hql,  Object... values) {
 		return createQuery(hql, values).executeUpdate();
 	}
-	
-	/**
-	 * 执行HQL进行批量修改/删除操作.成功后更新记录数,参数形式为jpa参数形式:
-	 * <pre>
-	 * //使用的是jpa参数风格(问号后面带有一个顺序值"?1")
-	 * update object o set o.property=?1 where o.condition = ?2
-	 * </pre>
-	 * 
-	 * @param values 参数值
-	 *            
-	 * @return int
-	 */
-	public int executeUpdateUseJpaStyle(String hql, Object...values) {
-		return createQueryUseJpaStyle(hql, values).executeUpdate();
-	}
 
 	/**
 	 * 通过namedQuery执行HQL进行批量修改/删除操作.成功后返回更新记录数,参数形式为命名参数形式:
@@ -1397,20 +1229,5 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 */
 	public int executeUpdateByNamedQuery(String namedQuery,Object... values) {
 		return createQueryByNamedQuery(namedQuery, values).executeUpdate();
-	}
-	
-	/**
-	 * 通过namedQuery执行HQL进行批量修改/删除操作.成功后返回更新记录数,参数形式为jpa参数形式:
-	 * <pre>
-	 * //使用的是jpa参数风格(问号后面带有一个顺序值"?1")
-	 * update object o set o.property=?1 where o.condition = ?2
-	 * </pre>
-	 * 
-	 * @param values 参数值
-	 *            
-	 * @return int
-	 */
-	public int executeUpdateByNamedQueryUseJapStyle(String namedQuery,Object... values) {
-		return createQueryByNamedQueryUseJpaStyle(namedQuery, values).executeUpdate();
 	}
 }

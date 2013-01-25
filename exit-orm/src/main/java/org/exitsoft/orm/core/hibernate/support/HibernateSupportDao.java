@@ -37,15 +37,15 @@ import org.springframework.util.Assert;
  */
 @SuppressWarnings({"rawtypes","unchecked"})
 public class HibernateSupportDao<T,PK extends Serializable> extends BasicHibernateDao<T, PK>{
-	
+
 	public HibernateSupportDao(){
-		
+
 	}
-	
+
 	public HibernateSupportDao(Class entityClass){
 		super(entityClass);
 	}
-	
+
 	/**
 	 * 执行count查询获得本次Criteria查询所能获得的对象总数.
 	 * 
@@ -81,7 +81,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		if (transformer != null) {
 			c.setResultTransformer(transformer);
 		}
-		
+
 		try {
 			ReflectionUtils.setFieldValue(impl, "orderEntries", orderEntries);
 		} catch (Exception e) {
@@ -90,7 +90,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 
 		return totalCount;
 	}
-	
+
 	/**
 	 * 通过表达式和对比值创建Criteria,要求表达式与值必须相等
 	 * <pre>
@@ -107,7 +107,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	protected Criteria createCriteria(String[] expressions,String[] matchValues) {
 		return createCriteria(expressions, matchValues, StringUtils.EMPTY);
 	}
-	
+
 	/**
 	 * 通过表达式和对比值创建Criteria,要求表达式与值必须相等
 	 * <pre>
@@ -125,7 +125,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	protected Criteria createCriteria(String[] expressions,String[] matchValues,String orderBy) {
 		return createCriteria(expressions, matchValues, orderBy,this.entityClass);
 	}
-	
+
 	/**
 	 * 通过表达式和对比值创建Criteria,要求表达式与值必须相等
 	 * <pre>
@@ -143,7 +143,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	protected Criteria createCriteria(String[] expressions,String[] matchValues,Class<?> persistentClass) {
 		return createCriteria(expressions,matchValues,StringUtils.EMPTY,persistentClass);
 	}
-	
+
 	/**
 	 * 通过表达式和对比值创建Criteria,要求表达式与值必须相等
 	 * <pre>
@@ -163,7 +163,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		List<PropertyFilter> filters = PropertyFilterBuilder.build(expressions, matchValues);
 		return createCriteria(filters,orderBy,persistentClass);
 	}
-	
+
 	/**
 	 * 根据{@link PropertyFilter}创建Criteria
 	 * 
@@ -174,7 +174,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	protected Criteria createCriteria(List<PropertyFilter> filters) {
 		return createCriteria(filters,StringUtils.EMPTY);
 	}
-	
+
 	/**
 	 * 根据{@link PropertyFilter}创建Criteria
 	 * 
@@ -186,7 +186,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	protected Criteria createCriteria(List<PropertyFilter> filters,Class<?> persistentClass) {
 		return createCriteria(filters,StringUtils.EMPTY,persistentClass);
 	}
-	
+
 	/**
 	 * 根据{@link PropertyFilter}创建Criteria
 	 * 
@@ -198,7 +198,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	protected Criteria createCriteria(List<PropertyFilter> filters,String orderBy) {
 		return createCriteria(filters,orderBy, this.entityClass);
 	}
-	
+
 	/**
 	 * 根据{@link PropertyFilter}创建Criteria
 	 * 
@@ -209,13 +209,13 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * @return {@link Criteria}
 	 */
 	protected Criteria createCriteria(List<PropertyFilter> filters,String orderBy,Class<?> persistentClass) {
-		
+
 		if(persistentClass == null) {
 			persistentClass = this.entityClass;
 		}
-		
+
 		Criteria criteria = createCriteria(persistentClass,orderBy);
-		
+
 		if (CollectionUtils.isEmpty(filters)) {
 			return criteria;
 		}
@@ -224,7 +224,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		}
 		return criteria;
 	}
-	
+
 	/**
 	 * 通过表达式和对比值创建Criterion
 	 * <pre>
@@ -242,7 +242,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		PropertyFilter filter = PropertyFilterBuilder.build(expression, matchValue);
 		return createCriterion(filter);
 	}
-	
+
 	/**
 	 * 通过{@link PropertyFilter} 创建 Criterion
 	 * 
@@ -256,7 +256,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		}
 		return HibernateRestrictionBuilder.getRestriction(filter);
 	}
-	
+
 	/**
 	 * 根据detachedCriteria查询全部
 	 * 
@@ -278,7 +278,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public List<T> findByPropertyFilters(List<PropertyFilter> filters) {
 		return findByPropertyFilters(filters,this.entityClass);
 	}
-	
+
 	/**
 	 * 根据{@link PropertyFilter} 查询全部
 	 * 
@@ -290,7 +290,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public List<T> findByPropertyFilters(List<PropertyFilter> filters,String orderBy) {
 		return findByPropertyFilters(filters,orderBy,this.entityClass);
 	}
-	
+
 	/**
 	 * 根据{@link PropertyFilter} 查询全部
 	 * 
@@ -302,7 +302,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public <X> List<X> findByPropertyFilters(List<PropertyFilter> filters,Class<?> persistentClass) {
 		return findByPropertyFilters(filters,StringUtils.EMPTY,persistentClass);
 	}
-	
+
 	/**
 	 * 根据{@link PropertyFilter} 查询全部
 	 * 
@@ -315,7 +315,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public <X> List<X> findByPropertyFilters(List<PropertyFilter> filters,String orderBy,Class<?> persistentClass) {
 		return createCriteria(filters, orderBy,persistentClass).list();
 	}
-	
+
 	/**
 	 * 通过表达式和对比值查询全部
 	 * <pre>
@@ -332,7 +332,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public List<T> findByExpressions(String[] expressions,String[] matchValues) {
 		return findByExpressions(expressions,matchValues,this.entityClass);
 	}
-	
+
 	/**
 	 * 通过表达式和对比值查询全部
 	 * <pre>
@@ -350,7 +350,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public List<T> findByExpressions(String[] expressions,String[] matchValues,String orderBy) {
 		return findByExpressions(expressions,matchValues,orderBy,this.entityClass);
 	}
-	
+
 	/**
 	 * 通过表达式和对比值查询全部
 	 * <pre>
@@ -368,7 +368,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public <X> List<X> findByExpressions(String[] expressions,String[] matchValues,Class<?> persistentClass) {
 		return findByExpressions(expressions,matchValues,StringUtils.EMPTY,persistentClass);
 	}
-	
+
 	/**
 	 * 通过表达式和对比值查询全部
 	 * <pre>
@@ -387,7 +387,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public <X> List<X> findByExpressions(String[] expressions,String[] matchValues,String orderBy,Class<?> persistentClass) {
 		return createCriteria(expressions, matchValues, orderBy, persistentClass).list();
 	}
-	
+
 	/**
 	 * 通过表达式和对比值查询全部
 	 * <pre>
@@ -405,7 +405,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public List<T> findByExpression(String expression,String matchValue) {
 		return findByExpression(expression,matchValue,this.entityClass);
 	}
-	
+
 	/**
 	 * 通过表达式和对比值查询全部
 	 * <pre>
@@ -422,7 +422,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public List<T> findByExpression(String expression,String matchValue,String orderBy) {
 		return findByExpression(expression,matchValue,orderBy,this.entityClass);
 	}
-	
+
 	/**
 	 * 通过表达式和对比值查询全部
 	 * 
@@ -440,7 +440,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public <X> List<X> findByExpression(String expression,String matchValue,Class<?> persistentClass) {
 		return findByExpression(expression,matchValue,StringUtils.EMPTY,persistentClass);
 	}
-	
+
 	/**
 	 * 通过表达式和对比值查询全部
 	 * <pre>
@@ -458,7 +458,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public <X> List<X> findByExpression(String expression,String matchValue,String orderBy,Class<?> persistentClass) {
 		return createCriteria(persistentClass, orderBy, createCriterion(expression, matchValue)).list();
 	}
-	
+
 
 	/**
 	 * 根据Criterion查询全部
@@ -482,7 +482,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public List<T> findByCriterion(String orderBy,Criterion...criterions) {
 		return findByCriterion(this.entityClass,orderBy,criterions);
 	}
-	
+
 	/**
 	 * 根据Criterion查询全部
 	 * 
@@ -494,7 +494,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public <X> List<X> findByCriterion(Class<?> persistentClass,Criterion...criterions) {
 		return findByCriterion(persistentClass,StringUtils.EMPTY,criterions);
 	}
-	
+
 	/**
 	 * 根据Criterion查询全部
 	 * 
@@ -507,7 +507,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public <X> List<X> findByCriterion(Class<?> persistentClass,String orderBy,Criterion...criterions) {
 		return createCriteria(persistentClass, orderBy, criterions).list();
 	}
-	
+
 	/**
 	 * 通过orm实体属性名称查询全部
 	 * 
@@ -519,7 +519,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public List<T> findByProperty(String propertyName,Object value) {
 		return findByProperty(propertyName, value, RestrictionNames.EQ);
 	}
-	
+
 	/**
 	 * 通过orm实体属性名称查询全部
 	 * 
@@ -532,7 +532,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public List<T> findByProperty(String propertyName,Object value,String restrictionName) {
 		return findByPropertyWithOrderBy(propertyName, value, StringUtils.EMPTY,restrictionName);
 	}
-	
+
 	/**
 	 * 通过orm实体属性名称查询全部
 	 * 
@@ -545,7 +545,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public List<T> findByPropertyWithOrderBy(String propertyName,Object value,String orderBy) {
 		return findByPropertyWithOrderBy(propertyName, value, orderBy, RestrictionNames.EQ);
 	}
-	
+
 	/**
 	 * 通过orm实体属性名称查询全部
 	 * 
@@ -559,7 +559,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public List<T> findByPropertyWithOrderBy(String propertyName,Object value,String orderBy,String restrictionName) {
 		return findByProperty(propertyName, value, restrictionName, this.entityClass,orderBy);
 	}
-	
+
 	/**
 	 * 通过orm实体属性名称查询全部
 	 * 
@@ -572,7 +572,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public <X> List<X> findByProperty(String propertyName,Object value,Class<?> persistentClass) {
 		return findByProperty(propertyName, value, RestrictionNames.EQ, persistentClass);
 	}
-	
+
 	/**
 	 * 通过orm实体属性名称查询全部
 	 * 
@@ -586,7 +586,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public <X> List<X> findByPropertyWithOrderBy(String propertyName,Object value,Class<?> persistentClass,String orderBy) {
 		return findByProperty(propertyName, value, RestrictionNames.EQ, persistentClass,orderBy);
 	}
-	
+
 	/**
 	 * 通过orm实体属性名称查询全部
 	 * 
@@ -600,7 +600,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public <X> List<X> findByProperty(String propertyName,Object value,String restrictionName,Class<?> persistentClass) {
 		return findByProperty(propertyName, value, restrictionName, persistentClass, StringUtils.EMPTY);
 	}
-	
+
 	/**
 	 * 通过orm实体属性名称查询全部
 	 * 
@@ -616,7 +616,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		Criterion criterion = HibernateRestrictionBuilder.getRestriction(propertyName, value, restrictionName);
 		return createCriteria(persistentClass, orderBy, criterion).list();
 	}
-	
+
 	/**
 	 * 通过detachedCriteria查询单个orm实体
 	 * 
@@ -627,7 +627,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public <X> X findUniqueByDetachedCriteria(DetachedCriteria detachedCriteria) {
 		return (X) createCriteria(detachedCriteria).uniqueResult();
 	}
-	
+
 	/**
 	 * 通过{@link PropertyFilter} 查询单个orm实体
 	 * 
@@ -639,7 +639,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public T findUniqueByPropertyFilters(List<PropertyFilter> filters) {
 		return (T)findUniqueByPropertyFilters(filters, this.entityClass);
 	}
-	
+
 	/**
 	 * 通过{@link PropertyFilter} 查询单个orm实体
 	 * 
@@ -668,7 +668,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public T findUniqueByExpression(String expression,String matchValue) {
 		return (T)findUniqueByExpression(expression, matchValue,this.entityClass);
 	}
-	
+
 	/**
 	 * 通过表达式和对比值查询单个orm实体
 	 * <pre>
@@ -685,7 +685,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public T findUniqueByExpressions(String[] expressions,String[] matchValues) {
 		return (T)findUniqueByExpressions(expressions,matchValues,this.entityClass);
 	}
-	
+
 	/**
 	 * 通过criterion数组查询单个orm实体
 	 * 
@@ -696,7 +696,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public T findUniqueByCriterions(Criterion[] criterions){
 		return (T)findUniqueByCriterions(criterions,this.entityClass);
 	}
-	
+
 	/**
 	 * 通过criterion数组查询单个orm实体
 	 * 
@@ -725,7 +725,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		Criterion criterion = createCriterion(expression, matchValue);
 		return (X)findUniqueByCriterions(new Criterion[]{criterion}, persistentClass);
 	}
-	
+
 	/**
 	 * 通过表达式和对比值查询单个orm实体
 	 * <pre>
@@ -755,7 +755,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public T findUniqueByProperty(String propertyName,Object value) {
 		return (T)findUniqueByProperty(propertyName,value,RestrictionNames.EQ);
 	}
-	
+
 	/**
 	 * 通过orm实体的属性名称查询单个orm实体
 	 * 
@@ -768,7 +768,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public T findUniqueByProperty(String propertyName,Object value,String restrictionName) {
 		return (T)findUniqueByProperty(propertyName,value,restrictionName,this.entityClass);
 	}
-	
+
 	/**
 	 * 
 	 * 通过orm实体的属性名称查询单个orm实体
@@ -782,7 +782,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public <X> X findUniqueByProperty(String propertyName,Object value,Class<?> persistentClass) {
 		return (X)findUniqueByProperty(propertyName,value,RestrictionNames.EQ, persistentClass);
 	}
-	
+
 	/**
 	 * 通过orm实体的属性名称查询单个orm实体
 	 * 
@@ -797,7 +797,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		Criterion criterion = HibernateRestrictionBuilder.getRestriction(propertyName, value, restrictionName);
 		return (X) createCriteria(persistentClass, criterion).uniqueResult();
 	}
-	
+
 	/**
 	 * 通过DetachedCriteria和分页请求参数获取分页对象
 	 * 
@@ -810,7 +810,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		Criteria criteria = createCriteria(detachedCriteria);
 		return findPage(request,criteria);
 	}
-	
+
 	/**
 	 * 通过Criterion和分页请求参数获取分页对象
 	 * 
@@ -822,7 +822,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public Page<T> findPage(PageRequest request, Criterion... criterions) {
 		return findPage(request,this.entityClass,criterions);
 	}
-	
+
 	/**
 	 * 通过Criterion和分页请求参数获取分页对象
 	 * 
@@ -837,7 +837,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		Criteria c = createCriteria(persistentClass,criterions);
 		return findPage(request,c);
 	}
-	
+
 	/**
 	 * 通过分页参数，和属性过滤器查询分页
 	 * 
@@ -849,7 +849,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public Page<T> findPage(PageRequest request,List<PropertyFilter> filters) {
 		return findPage(request,filters,this.entityClass);
 	}
-	
+
 	/**
 	 * 通过{@link PropertyFilter}和分页请求参数获取分页对象
 	 * 
@@ -864,7 +864,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		Criteria c = createCriteria(filters, persistentClass);
 		return findPage(request,c);
 	}
-	
+
 	/**
 	 * 通过分页请求参数和表达式与对比值获取分页对象
 	 * 
@@ -880,10 +880,10 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * @return {@link Page}
 	 */
 	public Page<T> findPage(PageRequest request,String expression,String matchValue) {
-		
+
 		return findPage(request, expression,matchValue,this.entityClass);
 	}
-	
+
 	/**
 	 * 通过分页请求参数和表达式与对比值获取分页对象
 	 * <pre>
@@ -903,7 +903,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		Criteria criteria = createCriteria(persistentClass,criterion);
 		return findPage(request, criteria);
 	}
-	
+
 	/**
 	 * 通过表达式和对比值获取分页对象
 	 * <pre>
@@ -920,7 +920,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public Page<T> findPage(PageRequest request,String[] expressions,String[] matchValues) {
 		return findPage(request, expressions,matchValues,this.entityClass);
 	}
-	
+
 	/**
 	 * 通过表达式和对比值获取分页对象
 	 * <pre>
@@ -939,7 +939,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		Criteria criteria = createCriteria(expressions, matchValues, persistentClass);
 		return findPage(request, criteria);
 	}
-	
+
 	/**
 	 * 根据分页参数与Criteria获取分页对象
 	 * 
@@ -951,24 +951,24 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public <X> Page<X> findPage(PageRequest request, Criteria c) {
 
 		Page<X> page = new Page<X>(request);
-		
+
 		if (request == null) {
 			return page;
 		}
-		
+
 		if (request.isCountTotal()) {
 			long totalCount = countCriteriaResult(c);
 			page.setTotalItems(totalCount);
 		}
-		
+
 		setPageRequestToCriteria(c, request);
-		
+
 		List result = c.list();
 		page.setResult(result); 
-		
+
 		return page;
 	}
-	
+
 	/**
 	 * 根据分页请求参数与Query获取分页请求对象
 	 * 
@@ -979,25 +979,25 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 */
 	public <X> Page<X> findPage(PageRequest request, Query query) {
 		Page<X> page = new Page<X>(request);
-		
+
 		if (request == null) {
 			return page;
 		}
-		
+
 		if (request.isCountTotal()) {
 			List<Object> values = ReflectionUtils.invokeGetterMethod(query, "values");
 			long totalCount = countHqlResult(query.getQueryString(), values.toArray());
 			page.setTotalItems(totalCount);
 		}
-		
+
 		setPageRequestToQuery(query, request);
-		
+
 		List result = query.list();
 		page.setResult(result);
-		
+
 		return page;
 	}
-	
+
 	/**
 	 * 通过分页参数与HQL语句获取分页对象
 	 * 
@@ -1008,7 +1008,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * @return {@link Page}
 	 */
 	public <X> Page<X> findPage(PageRequest request,String queryString,Object... values) {
-		
+
 		Page<X> page = createQueryPage(request, queryString, values);
 		Query q = createQuery(queryString, values);
 
@@ -1018,7 +1018,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		page.setResult(result);
 		return page;
 	}
-	
+
 	/**
 	 * 根据NamedQuery获取分页对象
 	 * 
@@ -1031,25 +1031,25 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	public <X> Page<X> findPageByNamedQuery(PageRequest request, String namedQuery,Object... values) {
 		Query query = createQueryByNamedQuery(namedQuery, values);
 		Page<X> page = new Page<X>(request);
-		
+
 		if (request == null) {
 			return page;
 		}
-		
+
 		if (request.isCountTotal()) {
-			
+
 			long totalCount = countHqlResult(query.getQueryString(), values);
 			page.setTotalItems(totalCount);
 		}
-		
+
 		setPageRequestToQuery(query, request);
-		
+
 		List result = query.list();
 		page.setResult(result);
-		
+
 		return page;
 	}
-	
+
 	/**
 	 * 根据NamedQuery获取分页对象
 	 * 
@@ -1063,37 +1063,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		Query query = createQueryByNamedQuery(namedQuery, values);
 		return findPage(request,query);
 	}
-	
-	/**
-	 * 根据NamedQuery获取分页对象（使用jpa风格参数方式）
-	 * 
-	 * @param request 分页请求参数
-	 * @param namedQuery hibernate named query
-	 * @param values 值
-	 * 
-	 * @return Page
-	 */
-	public <X> Page<X> findPageByNamedQueryUseJpaStyle(PageRequest request, String namedQuery,Object... values) {
-		Query query = createQueryByNamedQueryUseJpaStyle(namedQuery, values);
-		Page<X> page = new Page<X>(request);
-		
-		if (request == null) {
-			return page;
-		}
-		
-		if (request.isCountTotal()) {
-			
-			long totalCount = countHqlResultUseJpaStyle(query.getQueryString(), values);
-			page.setTotalItems(totalCount);
-		}
-		
-		setPageRequestToQuery(query, request);
-		
-		List result = query.list();
-		page.setResult(result);
-		return page;
-	}
-	
+
 	/**
 	 * 通过分页参数与HQL语句获取分页对象
 	 * 
@@ -1104,7 +1074,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * @return {@link Page}
 	 */
 	public <X> Page<X> findPage(PageRequest request, String queryString,Map<String,Object> values) {
-		
+
 		Page<X> page = createQueryPage(request, queryString, values);
 		Query q = createQuery(queryString, values);
 
@@ -1114,7 +1084,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		page.setResult(result);
 		return page;
 	}
-	
+
 	/**
 	 * 通过分页请求参数和HQL创建分页对象
 	 * 
@@ -1127,11 +1097,11 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	protected <X> Page<X> createQueryPage(PageRequest pageRequest, String queryString, Object... values) {
 
 		Page<X> page = new Page<X>(pageRequest);
-		
+
 		if (pageRequest == null) {
 			return page;
 		}
-		
+
 		if (pageRequest.isCountTotal()) {
 			long totalCount = countHqlResult(queryString, values);
 			page.setTotalItems(totalCount);
@@ -1140,10 +1110,10 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		if (pageRequest.isOrderBySetted()) {
 			queryString = setPageRequestToHql(queryString, pageRequest);
 		}
-		
+
 		return page;
 	}
-	
+
 	/**
 	 * 在HQL的后面添加分页参数定义的orderBy, 辅助函数.
 	 */
@@ -1159,7 +1129,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 
 		return builder.toString();
 	}
-	
+
 	/**
 	 * 设置分页参数到Query对象,辅助函数.
 	 */
@@ -1168,7 +1138,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		q.setMaxResults(pageRequest.getPageSize());
 		return q;
 	}
-	
+
 	/**
 	 * 设置分页参数到Criteria对象,辅助函数.
 	 * 
@@ -1190,5 +1160,5 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		}
 		return c;
 	}
-	
+
 }

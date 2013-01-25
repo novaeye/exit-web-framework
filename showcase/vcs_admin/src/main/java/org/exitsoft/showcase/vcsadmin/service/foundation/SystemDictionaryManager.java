@@ -86,7 +86,7 @@ public class SystemDictionaryManager {
 	 */
 	@Cacheable(value=DataDictionary.FindByCateGoryCode)
 	public List<DataDictionary> getDataDictionariesByCategoryCode(SystemDictionaryCode code) {
-		return dataDictionaryDao.findByNamedQueryUseJpaStyle(DataDictionary.FindByCateGoryCode, code.getCode());
+		return dataDictionaryDao.findByNamedQuery(DataDictionary.FindByCateGoryCode, code.getCode());
 	}
 	
 	/**
@@ -99,7 +99,7 @@ public class SystemDictionaryManager {
 	 */
 	@Cacheable(value=DataDictionary.FindByCateGoryCode)
 	public List<DataDictionary> getDataDictionariesByCategoryCode(SystemDictionaryCode code,String ignoreValue) {
-		return dataDictionaryDao.findByNamedQueryUseJpaStyle(DataDictionary.FindByCategoryCodeWithIgnoreValue, code.getCode(),ignoreValue);
+		return dataDictionaryDao.findByNamedQuery(DataDictionary.FindByCategoryCodeWithIgnoreValue, code.getCode(),ignoreValue);
 	}
 	
 	//---------------------------------------字典类别管理---------------------------------------//
