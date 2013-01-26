@@ -29,7 +29,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.AbstractQueryImpl;
@@ -604,11 +603,11 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 		AbstractQueryImpl impl = (AbstractQueryImpl) query;
 		String[] params = impl.getNamedParameters();
 		
-		int methodParameterPosition = 0;
+		int methodParameterPosition = params.length - 1;
 		
 		if (impl.hasNamedParameters()) {
 			for (String p : params) {
-				query.setParameter(p, values[methodParameterPosition++]);
+				query.setParameter(p, values[methodParameterPosition--]);
 			}
 		} else {
 			for (Integer i = 0; i < values.length; i++) {
