@@ -72,10 +72,7 @@
 	</bean>
 	
 	<!--   factory-class="org.exitsoft.orm.core.spring.data.jpa.BasicRepositoryFactoryBean" -->
-	<jpa:repositories base-package="org.exitsoft.orm.test" 
-							  transaction-manager-ref="jpaTransactionManager" 
-							  factory-class="org.exitsoft.orm.core.spring.data.jpa.factory.BasicRepositoryFactoryBean"
-							  entity-manager-factory-ref="entityManagerFactory"  />
+	<jpa:repositories base-package="org.exitsoft.orm.test"  transaction-manager-ref="jpaTransactionManager" />
 	
 	<!-- 事务管理器配置,单数据源事务 -->
 	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">

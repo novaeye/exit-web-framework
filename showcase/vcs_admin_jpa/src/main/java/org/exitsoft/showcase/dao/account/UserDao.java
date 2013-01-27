@@ -1,7 +1,8 @@
 package org.exitsoft.showcase.dao.account;
 
-import org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository;
 import org.exitsoft.showcase.entity.account.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
@@ -10,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
  * @author vincent
  *
  */
-public interface UserDao extends BasicJpaRepository<User, String>{
+public interface UserDao extends JpaRepository<User, String>,JpaSpecificationExecutor<User>{
 
 	/**
 	 * 通过用户id更新用户密码

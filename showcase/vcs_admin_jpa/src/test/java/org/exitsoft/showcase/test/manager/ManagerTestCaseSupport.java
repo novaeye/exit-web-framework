@@ -5,7 +5,7 @@ import java.util.HashMap;
 import javax.sql.DataSource;
 
 import org.exitsoft.common.unit.Fixtures;
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,8 +28,6 @@ public class ManagerTestCaseSupport {
 	protected DataSource dataSource;
 	
 	protected NamedParameterJdbcTemplate jdbcTemplate;
-	
-	private static DataSource dataSourceHandler;
 	
 	@Autowired
 	public void setDataSource(DataSource dataSource) throws Exception {
@@ -56,10 +54,7 @@ public class ManagerTestCaseSupport {
 	 */
 	@Before
 	public void install() throws Exception {
-		if (dataSourceHandler == null) {
-			Fixtures.loadData(dataSource, "/sample-data.xml");
-			dataSourceHandler = dataSource;
-		}
+		Fixtures.loadData(dataSource, "/sample-data.xml");
 
 	}
 	
@@ -67,10 +62,9 @@ public class ManagerTestCaseSupport {
 	 * 整个类的单元测试方法用例测试完成后，将dataSource的模拟数据清楚，让reloadSampleData方法在重新加载模拟数据，供第二个单元测试类使用
 	 * @throws Exception
 	 */
-	@AfterClass
-	public static void uninstall() throws Exception {
-		Fixtures.deleteData(dataSourceHandler, "/sample-data.xml");
-		dataSourceHandler = null;
+	@After
+	public void uninstall() throws Exception {
+		Fixtures.deleteData(dataSource, "/sample-data.xml");
 	}
 
 	@Test

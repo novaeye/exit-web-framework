@@ -2,8 +2,9 @@ package org.exitsoft.showcase.dao.account;
 
 import java.util.List;
 
-import org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository;
 import org.exitsoft.showcase.entity.account.Group;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 /**
@@ -12,7 +13,7 @@ import org.springframework.data.jpa.repository.Query;
  * @author vincent
  *
  */
-public interface GroupDao extends BasicJpaRepository<Group, String>{
+public interface GroupDao extends JpaRepository<Group, String>,JpaSpecificationExecutor<Group>{
 
 	/**
 	 * 通过用户id获取所有资源

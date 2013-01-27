@@ -18,8 +18,8 @@ import org.springframework.data.jpa.domain.Specification;
  * @author vincent
  *
  */
-@SuppressWarnings({"rawtypes","unchecked"})
-public class Specifications{
+@SuppressWarnings({ "rawtypes", "unchecked" })
+public class Specifications {
 	
 	/**
 	 * 通过属性过滤器集合，创建Specification
@@ -28,7 +28,7 @@ public class Specifications{
 	 * 
 	 * @return {@link Specification}
 	 */
-	public static Specification getByPropertyFilter(List<PropertyFilter> filters) {
+	public static Specification get(List<PropertyFilter> filters) {
 		return new PropertyFilterSpecification(filters);
 	}
 
@@ -39,33 +39,8 @@ public class Specifications{
 	 * 
 	 * @return {@link Specification}
 	 */
-	public static Specification getByPropertyFilter(PropertyFilter filter) {
+	public static Specification get(PropertyFilter filter) {
 		return new PropertyFilterSpecification(filter);
-	}
-	
-	/**
-	 * 通过表达式，创建Specification
-	 * 
-	 * @param expression 表达式
-	 * @param matchValue 对比值
-	 * 
-	 * @return {@link Specification}
-	 */
-	public static Specification getByExpression(String expression,String matchValue) {
-		return new PropertyFilterSpecification(expression, matchValue);
-	}
-	
-
-	/**
-	 * 通过表达式数组，创建Specification
-	 * 
-	 * @param expressions 表达式
-	 * @param matchValues 对比值
-	 * 
-	 * @return {@link Specification}
-	 */
-	public static Specification getByExpression(String[] expressions,String[] matchValues) {
-		return new PropertyFilterSpecification(expressions, matchValues);
 	}
 	
 	/**
@@ -76,8 +51,8 @@ public class Specifications{
 	 * 
 	 * @return {@link Specification}
 	 */
-	public static Specification getByProperty(String propertyName,Object value) {
-		return getByProperty(propertyName, value,RestrictionNames.EQ);
+	public static Specification get(String propertyName,Object value) {
+		return get(propertyName, value,RestrictionNames.EQ);
 	}
 	
 	/**
@@ -89,7 +64,7 @@ public class Specifications{
 	 * 
 	 * @return {@link Specification}
 	 */
-	public static Specification getByProperty(String propertyName, Object value,String restrictionName) {
+	public static Specification get(String propertyName, Object value,String restrictionName) {
 		return new PropertySpecification(propertyName, value,restrictionName);
 	}
 	

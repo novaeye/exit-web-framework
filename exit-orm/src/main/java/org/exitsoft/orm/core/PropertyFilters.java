@@ -1,13 +1,11 @@
 package org.exitsoft.orm.core;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.exitsoft.common.utils.ServletUtils;
 import org.springframework.util.Assert;
@@ -19,41 +17,6 @@ import org.springframework.util.Assert;
  *
  */
 public class PropertyFilters {
-	
-	/**
-	 * 通过表达式和对比值创建属性过滤器集合,要求表达式与值必须相等
-	 * <p>
-	 * 	如：
-	 * </p>
-	 * <code>
-	 * 	PropertyFilerRestriction.build(new String[]{"EQS_propertyName1","NEI_propertyName2"},new String[]{"vincent","vincent_OR_admin"})
-	 * </code>
-	 * <p>
-	 * 	对比值长度与表达式长度必须相等
-	 * </p>
-	 * 
-	 * @param expressions 表达式
-	 * @param matchValues 对比值
-	 * 
-	 * @return List
-	 */
-	public static List<PropertyFilter> build(String[] expressions,String[] matchValues) {
-		if (ArrayUtils.isEmpty(expressions) && ArrayUtils.isEmpty(matchValues)) {
-			return Collections.emptyList();
-		}
-		
-		if (expressions.length != matchValues.length) {
-			throw new IllegalAccessError("expressions中的值与matchValues不匹配，matchValues的长度为:" + matchValues.length + "而expressions的长度为:" + expressions.length);
-		}
-		
-		List<PropertyFilter> filters = new ArrayList<PropertyFilter>();
-		
-		for (int i = 0; i < expressions.length; i++) {
-			filters.add(build(expressions[i], matchValues[i]));
-		}
-		
-		return filters;
-	}
 	
 	/**
 	 * 通过表达式和对比值创建属性过滤器

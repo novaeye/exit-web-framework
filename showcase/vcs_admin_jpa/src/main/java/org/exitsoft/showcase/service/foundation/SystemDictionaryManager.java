@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
+@SuppressWarnings("unchecked")
 public class SystemDictionaryManager {
 
 	//数据字典数据访问
@@ -74,8 +75,8 @@ public class SystemDictionaryManager {
 	 * 
 	 * @return Page
 	 */
-	public Page<DataDictionary> searchDataDictionaryPage(Pageable request,List<PropertyFilter> filters) {
-		return dataDictionaryDao.findAll(request, filters);
+	public Page<DataDictionary> searchDataDictionaryPage(Pageable pageable,List<PropertyFilter> filters) {
+		return dataDictionaryDao.findAll(Specifications.get(filters), pageable);
 	}
 	
 	/**
@@ -137,10 +138,9 @@ public class SystemDictionaryManager {
 	 * 
 	 * @return List
 	 */
-	@SuppressWarnings("unchecked")
 	public List<DictionaryCategory> getAllParentDictionaryCategories() {
 		
-		return dictionaryCategoryDao.findAll(Specifications.getByProperty("parent.id", null));
+		return dictionaryCategoryDao.findAll(Specifications.get("parent.id", null));
 	}
 	
 	/**
@@ -151,8 +151,8 @@ public class SystemDictionaryManager {
 	 * 
 	 * @return {@link Page}
 	 */
-	public Page<DictionaryCategory> searchDictionaryCategoryPage(Pageable request,List<PropertyFilter> filters) {
-		return dictionaryCategoryDao.findAll(request, filters);
+	public Page<DictionaryCategory> searchDictionaryCategoryPage(Pageable pageable,List<PropertyFilter> filters) {
+		return dictionaryCategoryDao.findAll(Specifications.get(filters), pageable);
 	}
 	
 	/**
@@ -172,7 +172,7 @@ public class SystemDictionaryManager {
 	 * @return List
 	 */
 	public List<DictionaryCategory> getAllDictionaryCategories(List<PropertyFilter> filters) {
-		return dictionaryCategoryDao.findAll(filters);
+		return dictionaryCategoryDao.findAll(Specifications.get(filters));
 	}
 
 }

@@ -9,7 +9,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.exitsoft.orm.core.PropertyFilter;
-import org.exitsoft.orm.core.PropertyFilters;
 import org.exitsoft.orm.core.spring.data.jpa.JpaRestrictionBuilder;
 import org.exitsoft.orm.core.spring.data.jpa.specification.SpecificationModel;
 import org.springframework.data.jpa.domain.Specification;
@@ -45,27 +44,6 @@ public class PropertyFilterSpecification<T> implements Specification<T> {
 	 */
 	public PropertyFilterSpecification(List<PropertyFilter> filters) {
 		this.filters.addAll(filters);
-	}
-	
-	/**
-	 * 通过表达式与值构建
-	 * 
-	 * @param expression 表达式
-	 * @param matchValue 值
-	 * 
-	 */
-	public PropertyFilterSpecification(String expression,String matchValue) {
-		this(PropertyFilters.build(expression, matchValue));
-	}
-	
-	/**
-	 * 通过表达式数组与值数组构建
-	 * 
-	 * @param expressions 表达式数组
-	 * @param matchValues 值数组
-	 */
-	public PropertyFilterSpecification(String[] expressions, String[] matchValues) {
-		this(PropertyFilters.build(expressions, matchValues));
 	}
 	
 	/*

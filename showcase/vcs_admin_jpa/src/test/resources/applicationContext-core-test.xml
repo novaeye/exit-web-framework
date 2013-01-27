@@ -78,9 +78,7 @@
 		<property name="entityManagerFactory" ref="entityManagerFactory"/>
 	</bean>
 	
-	<jpa:repositories base-package="org.exitsoft.showcase.dao"  transaction-manager-ref="transactionManager" 
-							  factory-class="org.exitsoft.orm.core.spring.data.jpa.factory.BasicRepositoryFactoryBean"
-							  entity-manager-factory-ref="entityManagerFactory"  />
+	<jpa:repositories base-package="org.exitsoft.showcase.dao"  transaction-manager-ref="transactionManager" />
 							  
 	<!-- 使用annotation定义事务 -->
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />

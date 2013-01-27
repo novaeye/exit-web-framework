@@ -76,9 +76,6 @@ public class TestDataDictionaryManager extends ManagerTestCaseSupport{
 		
 		assertEquals(afterRow, beforeRow + 1);
 		
-		assertEquals(dataDictionary.getWubiCode(), "A1B2C3D4E5F6G7H8I9J0KKYLTIA1B2C3D4E5F6G7H8I9J0K");
-		assertEquals(dataDictionary.getPinYinCode(), "A1B2C3D4E5F6G7H8I9J0KZWSRFA1B2C3D4E5F6G7H8I9J0K");
-		
 	}
 	
 }

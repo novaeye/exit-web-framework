@@ -2,8 +2,9 @@ package org.exitsoft.showcase.dao.account;
 
 import java.util.List;
 
-import org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository;
 import org.exitsoft.showcase.entity.account.Resource;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 /**
@@ -12,7 +13,7 @@ import org.springframework.data.jpa.repository.Query;
  * @author vincent
  *
  */
-public interface ResourceDao extends BasicJpaRepository<Resource, String>{
+public interface ResourceDao extends JpaRepository<Resource, String>,JpaSpecificationExecutor<Resource>{
 
 	/**
 	 * 通过用户id获取该用户下的所有资源

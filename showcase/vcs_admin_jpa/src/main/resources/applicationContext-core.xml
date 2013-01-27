@@ -31,10 +31,7 @@
 		<context:include-filter type="annotation" expression="org.aspectj.lang.annotation.Aspect" />
 	</context:component-scan>
 
-	<jpa:repositories base-package="org.exitsoft.showcase.dao" 
-							  transaction-manager-ref="transactionManager" 
-							  factory-class="org.exitsoft.orm.core.spring.data.jpa.factory.BasicRepositoryFactoryBean"
-							  entity-manager-factory-ref="entityManagerFactory"  />
+	<jpa:repositories base-package="org.exitsoft.showcase.dao" transaction-manager-ref="transactionManager" />
 							  
 	<!-- 数据源配置,使用应用内的DBCP数据库连接池 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">

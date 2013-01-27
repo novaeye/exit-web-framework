@@ -29,6 +29,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
+
 /**
  * 测试HibernateSuperDao的查询方法
  * 
@@ -112,12 +114,12 @@ public class TestHibernateSupportDao {
 		Assert.assertEquals(user.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0002");
 		
 		List<PropertyFilter> filters = new ArrayList<PropertyFilter>();
-		filters = PropertyFilters.build(new String[]{"EQS_loginName"}, new String[]{"admin"});
+		filters = Lists.newArrayList(PropertyFilters.build("EQS_loginName", "admin"));
 		
 		user = dao.findUniqueByPropertyFilter(filters);
 		Assert.assertEquals(user.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0002");
 		
-		filters = PropertyFilters.build(new String[]{"EQS_name"}, new String[]{"系统"});
+		filters = Lists.newArrayList(PropertyFilters.build("EQS_name","系统"));
 		
 		user = dao.findUniqueByNamedQuery("QueryUserResourceJpa", "admin");
 		Assert.assertEquals(user.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0002");
@@ -161,7 +163,7 @@ public class TestHibernateSupportDao {
 		Assert.assertEquals(user.getTotalPages(), 4);
 		Assert.assertEquals(user.getTotalItems(), 8);
 		
-		List<PropertyFilter> filters = PropertyFilters.build(new String[]{"EQI_state"}, new String[]{"1"});
+		List<PropertyFilter> filters = Lists.newArrayList(PropertyFilters.build("EQI_state", "1"));
 		
 		user = dao.findPage(request, filters);
 		Assert.assertEquals(user.getResult().size(), 2);
