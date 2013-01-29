@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  */
 @XmlRootElement
+@SuppressWarnings("serial")
 public class Group extends UniversallyUniqueIdentifier{
 
 	public static final String UserGroups = "userGroups";

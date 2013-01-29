@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.PROPERTY)
+@SuppressWarnings("serial")
 public class UniversallyUniqueIdentifier implements Serializable{
 	
 	protected String id;

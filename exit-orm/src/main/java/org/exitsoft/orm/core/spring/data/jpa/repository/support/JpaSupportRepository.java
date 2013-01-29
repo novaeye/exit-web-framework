@@ -13,9 +13,7 @@ import org.exitsoft.orm.core.RestrictionNames;
 import org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository;
 import org.exitsoft.orm.core.spring.data.jpa.specification.Specifications;
 import org.exitsoft.orm.enumeration.ExecuteMehtod;
-import org.exitsoft.orm.strategy.CodeStrategy;
-import org.exitsoft.orm.strategy.annotation.ConvertCode;
-import org.exitsoft.orm.strategy.annotation.ConvertProperty;
+import org.exitsoft.orm.strategy.utils.ConvertCodeUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -49,43 +47,6 @@ public class JpaSupportRepository<T, ID extends Serializable>  extends SimpleJpa
 		this.entityManager = em;
 	}
 	
-	/**
-	 * 
-	 * 将对象执行转码操作
-	 * 
-	 * @param source 要转码的对象
-	 * @param executeMehtods 在什么方法进行转码
-	 */
-	protected void convertObject(Object source,ExecuteMehtod...executeMethods) {
-		if (executeMethods == null) {
-			return ;
-		}
-		
-		ConvertCode convertCode = ReflectionUtils.getAnnotation(source.getClass(),ConvertCode.class);
-		
-		if (convertCode == null) {
-			return ;
-		}
-		
-		for (ExecuteMehtod em:executeMethods) {
-			if (convertCode.executeMehtod().equals(em)) {
-				for (ConvertProperty convertProperty : convertCode.convertPropertys()) {
-					
-					CodeStrategy strategy = ReflectionUtils.newInstance(convertProperty.strategyClass());
-					
-					for (String property :convertProperty.propertyNames()) {
-						
-						Object fromValue = ReflectionUtils.invokeGetterMethod(source, convertCode.fromProperty());
-						Object convertValue = strategy.convertCode(fromValue,property);
-						ReflectionUtils.invokeSetterMethod(source, property, convertValue);
-						
-					}
-				}
-			}
-		}
-		
-	}
-	
 	/*
 	 * (non-Javadoc)
 	 * @see org.springframework.data.jpa.repository.support.SimpleJpaRepository#save(S)
@@ -95,11 +56,11 @@ public class JpaSupportRepository<T, ID extends Serializable>  extends SimpleJpa
 	public <S extends T> S save(S entity) {
 		
 		if (entityInformation.isNew(entity)) {
-			convertObject(entity,ExecuteMehtod.Save,ExecuteMehtod.Insert);
+			ConvertCodeUtils.convertObject(entity,ExecuteMehtod.Save,ExecuteMehtod.Insert);
 			entityManager.persist(entity);
 			return entity;
 		} else {
-			convertObject(entity,ExecuteMehtod.Save,ExecuteMehtod.Update);
+			ConvertCodeUtils.convertObject(entity,ExecuteMehtod.Save,ExecuteMehtod.Update);
 			return entityManager.merge(entity);
 		}
 	}

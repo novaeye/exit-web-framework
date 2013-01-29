@@ -5,7 +5,9 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.exitsoft.common.utils.CollectionUtils;
+
 @XmlRootElement
+@SuppressWarnings("serial")
 public class User extends UniversallyUniqueIdentifier{
 	//登录名称
 	private String username = "vincent";
