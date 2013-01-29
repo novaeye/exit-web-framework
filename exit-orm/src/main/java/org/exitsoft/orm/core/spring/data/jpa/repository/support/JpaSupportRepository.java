@@ -9,6 +9,7 @@ import org.exitsoft.common.utils.ConvertUtils;
 import org.exitsoft.common.utils.ReflectionUtils;
 import org.exitsoft.orm.annotation.StateDelete;
 import org.exitsoft.orm.core.PropertyFilter;
+import org.exitsoft.orm.core.RestrictionNames;
 import org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository;
 import org.exitsoft.orm.core.spring.data.jpa.specification.Specifications;
 import org.exitsoft.orm.enumeration.ExecuteMehtod;
@@ -120,27 +121,98 @@ public class JpaSupportRepository<T, ID extends Serializable>  extends SimpleJpa
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(java.util.List)
+	 */
 	@Override
 	public List<T> findAll(List<PropertyFilter> filters) {
 		return findAll(filters,(Sort)null);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(java.util.List, org.springframework.data.domain.Sort)
+	 */
 	@Override
 	public List<T> findAll(List<PropertyFilter> filters, Sort sort) {
 		
 		return findAll(Specifications.get(filters), sort);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(org.springframework.data.domain.Pageable, java.util.List)
+	 */
 	@Override
 	public Page<T> findAll(Pageable pageable, List<PropertyFilter> filters) {
 		
 		return findAll(Specifications.get(filters),pageable);
 	}
+	
+	/* 
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(java.lang.String, java.lang.Object)
+	 */
+	@Override
+	public List<T> findAll(String propertyName, Object value) {
+		
+		return findAll(propertyName, value, (Sort)null);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(java.lang.String, java.lang.Object, org.springframework.data.domain.Sort)
+	 */
+	@Override
+	public List<T> findAll(String propertyName, Object value, Sort sort) {
+		return findAll(propertyName, value, sort, RestrictionNames.EQ);
+	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(java.lang.String, java.lang.Object, java.lang.String)
+	 */
+	@Override
+	public List<T> findAll(String propertyName, Object value,String restrictionName) {
+		return findAll(propertyName, value, (Sort)null, restrictionName);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findAll(java.lang.String, java.lang.Object, org.springframework.data.domain.Sort, java.lang.String)
+	 */
+	@Override
+	public List<T> findAll(String propertyName, Object value, Sort sort,String restrictionName) {
+		
+		return findAll(Specifications.get(propertyName, value, restrictionName),sort);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findOne(java.util.List)
+	 */
 	@Override
 	public T findOne(List<PropertyFilter> filters) {
-		
 		return findOne(Specifications.get(filters));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findOne(java.lang.String, java.lang.Object)
+	 */
+	@Override
+	public T findOne(String propertyName, Object value) {
+		return findOne(propertyName, value, RestrictionNames.EQ);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.exitsoft.orm.core.spring.data.jpa.repository.BasicJpaRepository#findOne(java.lang.String, java.lang.Object, java.lang.String)
+	 */
+	@Override
+	public T findOne(String propertyName, Object value, String restrictionName) {
+		return findOne(Specifications.get(propertyName, value, restrictionName));
 	}
 	
 	

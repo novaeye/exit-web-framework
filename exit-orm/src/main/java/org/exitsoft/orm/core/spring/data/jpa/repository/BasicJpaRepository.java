@@ -29,6 +29,50 @@ public interface BasicJpaRepository<T, ID extends Serializable> extends JpaRepos
 	public List<T> findAll(List<PropertyFilter> filters);
 	
 	/**
+	 * 通过属性名查询全部对象
+	 * 
+	 * @param propertyName 属性名
+	 * @param value 值
+	 * 
+	 * @return List
+	 */
+	public List<T> findAll(String propertyName,Object value);
+	
+	/**
+	 * 通过属性名查询全部对象
+	 * 
+	 * @param propertyName 属性名
+	 * @param value 值
+	 * @param sort 排序方法
+	 * 
+	 * @return List
+	 */
+	public List<T> findAll(String propertyName,Object value,Sort sort);
+	
+	/**
+	 * 通过属性名查询全部对象
+	 * 
+	 * @param propertyName 属性名
+	 * @param value 值
+	 * @param restrictionName 约束条件名称
+	 * 
+	 * @return List
+	 */
+	public List<T> findAll(String propertyName,Object value,String restrictionName);
+	
+	/**
+	 * 通过属性名查询全部对象
+	 * 
+	 * @param propertyName 属性名
+	 * @param value 值
+	 * @param sort 排序方法
+	 * @param restrictionName 约束条件名称
+	 * 
+	 * @return List
+	 */
+	public List<T> findAll(String propertyName,Object value,Sort sort,String restrictionName);
+	
+	/**
 	 * 通过属性过滤器查询全部对象
 	 * 
 	 * @param filters 属性过滤器集合
@@ -57,4 +101,24 @@ public interface BasicJpaRepository<T, ID extends Serializable> extends JpaRepos
 	 */
 	public T findOne(List<PropertyFilter> filters);
 	
+	/**
+	 * 通过属性名查询单个对象
+	 * 
+	 * @param propertyName 属性名
+	 * @param value 值
+	 * 
+	 * @return Object
+	 */
+	public T findOne(String propertyName,Object value);
+	
+	/**
+	 * 通过属性名查询全部对象
+	 * 
+	 * @param propertyName 属性名
+	 * @param value 值
+	 * @param restrictionName 约束条件名称
+	 * 
+	 * @return Object
+	 */
+	public T findOne(String propertyName,Object value,String restrictionName);
 }
