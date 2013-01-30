@@ -403,13 +403,14 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		c.setMaxResults(pageRequest.getPageSize());
 
 		if (pageRequest.isOrderBySetted()) {
-			List<Order> orders = new ArrayList<Order>();
 			for (Sort sort : pageRequest.getSort()) {
+				Order order = null;
 				if (sort.getDir().equals(Sort.ASC)) {
-					orders.add(Order.asc(sort.getProperty()));
+					order = Order.asc(sort.getProperty());
 				} else {
-					orders.add(Order.desc(sort.getProperty()));
+					order = Order.desc(sort.getProperty());
 				}
+				c.addOrder(order);
 			}
 		}
 		
