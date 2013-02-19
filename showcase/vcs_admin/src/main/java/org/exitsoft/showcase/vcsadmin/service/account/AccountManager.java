@@ -3,6 +3,7 @@ package org.exitsoft.showcase.vcsadmin.service.account;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.exitsoft.orm.core.Page;
@@ -238,23 +239,14 @@ public class AccountManager {
 	/**
 	 * 获取所有资源
 	 * 
-	 * @return List
-	 */
-	public List<Resource> getAllResources() {
-		return getAllResources(null);
-	}
-	
-	/**
-	 * 获取所有资源
-	 * 
-	 * @param ignoreIdValue 要忽略的id属性值,如果是多个值，使用逗号分割
+	 * @param ignoreIdValue 要忽略的id属性值
 	 * 
 	 * @return List
 	 */
-	public List<Resource> getAllResources(String ignoreIdValue) {
+	public List<Resource> getAllResources(String... ignoreIdValue) {
 		
-		if(StringUtils.isNotEmpty(ignoreIdValue)) {
-			return resourceDao.findByProperty("id", ignoreIdValue,RestrictionNames.NE);
+		if(ArrayUtils.isNotEmpty(ignoreIdValue)) {
+			return resourceDao.findByProperty("id", ignoreIdValue, RestrictionNames.NIN);
 		}
 		
 		return resourceDao.getAll();
@@ -267,8 +259,8 @@ public class AccountManager {
 	 * 
 	 * @return List
 	 */
-	public List<Resource> getUserResourcesByUserId(String userId) {
-		return resourceDao.findByNamedQuery(Resource.UserResources, userId);
+	public List<Resource> getUserResources(String userId) {
+		return resourceDao.getUserResources(userId);
 	}
 	
 	/**
@@ -337,17 +329,6 @@ public class AccountManager {
 	}
 	
 	/**
-	 * 通过组类型，获取组集合
-	 * 
-	 * @param type 组类型，参考:{@link GroupType}
-	 * 
-	 * @return List
-	 */
-	public List<Group> getGroups(GroupType type) {
-		return groupDao.findByProperty("type", type.getValue());
-	}
-	
-	/**
 	 * 保存组实体
 	 * 
 	 * @param entity 组实体
@@ -378,32 +359,21 @@ public class AccountManager {
 		
 		return groupDao.findPage(request, filters);
 	}
-
-	/**
-	 * 根据组类型获取所有组信息
-	 * 
-	 * @param groupType 组类型
-	 * 
-	 * @return List
-	 */
-	public List<Group> getAllGroup(GroupType groupType) {
-		return getAllGroup(groupType,null);
-	}
 	
 	/**
 	 * 根据组类型获取所有组信息
 	 * 
 	 * @param groupType 组类型
-	 * @param ignoreIdValue 要忽略的id属性值,如果是多个值，使用逗号分割
+	 * @param ignoreIdValue 要忽略的id属性值
 	 * 
 	 * @return List
 	 */
-	public List<Group> getAllGroup(GroupType groupType,String ignoreIdValue) {
+	public List<Group> getAllGroup(GroupType groupType,String... ignoreIdValue) {
 		
 		List<PropertyFilter> filters = new ArrayList<PropertyFilter>();
 		
-		if (StringUtils.isNotEmpty(ignoreIdValue)) {
-			filters.add(PropertyFilters.build("NES_id", ignoreIdValue));
+		if (ArrayUtils.isNotEmpty(ignoreIdValue)) {
+			filters.add(PropertyFilters.build("NES_id", StringUtils.join(ignoreIdValue,",")));
 		}
 		
 		filters.add(PropertyFilters.build("EQS_type", groupType.getValue()));
@@ -418,7 +388,7 @@ public class AccountManager {
 	 * 
 	 * @return List
 	 */
-	public List<Group> getUserGroupsByUserId(String userId) {
+	public List<Group> getUserGroups(String userId) {
 		return groupDao.findByNamedQuery(Group.UserGroups, userId);
 	}
 

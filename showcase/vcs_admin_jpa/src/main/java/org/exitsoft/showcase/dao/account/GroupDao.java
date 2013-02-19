@@ -23,6 +23,6 @@ public interface GroupDao extends JpaRepository<Group, String>,JpaSpecificationE
 	 * @return List
 	 */
 	@Query("select gl from User u left join u.groupsList gl  where u.id=?1 and gl.type= '03'")
-	List<Group> findUserGroupsByUserId(String userId);
+	List<Group> findUserGroups(String userId);
 
 }

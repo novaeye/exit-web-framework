@@ -88,9 +88,10 @@ public abstract class Fixtures {
 				InputStream input = resourceLoader.getResource(xmlPath).getInputStream();
 				IDataSet dataSet = new FlatXmlDataSetBuilder().setColumnSensing(true).build(input);
 				operation.execute(connection, dataSet);
-				connection.close();
 			} catch (IOException e) {
 				logger.warn(xmlPath + " file not found", e);
+			}finally{
+				connection.close();
 			}
 		}
 	}
@@ -102,17 +103,20 @@ public abstract class Fixtures {
 	public static void deleteAllTable(DataSource h2DataSource, String... excludeTables) throws SQLException {
 
 		List<String> tableNames = new ArrayList<String>();
+		
 		try {
 			ResultSet rs = h2DataSource.getConnection().getMetaData()
-					.getTables(null, null, null, new String[] { "TABLE" });
+				.getTables(null, null, null, new String[] { "TABLE" });
+			
 			while (rs.next()) {
 				String tableName = rs.getString("TABLE_NAME");
 				if (Arrays.binarySearch(excludeTables, tableName) < 0) {
 					tableNames.add(tableName);
 				}
 			}
+			
 			deleteTable(h2DataSource, tableNames.toArray(new String[tableNames.size()]));
-			rs.close();
+			
 		} catch (SQLException e) {
 			throw e;
 		}

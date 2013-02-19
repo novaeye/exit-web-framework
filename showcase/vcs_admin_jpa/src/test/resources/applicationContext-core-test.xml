@@ -65,6 +65,7 @@
 				<prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.current_session_context_class">thread</prop>
 			</props>
 		</property>
 	</bean>
