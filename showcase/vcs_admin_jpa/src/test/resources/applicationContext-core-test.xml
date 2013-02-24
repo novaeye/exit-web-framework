@@ -20,7 +20,7 @@
 	http://www.springframework.org/schema/cache 
 	http://www.springframework.org/schema/cache/spring-cache.xsd 
 	http://www.springframework.org/schema/data/jpa 
-	http://www.springframework.org/schema/data/jpa/spring-jpa.xsd " >
+	http://www.springframework.org/schema/data/jpa/spring-jpa-1.2.xsd " >
 
 	<description>Spring测试环境配置 </description>
 	
