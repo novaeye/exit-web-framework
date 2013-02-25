@@ -6,7 +6,6 @@ import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
 import org.exitsoft.common.unit.Fixtures;
-import org.hibernate.SessionFactory;
 import org.hibernate.ejb.HibernateEntityManagerFactory;
 import org.junit.Before;
 import org.junit.Test;
