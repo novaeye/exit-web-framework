@@ -74,10 +74,10 @@ public class TestHibernateSupportDao {
 	public void testFind() {
 		List<User> userList = new ArrayList<User>();
 		
-		userList = dao.findByNamedQuery("QueryUserResourceJpa", "admin");
+		userList = dao.findByQuery("QueryUserResourceJpa", "admin");
 		Assert.assertEquals(userList.size(), 1);
 		
-		userList = dao.findByNamedQuery("QueryUserResource", "admin");
+		userList = dao.findByQuery("QueryUserResource", "admin");
 		Assert.assertEquals(userList.size(), 1);
 		
 		userList = dao.findByQuery("from User u where u.loginName=?", "admin");
@@ -121,10 +121,10 @@ public class TestHibernateSupportDao {
 		
 		filters = Lists.newArrayList(PropertyFilters.build("EQS_name","系统"));
 		
-		user = dao.findUniqueByNamedQuery("QueryUserResourceJpa", "admin");
+		user = dao.findUniqueByQuery("QueryUserResourceJpa", "admin");
 		Assert.assertEquals(user.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0002");
 		
-		user = dao.findUniqueByNamedQuery("QueryUserResource", "admin");
+		user = dao.findUniqueByQuery("QueryUserResource", "admin");
 		Assert.assertEquals(user.getId(), "SJDK3849CKMS3849DJCK2039ZMSK0002");
 		
 		user = dao.findUniqueByQuery("from User u where u.loginName=?", "admin");

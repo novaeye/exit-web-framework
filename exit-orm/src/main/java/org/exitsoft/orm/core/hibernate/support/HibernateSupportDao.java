@@ -287,6 +287,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * 
 	 * @return Page
 	 */
+	@Deprecated
 	public <X> Page<X> findPageByNamedQuery(PageRequest request, String namedQuery,Object... values) {
 		
 		Query query = createQueryByNamedQuery(namedQuery, values);
@@ -303,6 +304,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * 
 	 * @return Page
 	 */
+	@Deprecated
 	public <X> Page<X> findPageByNamedQuery(PageRequest request, String namedQuery,Map<String, Object> values) {
 		
 		Query query = createQueryByNamedQuery(namedQuery, values);

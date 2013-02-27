@@ -29,7 +29,10 @@ import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.engine.spi.NamedQueryDefinition;
+import org.hibernate.engine.spi.NamedSQLQueryDefinition;
 import org.hibernate.internal.AbstractQueryImpl;
+import org.hibernate.internal.SessionFactoryImpl;
 import org.hibernate.jdbc.Work;
 import org.hibernate.metadata.ClassMetadata;
 import org.slf4j.Logger;
@@ -255,7 +258,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * @param list
 	 */
 	public void deleteAllByEntities(List<T> list) {
-		if (!CollectionUtils.isEmpty(list)) {
+		if (CollectionUtils.isEmpty(list)) {
 			return ;
 		}
 		
@@ -384,6 +387,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * 
 	 * @return List
 	 */
+	@Deprecated
 	public <X> List<X> findByNamedQuery(String namedQuery,Map<String, Object> values) {
 		return createQueryByNamedQuery(namedQuery, values).list();
 	}
@@ -396,6 +400,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * 
 	 * @return List
 	 */
+	@Deprecated
 	public <X> List<X> findByNamedQuery(String namedQuery,Object... values) {
 		return createQueryByNamedQuery(namedQuery, values).list();
 	}
@@ -432,6 +437,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * 
 	 * @return Object
 	 */
+	@Deprecated
 	public <X> X findUniqueByNamedQuery(String namedQuery,Map<String, Object> values) {
 		return (X)createQueryByNamedQuery(namedQuery, values).uniqueResult();
 	}
@@ -444,6 +450,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * 
 	 * @return Object
 	 */
+	@Deprecated
 	public <X> X findUniqueByNamedQuery(String namedQuery,Object... values) {
 		return (X) createQueryByNamedQuery(namedQuery, values).uniqueResult();
 	}
@@ -493,15 +500,15 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	/**
 	 * 根据查询HQL与参数列表创建Query对象
 	 * 
+	 * @param queryOrNamedQuery hql 或者Hibernate的NamedQuery
 	 * @param values
 	 *            命名参数,按名称绑定.
 	 *            
 	 * @return {@link Query}           
 	 * 
 	 */
-	protected Query createQuery( String queryString, Map<String, ?> values) {
-		Assert.hasText(queryString, "queryString不能为空");
-		Query query = getSession().createQuery(queryString);
+	protected Query createQuery( String queryOrNamedQuery, Map<String, ?> values) {
+		Query query = createQuery(queryOrNamedQuery);
 		if (values != null) {
 			query.setProperties(values);
 		}
@@ -511,15 +518,25 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	/**
 	 * 根据hql创建Hibernate Query对象
 	 * 
-	 * @param queryString hql
+	 * @param queryOrNamedQuery hql 或者Hibernate的NamedQuery
 	 * @param values
 	 *            数量可变的参数,按顺序绑定.
 	 *            
 	 * @return {@link Query}
 	 */
-	protected Query createQuery(String queryString, Object... values) {
-		Assert.hasText(queryString, "queryString不能为空");
-		Query query = getSession().createQuery(queryString);
+	protected Query createQuery(String queryOrNamedQuery, Object... values) {
+		Assert.hasText(queryOrNamedQuery, "queryString不能为空");
+		
+		SessionFactoryImpl factory = (SessionFactoryImpl) sessionFactory;
+		NamedQueryDefinition nqd = factory.getNamedQuery( queryOrNamedQuery );
+		Query query = null;
+		
+		if (nqd != null) {
+			query = getSession().getNamedQuery(queryOrNamedQuery);
+		} else {
+			query = getSession().createQuery(queryOrNamedQuery);
+		}
+		
 		setQueryValues(query, values);
 		return query;
 	}
@@ -532,6 +549,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * 
 	 * @return {@link Query}
 	 */
+	@Deprecated
 	protected Query createQueryByNamedQuery(String namedQuery,Map<String, Object> values) {
 		Query query = getSession().getNamedQuery(namedQuery);
 		if (values != null) {
@@ -548,6 +566,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * 
 	 * @return {@link Query}
 	 */
+	@Deprecated
 	protected Query createQueryByNamedQuery(String namedQuery,Object... values) {
 		Assert.hasText(namedQuery, "namedQuery不能为空");
 		Query query = getSession().getNamedQuery(namedQuery);
@@ -558,15 +577,15 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	/**
 	 * 根据查询HQL与参数列表创建Query对象
 	 * 
+	 * @param queryOrSqlQuery query 或者 NamedSQLQuery
 	 * @param values
 	 *            命名参数,按名称绑定.
 	 *            
 	 * @return {@link Query}           
 	 * 
 	 */
-	protected SQLQuery createSQLQuery( String queryString, Map<String, ?> values) {
-		Assert.hasText(queryString, "queryString不能为空");
-		SQLQuery query = getSession().createSQLQuery(queryString);
+	protected SQLQuery createSQLQuery( String queryOrSqlQuery, Map<String, ?> values) {
+		SQLQuery query = createSQLQuery(queryOrSqlQuery);
 		if (values != null) {
 			query.setProperties(values);
 		}
@@ -576,16 +595,28 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	/**
 	 * 根据查询SQL与参数列表创建SQLQuery对象
 	 * 
+	 * @param queryOrSqlQuery query 或者 NamedSQLQuery
 	 * @param values
 	 *            数量可变的参数,按顺序绑定.
 	 *            
 	 * @return {@link SQLQuery}
 	 */
-	protected SQLQuery createSQLQuery( String queryString,  Object... values) {
-		Assert.hasText(queryString, "queryString不能为空");
-		SQLQuery query = getSession().createSQLQuery(queryString);
+	protected SQLQuery createSQLQuery( String queryOrNamedSQLQuery,  Object... values) {
+		Assert.hasText(queryOrNamedSQLQuery, "queryOrNamedSQLQuery不能为空");
+		SessionFactoryImpl factory = (SessionFactoryImpl) sessionFactory;
+		NamedSQLQueryDefinition nsqlqd = factory.getNamedSQLQuery( queryOrNamedSQLQuery );
+		Query query = null;
+		
+		if (nsqlqd != null) {
+			query = getSession().getNamedQuery(queryOrNamedSQLQuery);
+		} else {
+			query = getSession().createSQLQuery(queryOrNamedSQLQuery);
+		}
+		
 		setQueryValues(query, values);
-		return query.addEntity(entityClass);
+		SQLQuery sqlQuery = (SQLQuery)query;
+		
+		return sqlQuery.addEntity(entityClass);
 	}
 	
 	/**
@@ -968,6 +999,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 *            
 	 * @return int
 	 */
+	@Deprecated
 	public int executeUpdateByNamedQuery(String namedQuery,Map<String, ?> values) {
 		return createQueryByNamedQuery(namedQuery, values).executeUpdate();
 	}
@@ -979,6 +1011,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 *            
 	 * @return int
 	 */
+	@Deprecated
 	public int executeUpdateByNamedQuery(String namedQuery,Object... values) {
 		return createQueryByNamedQuery(namedQuery, values).executeUpdate();
 	}
