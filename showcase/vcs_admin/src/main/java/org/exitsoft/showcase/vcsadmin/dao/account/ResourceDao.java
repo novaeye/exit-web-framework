@@ -19,7 +19,7 @@ public class ResourceDao extends HibernateSupportDao<Resource, String>{
 
 	@SuppressWarnings("unchecked")
 	public List<Resource> getUserResources(String userId) {
-		Query query = createQueryByNamedQuery(Resource.UserResources, userId);
+		Query query = createQuery(Resource.UserResources, userId);
 		query.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 		return query.list();
 	}

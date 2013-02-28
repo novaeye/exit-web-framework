@@ -389,7 +389,7 @@ public class AccountManager {
 	 * @return List
 	 */
 	public List<Group> getUserGroups(String userId) {
-		return groupDao.findByNamedQuery(Group.UserGroups, userId);
+		return groupDao.findByQuery(Group.UserGroups, userId);
 	}
 
 }
