@@ -1,6 +1,7 @@
 package org.exitsoft.orm.core.hibernate.support;
 
 import java.io.Serializable;
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -10,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.exitsoft.common.utils.CollectionUtils;
 import org.exitsoft.common.utils.ConvertUtils;
 import org.exitsoft.common.utils.ReflectionUtils;
@@ -17,8 +19,6 @@ import org.exitsoft.orm.annotation.StateDelete;
 import org.exitsoft.orm.enumeration.ExecuteMehtod;
 import org.exitsoft.orm.strategy.utils.ConvertCodeUtils;
 import org.hibernate.Criteria;
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
 import org.hibernate.LockOptions;
 import org.hibernate.Query;
 import org.hibernate.ReplicationMode;
@@ -217,8 +217,8 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 			logger.warn("要删除的对象为:null");
 			return ;
 		}
-		
-		StateDelete stateDelete = ReflectionUtils.getAnnotation(entity.getClass(),StateDelete.class);
+		Class<?> entityClass = ReflectionUtils.getTargetClass(entity);
+		StateDelete stateDelete = ReflectionUtils.getAnnotation(entityClass,StateDelete.class);
 		if (stateDelete != null) {
 			Object value = ConvertUtils.convertToObject(stateDelete.value(), stateDelete.type().getValue());
 			ReflectionUtils.invokeSetterMethod(entity, stateDelete.propertyName(), value);
@@ -358,51 +358,25 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	/**
 	 * 通过HQL查询全部
 	 * 
-	 * @param queryString hql语句
+	 * @param queryOrNamedQuery hql 或者Hibernate的NamedQuery
 	 * @param values 与属性名方式的hql值
 	 * 
 	 * @return List
 	 */
-	public <X> List<X> findByQuery(String queryString,Map<String,Object> values) {
-		return createQuery(queryString, values).list();
+	public <X> List<X> findByQuery(String queryOrNamedQuery ,Map<String,Object> values) {
+		return createQuery(queryOrNamedQuery , values).list();
 	}
 
 	/**
 	 * 通过HQL查询全部
 	 * 
-	 * @param queryString hql语句
+	 * @param queryOrNamedQuery hql 或者Hibernate的NamedQuery
 	 * @param values 可变长度的hql值
 	 * 
 	 * @return List
 	 */
-	public <X> List<X> findByQuery(String queryString,Object... values) {
-		return createQuery(queryString, values).list();
-	}
-	
-	/**
-	 * 通过namedQuery查询全部
-	 * 
-	 * @param namedQuery namedQuery
-	 * @param values 属性名参数规则
-	 * 
-	 * @return List
-	 */
-	@Deprecated
-	public <X> List<X> findByNamedQuery(String namedQuery,Map<String, Object> values) {
-		return createQueryByNamedQuery(namedQuery, values).list();
-	}
-
-	/**
-	 * 通过namedQuery查询全部
-	 * 
-	 * @param namedQuery namedQuery
-	 * @param values 值
-	 * 
-	 * @return List
-	 */
-	@Deprecated
-	public <X> List<X> findByNamedQuery(String namedQuery,Object... values) {
-		return createQueryByNamedQuery(namedQuery, values).list();
+	public <X> List<X> findByQuery(String queryOrNamedQuery,Object... values) {
+		return createQuery(queryOrNamedQuery, values).list();
 	}
 	
 	/**
@@ -427,32 +401,6 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 */
 	public <X> X findUniqueByQuery(String queryString,Object... values){
 		return (X)createQuery(queryString, values).uniqueResult();
-	}
-
-	/**
-	 * 通过namedQuery查询单个orm实体
-	 * 
-	 * @param namedQuery namedQuery
-	 * @param values 属性名参数规则
-	 * 
-	 * @return Object
-	 */
-	@Deprecated
-	public <X> X findUniqueByNamedQuery(String namedQuery,Map<String, Object> values) {
-		return (X)createQueryByNamedQuery(namedQuery, values).uniqueResult();
-	}
-
-	/**
-	 * 通过namedQuery查询单个orm实体
-	 * 
-	 * @param namedQuery namedQuery
-	 * @param values 值
-	 * 
-	 * @return Object
-	 */
-	@Deprecated
-	public <X> X findUniqueByNamedQuery(String namedQuery,Object... values) {
-		return (X) createQueryByNamedQuery(namedQuery, values).uniqueResult();
 	}
 	
 	/**
@@ -496,7 +444,6 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 		return criteria;
 	}
 	
-	
 	/**
 	 * 根据查询HQL与参数列表创建Query对象
 	 * 
@@ -537,39 +484,6 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 			query = getSession().createQuery(queryOrNamedQuery);
 		}
 		
-		setQueryValues(query, values);
-		return query;
-	}
-	
-	/**
-	 * 通过namedQuery 创建Query
-	 * 
-	 * @param namedQuery namedQuery
-	 * @param values 属性名参数规则
-	 * 
-	 * @return {@link Query}
-	 */
-	@Deprecated
-	protected Query createQueryByNamedQuery(String namedQuery,Map<String, Object> values) {
-		Query query = getSession().getNamedQuery(namedQuery);
-		if (values != null) {
-			query.setProperties(values);
-		}
-		return query;
-	}
-
-	/**
-	 * 通过namedQuery创建Query
-	 * 
-	 * @param namedQuery namedQuery
-	 * @param values 值
-	 * 
-	 * @return {@link Query}
-	 */
-	@Deprecated
-	protected Query createQueryByNamedQuery(String namedQuery,Object... values) {
-		Assert.hasText(namedQuery, "namedQuery不能为空");
-		Query query = getSession().getNamedQuery(namedQuery);
 		setQueryValues(query, values);
 		return query;
 	}
@@ -636,7 +550,8 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 		
 		if (impl.hasNamedParameters()) {
 			for (String p : params) {
-				query.setParameter(p, values[methodParameterPosition--]);
+				Object o = values[methodParameterPosition--];
+				query.setParameter(p, o);
 			}
 		} else {
 			for (Integer i = 0; i < values.length; i++) {
@@ -677,7 +592,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 		String countHql = prepareCountHql(queryString);
 
 		try {
-			return (Long)createQuery(queryString, values).uniqueResult();
+			return (Long)createQuery(countHql, values).uniqueResult();
 		} catch (Exception e) {
 			throw new RuntimeException("hql不能自动计算总是:"+ countHql, e);
 		}
@@ -701,7 +616,8 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 		String countHql = prepareCountHql(queryString);
 
 		try {
-			return (Long)createQuery(countHql, values).uniqueResult();
+			Object result = createQuery(countHql, values).uniqueResult();
+			return (Long)result;
 		} catch (Exception e) {
 			throw new RuntimeException("hql不能自动计算总数:"+ countHql, e);
 		}
@@ -715,7 +631,10 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * @return String
 	 */
 	private String prepareCountHql(String orgHql) {
-		String countHql = "select count (*) " + removeSelect(removeOrders(orgHql));
+		String countField = StringUtils.substringBetween(orgHql, "select", "from");
+		String countHql = MessageFormat.format("select count ({0}) {1} ",
+										StringUtils.isEmpty(countField) ? "*" : countField,
+										removeSelect(removeOrders(orgHql)));
 		return countHql;
 	}
 	
@@ -748,71 +667,33 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	}
 	
 	/**
-	 * 为Query添加distinct transformer. 预加载关联对象的HQL会引起主对象重复, 需要进行distinct处理.
+	 * 为Query添加distinct transformer,讲查询出来的重复数据进行distinct处理
 	 * 
-	 * @param query Hibernate Query 接口
-	 * 
-	 * @return {@link Query};
-	 */
-	public Query distinct(Query query) {
-		query.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-		return query;
-	}
-
-	/**
-	 * 为Criteria添加distinct transformer. 预加载关联对象的HQL会引起主对象重复, 需要进行distinct处理.
-	 * 
-	 * @param criteria Hibernate Criteria 接口
-	 * 
-	 * @return {@link Criteria}
-	 */
-	public Criteria distinct(Criteria criteria) {
-		criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-		return criteria;
-	}
-	
-	/**
-	 * 根据HQL创建迭代器
-	 * 
-	 * @param queryString hql
+	 * @param queryOrNamedQuery hql 或者Hibernate的NamedQuery
 	 * @param values 值
 	 * 
-	 * @return Iterator
+	 * @return List
 	 */
-	public Iterator<T> iterator(String queryString,Object... values) {
-		Query query = createQuery(queryString, values);
-		return distinct(query).iterate();
+	public <X> List<X> distinct(String queryOrNamedQuery,Object... values) {
+		Query query = createQuery(queryOrNamedQuery, values);
+		query.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 		
+		return query.list();
 	}
 	
 	/**
-	 * 根据Criterion创建迭代器
+	 * 为Query添加distinct transformer,讲查询出来的重复数据进行distinct处理
 	 * 
-	 * @param criterions 可变的Criterion参数
+	 * @param queryOrNamedQuery hql 或者Hibernate的NamedQuery
+	 * @param values 值
 	 * 
-	 * @return Iterator
+	 * @return List
 	 */
-	public Iterator<T> iterator(Criterion...criterions) {
-		return distinct(createCriteria(criterions)).list().iterator();
-	}
-	
-	/**
-	 * 立即关闭迭代器而不是等待session.close的时候才关闭
-	 * @param it 要关闭的迭代器
-	 * 
-	 */
-	public void closeIterator(Iterator<?> it) throws HibernateException {
-		Hibernate.close(it);
-	}
-	
-	/**
-	 * 将persistable对象 Object对象、代理对象、持久化对象，Collection 对象或为空的对象里的代理属性全部加载(该方法使用了Hibernate.initialize方法)
-	 * 
-	 * @param proxy 一个persistable对象 Object对象、代理对象、持久化对象，Collection 对象或为空的对象
-	 * 
-	 */
-	public void initProxyObject(Object proxy) {
-		Hibernate.initialize(proxy);
+	public <X> List<X> distinct(String queryOrNamedQuery,Map<String, Object> values) {
+		Query query = createQuery(queryOrNamedQuery, values);
+		query.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+		
+		return query.list();
 	}
 
 	/**
@@ -990,29 +871,5 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 */
 	public int executeUpdate(String hql,  Object... values) {
 		return createQuery(hql, values).executeUpdate();
-	}
-
-	/**
-	 * 通过namedQuery执行HQL进行批量修改/删除操作.成功后返回更新记录数
-	 * 
-	 * @param values 命名参数,按名称绑定.
-	 *            
-	 * @return int
-	 */
-	@Deprecated
-	public int executeUpdateByNamedQuery(String namedQuery,Map<String, ?> values) {
-		return createQueryByNamedQuery(namedQuery, values).executeUpdate();
-	}
-
-	/**
-	 * 通过namedQuery执行HQL进行批量修改/删除操作.成功后返回更新记录数
-	 * 
-	 * @param values 参数值
-	 *            
-	 * @return int
-	 */
-	@Deprecated
-	public int executeUpdateByNamedQuery(String namedQuery,Object... values) {
-		return createQueryByNamedQuery(namedQuery, values).executeUpdate();
 	}
 }

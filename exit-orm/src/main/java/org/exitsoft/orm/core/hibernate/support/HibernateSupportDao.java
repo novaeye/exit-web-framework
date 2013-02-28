@@ -2,6 +2,7 @@ package org.exitsoft.orm.core.hibernate.support;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -165,6 +166,19 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		setOrderToCriteria(criteria, orders);
 		return createCriteria(criterion).list();
 	}
+	
+	/**
+	 * 通过criterion数组查询全部
+	 * 
+	 * @param criterions criterion数组
+	 * 
+	 * @return Object
+	 */
+	public T findByCriterion(Criterion[] criterions,Order ...orders){
+		Criteria criteria = createCriteria(criterions);
+		setOrderToCriteria(criteria, orders);
+		return (T)criteria.uniqueResult();
+	}
 
 	/**
 	 * 通过{@link PropertyFilter} 查询单个orm实体
@@ -174,8 +188,8 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * @return Object
 	 * 
 	 */
-	public T findUniqueByPropertyFilter(List<PropertyFilter> filters,Order ...orders) {
-		return (T) createCriteria(filters,orders).uniqueResult();
+	public T findUniqueByPropertyFilter(List<PropertyFilter> filters) {
+		return (T) createCriteria(filters).uniqueResult();
 	}
 
 	/**
@@ -185,9 +199,8 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * 
 	 * @return Object
 	 */
-	public T findUniqueByCriterion(Criterion[] criterions,Order ...orders){
+	public T findUniqueByCriterion(Criterion[] criterions){
 		Criteria criteria = createCriteria(criterions);
-		setOrderToCriteria(criteria, orders);
 		return (T)criteria.uniqueResult();
 	}
 
@@ -212,10 +225,9 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * 
 	 * @return Object
 	 */
-	public T findUniqueByProperty(String propertyName,Object value,String restrictionName,Order ...orders) {
+	public T findUniqueByProperty(String propertyName,Object value,String restrictionName) {
 		Criterion criterion = HibernateRestrictionBuilder.getRestriction(propertyName, value, restrictionName);
 		Criteria criteria = createCriteria(criterion);
-		setOrderToCriteria(criteria, orders);
 		return (T) criteria.uniqueResult();
 	}
 
@@ -266,49 +278,15 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * 通过分页参数与HQL语句获取分页对象
 	 * 
 	 * @param request 分页请求参数
-	 * @param queryString HQL语句
+	 * @param queryOrNamedQuery hql 或者Hibernate的NamedQuery
 	 * @param values 值
 	 * 
 	 * @return {@link Page}
 	 */
-	public <X> Page<X> findPage(PageRequest request,String queryString,Object... values) {
+	public <X> Page<X> findPage(PageRequest request,String queryOrNamedQuery,Object... values) {
 
-		Query query = createQuery(queryString, values);
+		Query query = createQuery(queryOrNamedQuery, values);
 
-		return findPage(request,query);
-	}
-
-	/**
-	 * 根据NamedQuery获取分页对象
-	 * 
-	 * @param request 分页请求参数
-	 * @param namedQuery hibernate named query
-	 * @param values 值
-	 * 
-	 * @return Page
-	 */
-	@Deprecated
-	public <X> Page<X> findPageByNamedQuery(PageRequest request, String namedQuery,Object... values) {
-		
-		Query query = createQueryByNamedQuery(namedQuery, values);
-
-		return findPage(request,query);
-	}
-
-	/**
-	 * 根据NamedQuery获取分页对象
-	 * 
-	 * @param request 分页请求参数
-	 * @param namedQuery hibernate named query
-	 * @param values 值
-	 * 
-	 * @return Page
-	 */
-	@Deprecated
-	public <X> Page<X> findPageByNamedQuery(PageRequest request, String namedQuery,Map<String, Object> values) {
-		
-		Query query = createQueryByNamedQuery(namedQuery, values);
-		
 		return findPage(request,query);
 	}
 
@@ -350,18 +328,21 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		ReflectionUtils.setFieldValue(impl, "queryString", queryString);
 		
 		if (request.isCountTotal()) {
-			List<Object> values = new ArrayList<Object>();
 			if (impl.hasNamedParameters()) {
 				Map<String,TypedValue> map = ReflectionUtils.getFieldValue(impl, "namedParameters");
-				for (TypedValue value : map.values()) {
-					values.add(value.getValue());
+				Map<String, Object> values = new HashMap<String, Object>();
+				
+				for (Map.Entry<String, TypedValue> entry:map.entrySet()) {
+					values.put(entry.getKey(), entry.getValue().getValue());
 				}
+				
+				long totalCount = countHqlResult(impl.getQueryString(), values);
+				page.setTotalItems(totalCount);
 			} else {
-				values = ReflectionUtils.invokeGetterMethod(impl, "values");
+				List<Object> values = ReflectionUtils.invokeGetterMethod(impl, "values");
+				long totalCount = countHqlResult(impl.getQueryString(), values.toArray());
+				page.setTotalItems(totalCount);
 			}
-			
-			long totalCount = countHqlResult(impl.getQueryString(), values.toArray());
-			page.setTotalItems(totalCount);
 		}
 
 		impl.setFirstResult(request.getOffset());
@@ -377,6 +358,11 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * 在HQL的后面添加分页参数定义的orderBy, 辅助函数.
 	 */
 	protected String setPageRequestToHql( String hql, PageRequest pageRequest) {
+		
+		if (CollectionUtils.isEmpty(pageRequest.getSort())) {
+			return hql;
+		}
+		
 		StringBuilder builder = new StringBuilder(hql);
 		builder.append(" order by");
 

@@ -17,8 +17,8 @@ import org.exitsoft.orm.annotation.StateDelete;
 @Table(name = "TB_ACCOUNT_USER")
 @StateDelete(propertyName = "state", value = "3")
 @NamedQueries({
-	@NamedQuery(name="QueryUserResourceJpa",query="from User u where u.loginName=?1"),
-	@NamedQuery(name="QueryUserResource",query="from User u where u.loginName=?")
+	@NamedQuery(name="QueryUserJpa",query="from User u where u.loginName=?1"),
+	@NamedQuery(name="QueryUser",query="from User u where u.loginName=?")
 })
 public class User extends UniversallyUniqueIdentifier {
 
