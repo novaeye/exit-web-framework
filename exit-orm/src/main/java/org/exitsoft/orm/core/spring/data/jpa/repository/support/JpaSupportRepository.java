@@ -72,7 +72,8 @@ public class JpaSupportRepository<T, ID extends Serializable>  extends SimpleJpa
 	@Override
 	@Transactional
 	public void delete(T entity) {
-		StateDelete stateDelete = ReflectionUtils.getAnnotation(entity.getClass(),StateDelete.class);
+		Class<?> entityClass = ReflectionUtils.getTargetClass(entity);
+		StateDelete stateDelete = ReflectionUtils.getAnnotation(entityClass,StateDelete.class);
 		if (stateDelete != null) {
 			Object value = ConvertUtils.convertToObject(stateDelete.value(), stateDelete.type().getValue());
 			ReflectionUtils.invokeSetterMethod(entity, stateDelete.propertyName(), value);

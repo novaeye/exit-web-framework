@@ -36,7 +36,8 @@ public class ConvertCodeUtils {
 			return ;
 		}
 		
-		ConvertCode convertCode = ReflectionUtils.getAnnotation(source.getClass(),ConvertCode.class);
+		Class<?> entityClass = ReflectionUtils.getTargetClass(source);
+		ConvertCode convertCode = ReflectionUtils.getAnnotation(entityClass,ConvertCode.class);
 		
 		if (convertCode == null) {
 			return ;
