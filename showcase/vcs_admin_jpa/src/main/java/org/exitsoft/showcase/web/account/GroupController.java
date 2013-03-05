@@ -103,7 +103,12 @@ public class GroupController {
 		
 		model.addAttribute("resourcesList", accountManager.getAllResources());
 		model.addAttribute("states", SystemVariableUtils.getDataDictionariesByCategoryCode(SystemDictionaryCode.State,"3"));
-		model.addAttribute("groupsList", accountManager.getAllGroup(GroupType.RoleGorup,id));
+		
+		if (StringUtils.isEmpty(id)) {
+			model.addAttribute("groupsList", accountManager.getAllGroup(GroupType.RoleGorup));
+		} else {
+			model.addAttribute("groupsList", accountManager.getAllGroup(GroupType.RoleGorup,id));
+		}
 		
 		return "account/group/read";
 	}
