@@ -328,6 +328,8 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		ReflectionUtils.setFieldValue(impl, "queryString", queryString);
 		
 		if (request.isCountTotal()) {
+			long totalCount = 0;
+			
 			if (impl.hasNamedParameters()) {
 				Map<String,TypedValue> map = ReflectionUtils.getFieldValue(impl, "namedParameters");
 				Map<String, Object> values = new HashMap<String, Object>();
@@ -336,13 +338,15 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 					values.put(entry.getKey(), entry.getValue().getValue());
 				}
 				
-				long totalCount = countHqlResult(impl.getQueryString(), values);
-				page.setTotalItems(totalCount);
+				totalCount = countHqlResult(impl.getQueryString(), values);
+				
 			} else {
 				List<Object> values = ReflectionUtils.invokeGetterMethod(impl, "values");
-				long totalCount = countHqlResult(impl.getQueryString(), values.toArray());
-				page.setTotalItems(totalCount);
+				totalCount = countHqlResult(impl.getQueryString(), values.toArray());
+				
 			}
+			
+			page.setTotalItems(totalCount);
 		}
 
 		impl.setFirstResult(request.getOffset());

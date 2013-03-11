@@ -382,25 +382,25 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	/**
 	 * 通过hql查询单个orm实体
 	 * 
-	 * @param queryString hql
+	 * @param queryOrNamedQuery hql 或者Hibernate的NamedQuery
 	 * @param values 以属性名的hql值
 	 * 
 	 * @return Object
 	 */
-	public <X> X findUniqueByQuery(String queryString,Map<String, Object> values){
-		return (X)createQuery(queryString, values).uniqueResult();
+	public <X> X findUniqueByQuery(String queryOrNamedQuery,Map<String, Object> values){
+		return (X)createQuery(queryOrNamedQuery, values).uniqueResult();
 	}
 
 	/**
 	 * 通过hql查询单个orm实体
 	 * 
-	 * @param queryString hql
+	 * @param queryOrNamedQuery hql 或者Hibernate的NamedQuery
 	 * @param values 可变长度的hql值
 	 * 
 	 * @return Object
 	 */
-	public <X> X findUniqueByQuery(String queryString,Object... values){
-		return (X)createQuery(queryString, values).uniqueResult();
+	public <X> X findUniqueByQuery(String queryOrNamedQuery ,Object... values){
+		return (X)createQuery(queryOrNamedQuery, values).uniqueResult();
 	}
 	
 	/**
@@ -472,7 +472,7 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * @return {@link Query}
 	 */
 	protected Query createQuery(String queryOrNamedQuery, Object... values) {
-		Assert.hasText(queryOrNamedQuery, "queryString不能为空");
+		Assert.hasText(queryOrNamedQuery, "queryOrNamedQuery不能为空");
 		
 		SessionFactoryImpl factory = (SessionFactoryImpl) sessionFactory;
 		NamedQueryDefinition nqd = factory.getNamedQuery( queryOrNamedQuery );
@@ -583,12 +583,12 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * 
 	 * 本函数只能自动处理简单的hql语句,复杂的hql查询请另行编写count语句查询.
 	 * 
-	 * @param queryString HQL
+	 * @param queryString hql
 	 * @param values 值
 	 * 
 	 * @return long
 	 */
-	protected Long countHqlResult( String queryString,  Map<String, ?> values) {
+	protected Long countHqlResult(String queryString,  Map<String, ?> values) {
 		String countHql = prepareCountHql(queryString);
 
 		try {
@@ -607,12 +607,12 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	 * 
 	 * 本函数只能自动处理简单的hql语句,复杂的hql查询请另行编写count语句查询.
 	 * 
-	 * @param queryString HQL
+	 * @param queryString hql
 	 * @param values 值
 	 * 
 	 * @return long
 	 */
-	protected Long countHqlResult( String queryString,  Object... values) {
+	protected Long countHqlResult(String queryString,  Object... values) {
 		String countHql = prepareCountHql(queryString);
 
 		try {
@@ -854,22 +854,24 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	/**
 	 * 执行HQL进行批量修改/删除操作.成功后返回更新记录数
 	 * 
+	 * @param queryOrNamedQuery hql 或者Hibernate的NamedQuery
 	 * @param values 命名参数,按名称绑定.
 	 *            
 	 * @return int
 	 */
-	public int executeUpdate(String hql,  Map<String, ?> values) {
-		return createQuery(hql, values).executeUpdate();
+	public int executeUpdate(String queryOrNamedQuery,  Map<String, ?> values) {
+		return createQuery(queryOrNamedQuery, values).executeUpdate();
 	}
 
 	/**
 	 * 执行HQL进行批量修改/删除操作.成功后更新记录数
 	 * 
+	 * @param queryOrNamedQuery hql 或者Hibernate的NamedQuery
 	 * @param values 参数值
 	 *            
 	 * @return int
 	 */
-	public int executeUpdate(String hql,  Object... values) {
-		return createQuery(hql, values).executeUpdate();
+	public int executeUpdate(String queryOrNamedQuery,  Object... values) {
+		return createQuery(queryOrNamedQuery, values).executeUpdate();
 	}
 }
