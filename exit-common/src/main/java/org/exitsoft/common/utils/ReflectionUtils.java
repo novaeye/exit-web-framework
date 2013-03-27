@@ -1,12 +1,10 @@
 package org.exitsoft.common.utils;
 
-import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -17,8 +15,6 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Bean;
 import org.springframework.util.Assert;
 
 /**
@@ -510,31 +506,6 @@ public abstract class ReflectionUtils {
 	}
 
 	/**
-	 * 获取所有 public get方法
-	 * 
-	 * @param target 目标对象
-	 * 
-	 * @return List
-	 */
-	public List<Method> getAllReadMethod(Object target) {
-		List<Method> result = new ArrayList<Method>();
-		Class<?> actualEditable = target.getClass();
-		PropertyDescriptor[] targetPds = BeanUtils.getPropertyDescriptors(actualEditable);
-		
-		for (PropertyDescriptor targetPd : targetPds) {
-			Method readMethod = targetPd.getReadMethod();
-			Method writeMethod = targetPd.getWriteMethod();
-			
-			if((writeMethod != null && readMethod != null ) && !Modifier.isPublic(readMethod.getDeclaringClass().getModifiers())) {
-					readMethod.setAccessible(true);
-					result.add(readMethod);
-			}
-		}
-		
-		return result;
-	}
-
-	/**
 	 * 获取field的annotationClass注解
 	 * 
 	 * @param field
@@ -705,7 +676,7 @@ public abstract class ReflectionUtils {
 	 * 
 	 * @return List
 	 */
-	public static List<String> getAllAccessibleFieldName(
+	public static List<String> getAccessibleFieldNames(
 			final Class targetClass, Class type) {
 
 		Assert.notNull(targetClass, "targetClass不能为空");
