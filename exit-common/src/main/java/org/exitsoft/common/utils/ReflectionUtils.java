@@ -775,14 +775,28 @@ public abstract class ReflectionUtils {
 	/**
 	 * 获取对象Class如果被cglib AOP过的对象或对象为CGLIB的Class，将获取真正的Class类型
 	 * 
-	 * @param target
-	 *            对象
+	 * @param target  对象
 	 * 
 	 * @return Class
 	 */
 	public static Class<?> getTargetClass(Object target) {
 		Assert.notNull(target, "target不能为空");
-		Class clazz = target.getClass();
+		return getTargetClass(target.getClass());
+
+	}
+	
+	/**
+	 * 获取Class如果被cglib AOP过的对象或对象为CGLIB的Class，将获取真正的Class类型
+	 * 
+	 * @param target  对象
+	 * 
+	 * @return Class
+	 */
+	public static Class<?> getTargetClass(Class<?> targetClass) {
+		
+		Assert.notNull(targetClass, "targetClass不能为空");
+		
+		Class clazz = targetClass;
 		if (clazz != null && clazz.getName().contains(CGLIB_CLASS_SEPARATOR)) {
 			Class<?> superClass = clazz.getSuperclass();
 			if (superClass != null && !Object.class.equals(superClass)) {
@@ -790,7 +804,6 @@ public abstract class ReflectionUtils {
 			}
 		}
 		return clazz;
-
 	}
 
 	/**
