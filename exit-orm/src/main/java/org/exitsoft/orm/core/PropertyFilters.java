@@ -186,7 +186,7 @@ public class PropertyFilters {
 			String expression = entry.getKey();
 			Object value = entry.getValue();
 			//如果ignoreEmptyValue为true忽略null或""的值
-			if (ignoreEmptyValue && (value == null || value.toString().equals(""))) {
+			if (ignoreEmptyValue && (value == null || value.toString().trim().equals(""))) {
 				continue;
 			}
 			//如果ignoreEmptyValue为true忽略null或""的值
