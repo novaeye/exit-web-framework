@@ -62,7 +62,7 @@ public class ManagerTestCaseSupport {
 	 * @return int
 	 */
 	protected int countRowsInTable(String tableName) {
-		return jdbcTemplate.queryForInt("SELECT COUNT(0) FROM " + tableName,new HashMap<String, Object>());
+		return jdbcTemplate.queryForObject("SELECT COUNT(0) FROM " + tableName, new HashMap<String, Object>(),Integer.class);
 	}
 	
 	/**

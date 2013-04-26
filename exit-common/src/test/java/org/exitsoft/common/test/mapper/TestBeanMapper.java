@@ -3,7 +3,7 @@ package org.exitsoft.common.test.mapper;
 import java.util.HashMap;
 import java.util.Map;
 
-import junit.framework.Assert;
+import static org.junit.Assert.assertEquals;
 
 import org.exitsoft.common.mapper.BeanMapper;
 import org.exitsoft.common.test.entity.User;
@@ -18,17 +18,17 @@ public class TestBeanMapper {
 	public void testToMap() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map = BeanMapper.toMap(new User(), false, true);
-		Assert.assertEquals(map.size(), 4);
+		assertEquals(map.size(), 4);
 		map = BeanMapper.toMap(new User(), false, false);
-		Assert.assertEquals(map.size(), 7);
+		assertEquals(map.size(), 7);
 		map = BeanMapper.toMap(new User(), true, false);
-		Assert.assertEquals(map.size(), 6);
+		assertEquals(map.size(), 6);
 		map = BeanMapper.toMap(new User(), true, true);
-		Assert.assertEquals(map.size(), 4);
+		assertEquals(map.size(), 4);
 		map = BeanMapper.toMap(new User(), true, true,"username","password");
-		Assert.assertEquals(map.size(), 2);
+		assertEquals(map.size(), 2);
 		map = BeanMapper.toMap(new User(), false, true,"username","password");
-		Assert.assertEquals(map.size(), 2);
+		assertEquals(map.size(), 2);
 		map = BeanMapper.toMap(new User(), false, false,"username","password");
 	}
 }
