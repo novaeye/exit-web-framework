@@ -38,7 +38,7 @@ public class GroupController {
 	private AccountManager accountManager;
 	
 	/**
-	 * 获取资源列表
+	 * 获取组列表
 	 * 
 	 * @param pageRequest 分页实体信息
 	 * @param request HttpServlet请求
@@ -65,10 +65,10 @@ public class GroupController {
 	
 	/**
 	 * 
-	 * 保存资源，保存成功后重定向到:account/group/view
+	 * 保存组,保存成功后重定向到:account/group/view
 	 * 
 	 * @param entity 实体信息
-	 * @param request HttpServlet请求,由于保存时候需要到parentId和resourceIds的参数，为了简洁，直接使用request,不用@RequestParam获取参数
+	 * @param parentId 所对应的父类id
 	 * @param redirectAttributes spring mvc 重定向属性
 	 * 
 	 * @return String
@@ -95,10 +95,11 @@ public class GroupController {
 	
 	/**
 	 * 
-	 * 读取资源信息
+	 * 读取组信息,返回account/group/read.ftl页面
 	 * 
 	 * @param model Spring mvc的Model接口，主要是将model的属性返回到页面中
 	 * 
+	 * @return String
 	 */
 	@RequestMapping("read")
 	public String read(@RequestParam(value = "id", required = false)String id,Model model) {
@@ -116,7 +117,12 @@ public class GroupController {
 	}
 	
 	/**
-	 * 删除资源
+	 * 通过主键id集合删除组,删除成功后重定向到:account/group/view
+	 * 
+	 * @param ids 主键id集合
+	 * @param redirectAttributes spring mvc 重定向属性
+	 * 
+	 * @return String
 	 */
 	@RequestMapping("delete")
 	public String delete(@RequestParam("ids")List<String> ids,RedirectAttributes redirectAttributes) {
