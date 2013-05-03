@@ -53,16 +53,18 @@
                     	<input type="password" name="password" id="password" class="text_input_big" size="25" value="admin"/>
                 	</div>
                 </div>
-                <div class="column">
-                	<label for="validateCode">
-                    	验证码:
-                    </label>
-                    <div class="field">
-                    	<input type="text" name="validateCode" id="validateCode" class="text_input_big" size="8" />
-                    	<img id="validateCodeImg" src="validateCode" width="70" height="28"  align="absmiddle"/>
-                    	<a href="javascript:reloadValidateCode();">看不请?</a>
-                	</div>
-                </div>
+                <#if validateCode?? && validateCode == true>
+	                <div class="column">
+	                	<label for="validateCode">
+	                    	验证码:
+	                    </label>
+	                    <div class="field">
+	                    	<input type="text" name="validateCode" id="validateCode" class="text_input_big" size="8" />
+	                    	<img id="validateCodeImg" src="validateCode" width="70" height="28"  align="absmiddle"/>
+	                    	<a href="javascript:reloadValidateCode();">看不请?</a>
+	                	</div>
+	                </div>
+                </#if>
             </form>
         </div>
 		<div class="panel_footer">
