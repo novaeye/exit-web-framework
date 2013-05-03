@@ -36,6 +36,8 @@
 		<property name="realm" ref="jdbcAuthenticationRealm" />
 		<!-- cacheManager,集合spring缓存工厂 -->
 		<property name="cacheManager" ref="cacheManager" />
+		<!-- rememberMeManager使用自定义的org.exitsoft.showcase.vcsadmin.service.account.CustomRememberMeManager -->
+		<property name="rememberMeManager" ref="customRememberMeManager" />
 	</bean>
 	
 	<!-- 自定义对 shiro的连接约束,结合shiroSecurityFilter实现动态获取资源 -->

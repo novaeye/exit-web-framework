@@ -8,10 +8,14 @@ import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.apache.shiro.web.util.WebUtils;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.stereotype.Component;
 
 /**
@@ -46,7 +50,7 @@ public class ValidateCodeAuthenticationFilter extends FormAuthenticationFilter{
 	@Override
 	protected boolean executeLogin(ServletRequest request,ServletResponse response) throws Exception {
 		
-		Session session = getSubject(request, response).getSession(false);
+		Session session = getSubject(request, response).getSession();
 		//获取登录次数
 		Integer number = (Integer) session.getAttribute(getLoginNumKey());
 		
@@ -190,5 +194,74 @@ public class ValidateCodeAuthenticationFilter extends FormAuthenticationFilter{
 	protected boolean onLoginSuccess(AuthenticationToken token, Subject subject, ServletRequest request, ServletResponse response) throws Exception {
 		subject.getSession(false).setAttribute(getLoginNumKey(), null);
 		return super.onLoginSuccess(token, subject, request, response);
+	}
+	
+	/**
+	 * 重写父类方法，创建一个自定义的{@link UsernamePasswordTokeExtend}
+	 */
+	@Override
+	protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) {
+		
+		String username = getUsername(request);
+	    String password = getPassword(request);
+        String host = getHost(request);
+
+	    boolean rememberMe = false;
+	    String rememberMeValue = request.getParameter(getRememberMeParam());
+	    Integer rememberMeCookieValue = null;
+	    //如果提交的rememberMe参数存在值,将rememberMe设置成true
+	    if(StringUtils.isNotEmpty(rememberMeValue)) {
+	    	rememberMe = true;
+	    	
+	    	ExpressionParser parser = new SpelExpressionParser();
+			Expression expression = parser.parseExpression(rememberMeValue);
+	    	
+	    	rememberMeCookieValue = expression.getValue(Integer.class);
+	    }
+	    
+		return new UsernamePasswordTokeExtend(username, password, rememberMe, host,rememberMeCookieValue);
+	}
+	
+	/**
+	 * UsernamePasswordToke扩展，添加一个rememberMeValue字段，获取提交上来的rememberMe值
+	 * 根据该rememberMe值去设置Cookie的有效时间。
+	 * 
+	 * @author vincent
+	 *
+	 */
+	@SuppressWarnings("serial")
+	protected class UsernamePasswordTokeExtend extends UsernamePasswordToken {
+		
+		//rememberMe cookie的有效时间
+		private Integer rememberMeCookieValue;
+		
+		public UsernamePasswordTokeExtend() {
+			
+		}
+		
+		public UsernamePasswordTokeExtend(String username,String password,boolean rememberMe, String host,Integer rememberMeCookieValue) {
+			super(username, password, rememberMe, host);
+			this.rememberMeCookieValue = rememberMeCookieValue;
+		}
+
+		/**
+		 * 获取rememberMe cookie的有效时间
+		 * 
+		 * @return Integer
+		 */
+		public Integer getRememberMeCookieValue() {
+			return rememberMeCookieValue;
+		}
+
+		/**
+		 * 设置rememberMe cookie的有效时间
+		 * 
+		 * @param rememberMeCookieValue cookie的有效时间
+		 */
+		public void setRememberMeCookieValue(Integer rememberMeCookieValue) {
+			this.rememberMeCookieValue = rememberMeCookieValue;
+		}
+		
+		
 	}
 }

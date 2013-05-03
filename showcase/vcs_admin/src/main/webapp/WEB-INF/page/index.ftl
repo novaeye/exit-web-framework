@@ -35,7 +35,6 @@
 		<script type="text/javascript" src="resources/scripts/jquery.form.js"></script>
 		<script type="text/javascript" src="resources/scripts/jquery.validate.js"></script>
 		<script type="text/javascript" src="resources/scripts/jquery.easydrag.js"></script>
-		<script type="text/javascript" src="resources/scripts/jquery.poshytip.js"></script>
 		<script type="text/javascript" src="resources/scripts/jquery.placeholder.js"></script>
 		
 		<!-- vcs admin 所需要的代码 -->

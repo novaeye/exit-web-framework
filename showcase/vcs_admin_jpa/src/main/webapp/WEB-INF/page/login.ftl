@@ -13,6 +13,8 @@
 
 <!-- jquery 核心代码 -->
 <script type="text/javascript" src="resources/scripts/jquery.core.js"></script>
+<script type="text/javascript" src="resources/scripts/exit.jquery.extend.js"></script>
+<script type="text/javascript" src="resources/scripts/exit.jquery.ui.js"></script>
 
 <script type="text/javascript">
 	function login(){
@@ -51,6 +53,27 @@
                     </label>
                     <div class="field">
                     	<input type="password" name="password" id="password" class="text_input_big" size="25" value="admin"/>
+                	</div>
+                </div>
+                <div class="column">
+                	<label for="password">
+                    	记住我:
+                    </label>
+                    <div class="field">
+                    	<select class="selection" name="rememberMe" id="filter_EQI_state" size="25">
+			           		<option value="">
+								无
+			                </option>
+			                <option value="60 * 60 * 24 * 7">
+								在一周内
+			                </option>
+			                <option value="60 * 60 * 24 * 30">
+								在一个月内
+			                </option>
+			                <option value="60 * 60 * 24 * 365">
+								在一个年内
+			                </option>
+			           </select>
                 	</div>
                 </div>
                 <#if validateCode?? && validateCode == true>
