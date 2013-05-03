@@ -13,7 +13,7 @@ public class CreateTestInitializeDataBaseSqlFile {
 		configuration.setNamingStrategy(new ImprovedNamingStrategy());
 		
 		SchemaExport export = new SchemaExport(configuration);
-		
+
 		export.setOutputFile("src/test/resources/h2schma.sql");
 		
 		export.create(true, false);

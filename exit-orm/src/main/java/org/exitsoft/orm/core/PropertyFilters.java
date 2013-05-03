@@ -24,11 +24,11 @@ public class PropertyFilters {
 	 * 	如：
 	 * </p>
 	 * <code>
-	 * 	PropertyFilerRestriction.build("EQS_propertyName","vincent")
+	 * 	PropertyFilters.build("EQS_propertyName","vincent")
 	 * </code>
 	 * 
-	 * @param expressions 表达式
-	 * @param matchValues 对比值
+	 * @param expression 表达式
+	 * @param matchValue 对比值
 	 * 
 	 * @return {@link PropertyFilter}
 	 */

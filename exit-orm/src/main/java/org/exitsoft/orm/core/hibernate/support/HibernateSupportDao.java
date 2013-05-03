@@ -166,7 +166,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 		setOrderToCriteria(criteria, orders);
 		return createCriteria(criterion).list();
 	}
-	
+
 	/**
 	 * 通过criterion数组查询全部
 	 * 
@@ -236,8 +236,7 @@ public class HibernateSupportDao<T,PK extends Serializable> extends BasicHiberna
 	 * 
 	 * @param request 分页请求参数
 	 * @param filters 属性过滤器集合
-	 * @param persistentClass orm实体Class
-	 * 
+	 *
 	 * @return {@link Page}
 	 */
 	public Page<T> findPage(PageRequest request,List<PropertyFilter> filters) {

@@ -405,9 +405,8 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	
 	/**
 	 * 获取全部对象
-	 * 
-	 * @param ordersProperty 要排序的字段名称
-	 * @param isAsc 是否顺序排序 true表示顺序排序，false表示倒序
+	 *
+	 * @param orders 排序对象，不需要排序，可以不传
 	 * 
 	 * @return List
 	 */
@@ -509,9 +508,8 @@ public class BasicHibernateDao<T,PK extends Serializable> {
 	/**
 	 * 根据查询SQL与参数列表创建SQLQuery对象
 	 * 
-	 * @param queryOrSqlQuery query 或者 NamedSQLQuery
-	 * @param values
-	 *            数量可变的参数,按顺序绑定.
+	 * @param queryOrNamedSQLQuery query 或者 NamedSQLQuery
+	 * @param values 数量可变的参数,按顺序绑定.
 	 *            
 	 * @return {@link SQLQuery}
 	 */
