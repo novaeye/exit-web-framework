@@ -93,7 +93,7 @@ public class SystemCommonController {
 		headers.setContentType(MediaType.IMAGE_JPEG);
 		
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		String captcha = CaptchaUtils.getCaptcha(70, 28, 4, outputStream).toLowerCase();
+		String captcha = CaptchaUtils.getGifCaptcha(70, 28, 4, outputStream,120).toLowerCase();
 		
 		session.setAttribute(CaptchaAuthenticationFilter.DEFAULT_CAPTCHA_PARAM,captcha);
 		byte[] bs = outputStream.toByteArray();
