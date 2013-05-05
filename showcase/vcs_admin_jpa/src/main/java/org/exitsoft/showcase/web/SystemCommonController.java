@@ -90,7 +90,7 @@ public class SystemCommonController {
 	public ResponseEntity<byte[]> getCaptcha(HttpSession session) throws IOException {
 		
 		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.IMAGE_JPEG);
+		headers.setContentType(MediaType.IMAGE_GIF);
 		
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		String captcha = CaptchaUtils.getGifCaptcha(70, 28, 4, outputStream,120).toLowerCase();
