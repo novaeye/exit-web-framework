@@ -62,7 +62,7 @@ public class CaptchaUtils {
 			// 绘制图片
 			Random random = new Random();
 			Graphics2D g = image.createGraphics();
-			g.setColor(getRandColor(239, 250));
+			g.setColor(getRandColor(220, 250));
 			g.fillRect(1, 1, width - 1, height - 1);
 			g.setColor(new Color(102, 102, 103));
 			g.drawRect(0, 0, width - 1, height - 1);
