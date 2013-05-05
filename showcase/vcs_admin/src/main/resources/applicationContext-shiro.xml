@@ -45,7 +45,7 @@
 		<!-- 默认的连接配置 -->
 		<property name="filterChainDefinitions">
 			<value>
-				/login = validteCodeAuthc
+				/login = captchaAuthc
 				/logout = logout
 				/resources/** = anon
 				/index = perms[security:index]
@@ -58,7 +58,7 @@
 	<bean id="shiroSecurityFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="filters">
 			<map>
-				<entry key="validteCodeAuthc" value-ref="validateCodeAuthenticationFilter" />
+				<entry key="captchaAuthc" value-ref="captchaAuthenticationFilter" />
 			</map>
 		</property>
 		<!-- shiro的核心安全接口 -->

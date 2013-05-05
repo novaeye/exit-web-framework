@@ -16,7 +16,7 @@ import javax.imageio.ImageIO;
  * @author vincent
  *
  */
-public class ValidateCodeUtils {
+public class CaptchaUtils {
 
 	public static String FONT_FAMILY = "Arial Black";
 	
@@ -32,7 +32,7 @@ public class ValidateCodeUtils {
 	 * 
 	 * @return String
 	 */
-	public static String getCode(int width, int height, int num,
+	public static String getCaptcha(int width, int height, int num,
 			OutputStream out) {
 		// 防止非负数
 		width = width > 0 ? width : 60;

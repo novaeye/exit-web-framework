@@ -1,4 +1,4 @@
-package org.exitsoft.showcase.vcsadmin.service.account;
+package org.exitsoft.showcase.service.account;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -25,22 +25,30 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class ValidateCodeAuthenticationFilter extends FormAuthenticationFilter{
+public class CaptchaAuthenticationFilter extends FormAuthenticationFilter{
 	
 	/**
 	 * 默认验证码参数名称
 	 */
-	public static final String DEFAULT_VALIDATE_CODE_PARAM = "validateCode";
+	public static final String DEFAULT_CAPTCHA_PARAM = "captcha";
+	
+	/**
+	 * 登录次数超出allowLoginNum时，存储在session记录是否展示验证码的key默认名称
+	 */
+	public static final String DEFAULT_SHOW_CAPTCHA_KEY_ATTRIBUTE = "showCaptcha";
+	
 	/**
 	 * 默认在session中存储的登录次数名称
 	 */
-	private static final String DEFAULT_LOGIN_NUM_KEY = "loginNum";
+	private static final String DEFAULT_LOGIN_NUM_KEY_ATTRIBUTE = "loginNum";
 	//验证码参数名称
-    private String validateCodeParam = DEFAULT_VALIDATE_CODE_PARAM;
+    private String captchaParam = DEFAULT_CAPTCHA_PARAM;
     //在session中的存储验证码的key名称
-    private String sessionValidateCodeKey = DEFAULT_VALIDATE_CODE_PARAM;
+    private String sessionCaptchaKeyAttribute = DEFAULT_CAPTCHA_PARAM;
     //在session中存储的登录次数名称
-    private String loginNumKey = DEFAULT_LOGIN_NUM_KEY;
+    private String loginNumKeyAttribute = DEFAULT_LOGIN_NUM_KEY_ATTRIBUTE;
+    //登录次数超出allowLoginNum时，存储在session记录是否展示验证码的key名称
+    private String sessionShowCaptchaKeyAttribute = DEFAULT_SHOW_CAPTCHA_KEY_ATTRIBUTE;
     //允许登录次数，当登录次数大于该数值时，会在页面中显示验证码
     private Integer allowLoginNum = 1;
     
@@ -52,22 +60,22 @@ public class ValidateCodeAuthenticationFilter extends FormAuthenticationFilter{
 		
 		Session session = getSubject(request, response).getSession();
 		//获取登录次数
-		Integer number = (Integer) session.getAttribute(getLoginNumKey());
+		Integer number = (Integer) session.getAttribute(getLoginNumKeyAttribute());
 		
 		//首次登录，将该数量记录在session中
 		if (number == null) {
 			number = new Integer(1);
-			session.setAttribute(getLoginNumKey(), number);
+			session.setAttribute(getLoginNumKeyAttribute(), number);
 		}
 		
-		//如果登录次数大于1，需要判断验证码是否一致
+		//如果登录次数大于allowLoginNum，需要判断验证码是否一致
 		if (number > getAllowLoginNum()) {
 			//获取当前验证码
-			String code = (String) session.getAttribute(getSessionValidateCodeKey());
+			String currentCaptcha = (String) session.getAttribute(getSessionCaptchaKeyAttribute());
 			//获取用户输入的验证码
-			String submitCode = getValidateCode(request);
+			String submitCaptcha = getCaptcha(request);
 			//如果验证码不匹配，登录失败
-			if (StringUtils.isEmpty(submitCode) || !StringUtils.equals(code,submitCode.toLowerCase())) {
+			if (StringUtils.isEmpty(submitCaptcha) || !StringUtils.equals(currentCaptcha,submitCaptcha.toLowerCase())) {
 				return onLoginFailure(this.createToken(request, response), new AccountException("验证码不正确"), request, response);
 			}
 		
@@ -79,10 +87,10 @@ public class ValidateCodeAuthenticationFilter extends FormAuthenticationFilter{
 	/**
 	 * 设置验证码提交的参数名称
 	 * 
-	 * @param validateCodeParam 验证码提交的参数名称
+	 * @param captchaParam 验证码提交的参数名称
 	 */
-	public void setValidateCodeParam(String validateCodeParam) {
-		this.validateCodeParam = validateCodeParam;
+	public void setCaptchaParam(String captchaParam) {
+		this.captchaParam = captchaParam;
 	}
 
 	/**
@@ -90,17 +98,17 @@ public class ValidateCodeAuthenticationFilter extends FormAuthenticationFilter{
 	 * 
 	 * @return String
 	 */
-	public String getValidateCodeParam() {
-		return validateCodeParam;
+	public String getCaptchaParam() {
+		return captchaParam;
 	}
 
 	/**
 	 * 设置在session中的存储验证码的key名称
 	 * 
-	 * @param sessionValidateCodeKey 存储验证码的key名称
+	 * @param sessionCaptchaKeyAttribute 存储验证码的key名称
 	 */
-	public void setSessionValidateCodeKey(String sessionValidateCodeKey) {
-		this.sessionValidateCodeKey = sessionValidateCodeKey;
+	public void setSessionCaptchaKeyAttribute(String sessionCaptchaKeyAttribute) {
+		this.sessionCaptchaKeyAttribute = sessionCaptchaKeyAttribute;
 	}
 	
 	/**
@@ -108,8 +116,8 @@ public class ValidateCodeAuthenticationFilter extends FormAuthenticationFilter{
 	 * 
 	 * @return Sting
 	 */
-	public String getSessionValidateCodeKey() {
-		return sessionValidateCodeKey;
+	public String getSessionCaptchaKeyAttribute() {
+		return sessionCaptchaKeyAttribute;
 	}
 
 	/**
@@ -117,17 +125,17 @@ public class ValidateCodeAuthenticationFilter extends FormAuthenticationFilter{
 	 * 
 	 * @return Stromg
 	 */
-	public String getLoginNumKey() {
-		return loginNumKey;
+	public String getLoginNumKeyAttribute() {
+		return loginNumKeyAttribute;
 	}
 
 	/**
 	 * 设置在session中存储的登录次数名称
 	 * 
-	 * @param loginNumKey 登录次数名称
+	 * @param loginNumKeyAttribute 登录次数名称
 	 */
-	public void setLoginNumKey(String loginNumKey) {
-		this.loginNumKey = loginNumKey;
+	public void setLoginNumKeyAttribute(String loginNumKeyAttribute) {
+		this.loginNumKeyAttribute = loginNumKeyAttribute;
 	}
 
 	/**
@@ -137,10 +145,28 @@ public class ValidateCodeAuthenticationFilter extends FormAuthenticationFilter{
 	 * 
 	 * @return String
 	 */
-	public String getValidateCode(ServletRequest request) {
-		return WebUtils.getCleanParam(request, getValidateCodeParam());
+	public String getCaptcha(ServletRequest request) {
+		return WebUtils.getCleanParam(request, getCaptchaParam());
 	}
 	
+	/**
+	 * 获取登录次数超出allowLoginNum时，存储在session记录是否展示验证码的key名称
+	 * 
+	 * @return String
+	 */
+	public String getSessionShowCaptchaKeyAttribute() {
+		return sessionShowCaptchaKeyAttribute;
+	}
+	
+	/**
+	 * 设置登录次数超出allowLoginNum时，存储在session记录是否展示验证码的key名称
+	 * 
+	 * @param sessionShowCaptchaKeyAttribute 是否展示验证码的key名称
+	 */
+	public void setSessionShowCaptchaKeyAttribute(String sessionShowCaptchaKeyAttribute) {
+		this.sessionShowCaptchaKeyAttribute = sessionShowCaptchaKeyAttribute;
+	}
+
 	/**
 	 * 获取允许登录次数
 	 * 
@@ -178,11 +204,15 @@ public class ValidateCodeAuthenticationFilter extends FormAuthenticationFilter{
 	protected boolean onLoginFailure(AuthenticationToken token,AuthenticationException e, ServletRequest request,ServletResponse response) {
 		Session session = getSubject(request, response).getSession(false);
 		
-		Integer number = (Integer) session.getAttribute(getLoginNumKey());
+		Integer number = (Integer) session.getAttribute(getLoginNumKeyAttribute());
 		
+		//如果失败登录次数大于allowLoginNum时，展示验证码
 		if (number > getAllowLoginNum() - 1) {
-			request.setAttribute(getValidateCodeParam(),true);
+			session.setAttribute(getSessionShowCaptchaKeyAttribute(), true);
+			session.setAttribute(getLoginNumKeyAttribute(), ++number);
 		}
+		
+		session.setAttribute(getLoginNumKeyAttribute(),++number);
 		
 		return super.onLoginFailure(token, e, request, response);
 	}
@@ -192,7 +222,11 @@ public class ValidateCodeAuthenticationFilter extends FormAuthenticationFilter{
 	 */
 	@Override
 	protected boolean onLoginSuccess(AuthenticationToken token, Subject subject, ServletRequest request, ServletResponse response) throws Exception {
-		subject.getSession(false).setAttribute(getLoginNumKey(), null);
+		Session session = subject.getSession(false);
+		
+		session.removeAttribute(getLoginNumKeyAttribute());
+		session.removeAttribute(getSessionShowCaptchaKeyAttribute());
+		
 		return super.onLoginSuccess(token, subject, request, response);
 	}
 	

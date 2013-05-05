@@ -6,7 +6,7 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.servlet.Cookie;
 import org.apache.shiro.web.servlet.SimpleCookie;
-import org.exitsoft.showcase.service.account.ValidateCodeAuthenticationFilter.UsernamePasswordTokeExtend;
+import org.exitsoft.showcase.service.account.CaptchaAuthenticationFilter.UsernamePasswordTokeExtend;
 import org.springframework.stereotype.Component;
 
 /**

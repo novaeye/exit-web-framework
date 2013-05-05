@@ -41,11 +41,11 @@
 	</bean>
 	
 	<!-- 自定义对 shiro的连接约束,结合shiroSecurityFilter实现动态获取资源 -->
-	<bean id="chainDefinitionSectionMetaSource" class="org.exitsoft.showcase.service.account.ChainDefinitionSectionMetaSource" depends-on="resourceDao,groupDao">
+	<bean id="chainDefinitionSectionMetaSource" class="org.exitsoft.showcase.service.account.ChainDefinitionSectionMetaSource">
 		<!-- 默认的连接配置 -->
 		<property name="filterChainDefinitions">
 			<value>
-				/login = validteCodeAuthc
+				/login = captchaAuthc
 				/logout = logout
 				/resources/** = anon
 				/index = perms[security:index]
@@ -58,14 +58,14 @@
 	<bean id="shiroSecurityFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="filters">
 			<map>
-				<entry key="validteCodeAuthc" value-ref="validateCodeAuthenticationFilter" />
+				<entry key="captchaAuthc" value-ref="captchaAuthenticationFilter" />
 			</map>
 		</property>
 		<!-- shiro的核心安全接口 -->
     	<property name="securityManager" ref="securityManager" />
-    	<!-- 要求登录时的链接 该连接是org.exitsoft.showcase.web.SystemCommonController.login()方法-->
+    	<!-- 要求登录时的链接 该连接是org.exitsoft.showcase.vcsadmin.web.SystemCommonController.login()方法-->
 	    <property name="loginUrl" value="/login" />
-	    <!-- 登陆成功后要跳转的连接，该连接是org.exitsoft.showcase.web.SystemCommonController.index()方法 -->
+	    <!-- 登陆成功后要跳转的连接，该连接是org.exitsoft.showcase.vcsadmin.web.SystemCommonController.index()方法 -->
 	    <property name="successUrl" value="/index" />
 	    <!-- shiro连接约束配置,在这里使用自定义的动态获取资源类 -->
 	    <property name="filterChainDefinitionMap" ref="chainDefinitionSectionMetaSource" />

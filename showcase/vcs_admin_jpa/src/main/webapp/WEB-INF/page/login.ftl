@@ -21,7 +21,7 @@
 		$("#login_form").submit();
 	}
 	function reloadValidateCode() {
-		$("#validateCodeImg").attr("src","validateCode?date = " + new Date() + Math.floor(Math.random()*24));
+		$("#captchaImg").attr("src","getCaptcha?date = " + new Date() + Math.floor(Math.random()*24));
 	}
 </script>
 
@@ -76,14 +76,14 @@
 			           </select>
                 	</div>
                 </div>
-                <#if validateCode?? && validateCode == true>
+                <#if Session.showCaptcha?has_content && Session.showCaptcha == true>
 	                <div class="column">
-	                	<label for="validateCode">
+	                	<label for="captcha">
 	                    	验证码:
 	                    </label>
 	                    <div class="field">
-	                    	<input type="text" name="validateCode" id="validateCode" class="text_input_big" size="8" />
-	                    	<img id="validateCodeImg" src="validateCode" width="70" height="28"  align="absmiddle"/>
+	                    	<input type="text" name="captcha" id="captcha" class="text_input_big" size="8" />
+	                    	<img id="captchaImg" src="getCaptcha" width="70" height="28"  align="absmiddle"/>
 	                    	<a href="javascript:reloadValidateCode();">看不请?</a>
 	                	</div>
 	                </div>
