@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 
@@ -127,6 +128,11 @@ public class PageRequest implements java.io.Serializable {
 
 		//检查order字符串的合法值
 		String[] orderDirs = StringUtils.split(lowcaseOrderDir, ',');
+		
+		if (ArrayUtils.isEmpty(orderDirs)) {
+			return ;
+		}
+		
 		for (String orderDirStr : orderDirs) {
 			if (!StringUtils.equals(Sort.DESC, orderDirStr) && !StringUtils.equals(Sort.ASC, orderDirStr)) {
 				throw new IllegalArgumentException("排序方向" + orderDirStr + "不是合法值");

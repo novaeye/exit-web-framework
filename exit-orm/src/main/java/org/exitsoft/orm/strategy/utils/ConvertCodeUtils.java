@@ -29,14 +29,15 @@ public class ConvertCodeUtils {
 	 * 将对象执行转码操作
 	 * 
 	 * @param source 要转码的对象
-	 * @param executeMehtods 在什么方法进行转码
+	 * @param executeMethods 在什么方法进行转码
 	 */
 	public static void convertObject(Object source,ExecuteMehtod...executeMethods) {
 		if (executeMethods == null) {
 			return ;
 		}
 		
-		ConvertCode convertCode = ReflectionUtils.getAnnotation(source.getClass(),ConvertCode.class);
+		Class<?> entityClass = ReflectionUtils.getTargetClass(source);
+		ConvertCode convertCode = ReflectionUtils.getAnnotation(entityClass,ConvertCode.class);
 		
 		if (convertCode == null) {
 			return ;

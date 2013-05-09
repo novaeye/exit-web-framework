@@ -93,7 +93,12 @@ public class ResourceController {
 	public String read(@RequestParam(value = "id", required = false)String id,Model model) {
 		
 		model.addAttribute("resourceType", SystemVariableUtils.getDataDictionariesByCategoryCode(SystemDictionaryCode.ResourceType));
-		model.addAttribute("resourcesList", accountManager.getAllResources(id));
+
+		if (StringUtils.isEmpty(id)) {
+			model.addAttribute("resourcesList", accountManager.getAllResources());
+		} else {
+			model.addAttribute("resourcesList", accountManager.getAllResources(id));
+		}
 		
 		return "account/resource/read";
 	}

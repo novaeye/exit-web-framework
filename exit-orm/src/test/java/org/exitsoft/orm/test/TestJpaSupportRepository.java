@@ -1,11 +1,6 @@
 package org.exitsoft.orm.test;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
-
+import com.google.common.collect.Lists;
 import org.exitsoft.common.unit.Fixtures;
 import org.exitsoft.orm.core.PropertyFilters;
 import org.exitsoft.orm.core.spring.data.jpa.specification.Specifications;
@@ -27,7 +22,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.collect.Lists;
+import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
+import java.util.List;
 
 @Transactional
 @TransactionConfiguration(transactionManager="jpaTransactionManager")
@@ -63,8 +60,8 @@ public class TestJpaSupportRepository {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testAllRestriction() {
-		List<User> userList = new ArrayList<User>();
-		
+		List<User> userList = Lists.newArrayList();
+
 		userList = dao.findAll(Specifications.get(PropertyFilters.build("EQD_createTime", "2012-08-12")));
 		Assert.assertEquals(userList.size(), 8);
 		
@@ -129,7 +126,7 @@ public class TestJpaSupportRepository {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testFindAll() {
-		List<User> userList = new ArrayList<User>();
+		List<User> userList = Lists.newArrayList();
 		
 		//---------------------------------------------Expressions test--------------------------------------------------//
 		
@@ -137,7 +134,7 @@ public class TestJpaSupportRepository {
 				PropertyFilters.build("EQS_loginName", "admin"),
 				PropertyFilters.build("EQS_realName", "admin")
 		)));
-		
+
 		Assert.assertEquals(userList.size(), 1);
 		
 		userList = dao.findAll(Specifications.get(Lists.newArrayList(

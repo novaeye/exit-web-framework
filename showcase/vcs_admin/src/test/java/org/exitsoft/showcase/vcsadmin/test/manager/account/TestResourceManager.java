@@ -2,9 +2,12 @@ package org.exitsoft.showcase.vcsadmin.test.manager.account;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.exitsoft.orm.core.Page;
+import org.exitsoft.orm.core.PageRequest;
+import org.exitsoft.orm.core.PropertyFilter;
+import org.exitsoft.orm.core.PropertyFilters;
 import org.exitsoft.showcase.vcsadmin.common.enumeration.entity.ResourceType;
 import org.exitsoft.showcase.vcsadmin.entity.account.Resource;
 import org.exitsoft.showcase.vcsadmin.service.account.AccountManager;
@@ -12,6 +15,8 @@ import org.exitsoft.showcase.vcsadmin.test.manager.ManagerTestCaseSupport;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Lists;
 
 /**
  * 测试资源管理所有方法
@@ -26,61 +31,98 @@ public class TestResourceManager extends ManagerTestCaseSupport{
 	
 	@Test
 	@Transactional(readOnly=true)
-	public void testGetAllResourcesByUserId() {
-		List<Resource> list = accountManager.getUserResourcesByUserId("SJDK3849CKMS3849DJCK2039ZMSK0001");
-		assertEquals(list.size(), 8);
-		list = accountManager.mergeResourcesToParent(list, ResourceType.Security);
-		assertEquals(list.size(), 2);
-		assertEquals(list.get(0).getChildren().size(), 3);
-		assertEquals(list.get(1).getChildren().size(), 2);
+	public void testGetResource() {
+		Resource resource = accountManager.getResource("SJDK3849CKMS3849DJCK2039ZMSK0007");
+		assertEquals(resource.getName(), "系统管理");
+		assertEquals(resource.getChildren().size(), 3);
 	}
-	
+
 	@Test
-	@Transactional(readOnly=true)
-	public void testGetAllParentResources() {
-		List<Resource> list = accountManager.getAllParentResources();
-		assertEquals(list.size(), 2);
+	public void testGetResources() {
+		List<String> ids = Lists.newArrayList(
+				"SJDK3849CKMS3849DJCK2039ZMSK0007",
+				"SJDK3849CKMS3849DJCK2039ZMSK0008",
+				"SJDK3849CKMS3849DJCK2039ZMSK0009",
+				"SJDK3849CKMS3849DJCK2039ZMSK0010"
+		);
+		
+		List<Resource> result = accountManager.getResources(ids);
+		
+		assertEquals(result.size(), 4);
 	}
-	
+
 	@Test
-	@Transactional(readOnly=true)
-	public void testGetAllResources() {
-		List<Resource> list = accountManager.getAllResources();
-		assertEquals(list.size(), 8);
+	public void testSearchResourcePage() {
+		PageRequest request = new PageRequest();
+		List<PropertyFilter> filters = Lists.newArrayList(
+				PropertyFilters.build("LIKES_name", "管理"),
+				PropertyFilters.build("LIKES_type", "01")
+				
+		);
+		Page<Resource> page = accountManager.searchResourcePage(request, filters);
+		
+		assertEquals(page.getTotalItems(), 5);
+		assertEquals(page.getTotalPages(), 1);
 	}
-	
-	@Test
-	@Transactional(readOnly=true)
-	public void testGetAllParentMenuResources() {
-		List<Resource> list = accountManager.getAllParentMenuResources();
-		assertEquals(list.size(), 2);
-	}
-	
+
 	@Test
 	public void testSaveResource() {
-		Resource resource = new Resource();
-		resource.setRemark("*");
-		resource.setName("test");
-		resource.setType(ResourceType.Security.getValue());
-		resource.setValue("**");
+		Resource entity = new Resource();
+		entity.setName("test");
+		entity.setPermission("prem[test:test]");
+		entity.setRemark("...");
+		entity.setType(ResourceType.Security.getValue());
+		entity.setValue("/test/**");
 		
-		int beforeRow = countRowsInTable("TB_RESOURCE");
-		accountManager.saveResource(resource);
-		int afterRow = countRowsInTable("TB_RESOURCE");
+		int before = countRowsInTable("tb_resource");
+		accountManager.saveResource(entity);
+		int after = countRowsInTable("tb_resource");
 		
-		assertEquals(afterRow, beforeRow + 1);
+		assertEquals(before + 1, after);
+	}
+
+	@Test
+	public void testDeleteResources() {
+		
+		int before = countRowsInTable("tb_resource");
+		accountManager.deleteResources(Lists.newArrayList("SJDK3849CKMS3849DJCK2039ZMSK0007"));
+		int after = countRowsInTable("tb_resource");
+		
+		assertEquals(before - 4, after);
+	}
+
+	@Test
+	public void testGetAllParentMenuResources() {
+		List<Resource> result = accountManager.getAllParentMenuResources();
+		assertEquals(result.size(), 2);
+	}
+
+	@Test
+	public void testGetAllParentResources() {
+		List<Resource> result = accountManager.getAllParentMenuResources();
+		assertEquals(result.size(), 2);
+	}
+
+	@Test
+	public void testGetAllResources() {
+		List<Resource> result = accountManager.getAllResources();
+		assertEquals(result.size(), 8);
+		
+		result = accountManager.getAllResources("SJDK3849CKMS3849DJCK2039ZMSK0007","SJDK3849CKMS3849DJCK2039ZMSK0008");
+		assertEquals(result.size(), 6);
 	}
 	
 	@Test
-	public void testDeleteResource() {
-		
-		List<String> ids = new ArrayList<String>();
-		ids.add("SJDK3849CKMS3849DJCK2039ZMSK0007");
-		
-		int beforeRow = countRowsInTable("TB_RESOURCE");
-		accountManager.deleteResources(ids);
-		int afterRow = countRowsInTable("TB_RESOURCE");
-		
-		assertEquals(afterRow, beforeRow - 4);
+	public void testGetUserResources() {
+		List<Resource> result = accountManager.getUserResources("SJDK3849CKMS3849DJCK2039ZMSK0001");
+		assertEquals(result.size(), 8);
+	}
+
+	@Test
+	@Transactional(readOnly=true)
+	public void testMergeResourcesToParent() {
+		List<Resource> result = accountManager.getUserResources("SJDK3849CKMS3849DJCK2039ZMSK0001");
+		result = accountManager.mergeResourcesToParent(result, ResourceType.Security);
+		assertEquals(result.size(), 2);
 	}
 }

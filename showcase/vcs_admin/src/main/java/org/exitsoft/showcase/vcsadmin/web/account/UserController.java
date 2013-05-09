@@ -144,7 +144,7 @@ public class UserController {
 	public String read(@RequestParam(value = "id", required = false)String id,Model model) {
 		
 		model.addAttribute("states", SystemVariableUtils.getDataDictionariesByCategoryCode(SystemDictionaryCode.State,"3"));
-		model.addAttribute("groupsList", accountManager.getGroups(GroupType.RoleGorup));
+		model.addAttribute("groupsList", accountManager.getAllGroup(GroupType.RoleGorup));
 		
 		if (StringUtils.isEmpty(id)) {
 			return "account/user/create";

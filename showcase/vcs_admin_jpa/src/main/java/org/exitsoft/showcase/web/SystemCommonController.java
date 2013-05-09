@@ -5,10 +5,10 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpSession;
 
-import org.exitsoft.common.utils.ValidateCodeUtils;
+import org.exitsoft.common.utils.CaptchaUtils;
 import org.exitsoft.showcase.common.SystemVariableUtils;
 import org.exitsoft.showcase.service.account.AccountManager;
-import org.exitsoft.showcase.service.account.ValidateCodeAuthenticationFilter;
+import org.exitsoft.showcase.service.account.CaptchaAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -86,16 +86,16 @@ public class SystemCommonController {
 	 * @return byte[]
 	 * @throws IOException 
 	 */
-	@RequestMapping("/validateCode")
-	public ResponseEntity<byte[]> validateCode(HttpSession session) throws IOException {
+	@RequestMapping("/getCaptcha")
+	public ResponseEntity<byte[]> getCaptcha(HttpSession session) throws IOException {
 		
 		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.IMAGE_JPEG);
+		headers.setContentType(MediaType.IMAGE_GIF);
 		
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		String validateCode = ValidateCodeUtils.getCode(70, 28, 4, outputStream).toLowerCase();
+		String captcha = CaptchaUtils.getGifCaptcha(70, 28, 4, outputStream,120).toLowerCase();
 		
-		session.setAttribute(ValidateCodeAuthenticationFilter.DEFAULT_VALIDATE_CODE_PARAM,validateCode);
+		session.setAttribute(CaptchaAuthenticationFilter.DEFAULT_CAPTCHA_PARAM,captcha);
 		byte[] bs = outputStream.toByteArray();
 		outputStream.close();
 		

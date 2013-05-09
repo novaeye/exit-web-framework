@@ -67,8 +67,8 @@ public abstract class AuthorizationRealm extends AuthorizingRealm{
         String id = model.getUser().getId();
         
         //加载用户的组信息和资源信息
-        List<Resource> authorizationInfo = accountManager.getUserResourcesByUserId(id);
-        List<Group> groupsList = accountManager.getUserGroupsByUserId(id);
+        List<Resource> authorizationInfo = accountManager.getUserResources(id);
+        List<Group> groupsList = accountManager.getUserGroups(id);
         List<Resource> resourcesList = accountManager.mergeResourcesToParent(authorizationInfo, ResourceType.Security);
         
         model.setAuthorizationInfo(authorizationInfo);

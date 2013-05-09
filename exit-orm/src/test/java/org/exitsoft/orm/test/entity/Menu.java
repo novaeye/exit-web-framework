@@ -7,12 +7,24 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
 @Entity
 @Table(name="TB_ACCOUNT_MENU")
+@NamedQueries({
+	@NamedQuery(name="QueryUserMenuJpa",query="select ml from " +
+			"User u left join u.roleList rl " +
+			"left join rl.menuList ml " +
+			"where u.id=?1 and u.state=?2"),
+	@NamedQuery(name="QueryUserMenu",query="select ml from " +
+			"User u left join u.roleList rl " +
+			"left join rl.menuList ml " +
+			"where u.id=? and u.state=?")
+})
 public class Menu extends UniversallyUniqueIdentifier{
 	//名称
 	private String name;

@@ -23,7 +23,7 @@ public interface ResourceDao extends JpaRepository<Resource, String>,JpaSpecific
 	 * @return List
 	 */
 	@Query("select distinct rl from User u left join u.groupsList gl left join gl.resourcesList rl where u.id=?1 and gl.type= '03' order by rl.sort")
-	List<Resource> findUserResourcesByUserId(String userId);
+	List<Resource> findUserResources(String userId);
 
 	
 }

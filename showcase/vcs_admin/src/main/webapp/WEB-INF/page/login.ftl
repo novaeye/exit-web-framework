@@ -13,13 +13,15 @@
 
 <!-- jquery 核心代码 -->
 <script type="text/javascript" src="resources/scripts/jquery.core.js"></script>
+<script type="text/javascript" src="resources/scripts/exit.jquery.extend.js"></script>
+<script type="text/javascript" src="resources/scripts/exit.jquery.ui.js"></script>
 
 <script type="text/javascript">
 	function login(){
 		$("#login_form").submit();
 	}
 	function reloadValidateCode() {
-		$("#validateCodeImg").attr("src","validateCode?date = " + new Date() + Math.floor(Math.random()*24));
+		$("#captchaImg").attr("src","getCaptcha?date = " + new Date() + Math.floor(Math.random()*24));
 	}
 </script>
 
@@ -54,15 +56,38 @@
                 	</div>
                 </div>
                 <div class="column">
-                	<label for="validateCode">
-                    	验证码:
+                	<label for="password">
+                    	记住我:
                     </label>
                     <div class="field">
-                    	<input type="text" name="validateCode" id="validateCode" class="text_input_big" size="8" />
-                    	<img id="validateCodeImg" src="validateCode" width="70" height="28"  align="absmiddle"/>
-                    	<a href="javascript:reloadValidateCode();">看不请?</a>
+                    	<select class="selection" name="rememberMe" id="filter_EQI_state" size="25">
+			           		<option value="">
+								无
+			                </option>
+			                <option value="60 * 60 * 24 * 7">
+								在一周内
+			                </option>
+			                <option value="60 * 60 * 24 * 30">
+								在一个月内
+			                </option>
+			                <option value="60 * 60 * 24 * 365">
+								在一个年内
+			                </option>
+			           </select>
                 	</div>
                 </div>
+                <#if Session.showCaptcha?has_content && Session.showCaptcha == true>
+	                <div class="column">
+	                	<label for="captcha">
+	                    	验证码:
+	                    </label>
+	                    <div class="field">
+	                    	<input type="text" name="captcha" id="captcha" class="text_input_big" size="8" />
+	                    	<img id="captchaImg" src="getCaptcha" width="70" height="28"  align="absmiddle"/>
+	                    	<a href="javascript:reloadValidateCode();">看不请?</a>
+	                	</div>
+	                </div>
+                </#if>
             </form>
         </div>
 		<div class="panel_footer">

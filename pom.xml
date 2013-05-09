@@ -11,6 +11,27 @@
 	<name>exit web framework project</name>
 	<packaging>pom</packaging>
 	
+	<description>exit-web-framework is a base framework based on spring,hibernate,spring mvc,shiro. </description>
+	<url>https://github.com/exitsoft/exit-web-framework</url>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+		</license>
+	</licenses>
+	
+	<issueManagement>
+        <system>Github</system>
+        <url>https://github.com/exitsoft/exit-web-framework/issues</url>
+    </issueManagement>
+
+    <scm>
+        <url>https://github.com/exitsoft/exit-web-framework</url>
+        <connection>scm:git:git://github.com/exitsoft/exit-web-framework.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:exitsoft/exit-web-framework.git</developerConnection>
+    </scm>
+	
 	<modules> 
 		<module>exit-parent</module>
 		<module>exit-common</module> 

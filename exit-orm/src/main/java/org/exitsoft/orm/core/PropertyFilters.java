@@ -24,11 +24,11 @@ public class PropertyFilters {
 	 * 	如：
 	 * </p>
 	 * <code>
-	 * 	PropertyFilerRestriction.build("EQS_propertyName","vincent")
+	 * 	PropertyFilters.build("EQS_propertyName","vincent")
 	 * </code>
 	 * 
-	 * @param expressions 表达式
-	 * @param matchValues 对比值
+	 * @param expression 表达式
+	 * @param matchValue 对比值
 	 * 
 	 * @return {@link PropertyFilter}
 	 */
@@ -186,7 +186,7 @@ public class PropertyFilters {
 			String expression = entry.getKey();
 			Object value = entry.getValue();
 			//如果ignoreEmptyValue为true忽略null或""的值
-			if (ignoreEmptyValue && (value == null || value.toString().equals(""))) {
+			if (ignoreEmptyValue && (value == null || value.toString().trim().equals(""))) {
 				continue;
 			}
 			//如果ignoreEmptyValue为true忽略null或""的值
